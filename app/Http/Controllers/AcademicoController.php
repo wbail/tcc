@@ -51,7 +51,6 @@ class AcademicoController extends Controller {
      */
     public function create() {
 
-
         $curso = DB::table('cursos as c')
             ->join('departamentos as d', 'c.departamento_id', '=', 'd.id')
             ->join('instituicaos as i', 'i.id', 'd.instituicao_id')

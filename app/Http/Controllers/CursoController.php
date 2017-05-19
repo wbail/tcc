@@ -187,6 +187,8 @@ class CursoController extends Controller {
      */
     public function destroy($id) {
 
-        //
+        Curso::find($id)->delete();
+
+        return back()->with('message', 'Curso excluído com sucesso');
     }
 }

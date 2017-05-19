@@ -44,8 +44,8 @@
 		            <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
 		                <thead>
 		                    <tr>
-                                <th>Instituição</th>
                                 <th>Nome</th>
+                                <th>Instituição</th>
 		                        <th>Sigla</th>
 		                        <th class="text-center">Ação</th>
 		                    </tr>
@@ -53,8 +53,8 @@
 		                <tbody>
 		                    @foreach($departamento as $departamento)
 		                    <tr>
-                                <td>{{ $departamento->instituicao->sigla }}</td>
                                 <td>{{ $departamento->nome }}</td>
+                                <td>{{ $departamento->instituicao->sigla }}</td>
 		                        <td>{{ $departamento->sigla }}</td>
 		                        <td class="text-center">
 		                            <a id="{{ $departamento->id }}" class="btn btn-link" href="{{ route('departamento.edit', ['id'=>$departamento->id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>

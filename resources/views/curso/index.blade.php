@@ -42,8 +42,8 @@
 		            <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
 		                <thead>
 		                    <tr>
-                                <th>Nome</th>
-                                <th>Departamento</th>
+                                <th class="col-md-3">Nome</th>
+                                <th title="Departamento">Dept</th>
                                 <th>Instituição</th>
 		                        <th>Coordenador</th>
 		                        <th class="text-center">Ação</th>
