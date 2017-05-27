@@ -42,16 +42,9 @@
                 </div>
             @endif
 
-            @if(session('message'))
-                <div class="alert alert-warning alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <strong>{{ session('message') }}</strong>
-                </div>
-            @endif
-
             <br>
 
-             {!! Form::open(['url'=>'/trabalho/store', 'method'=>'post']) !!}
+            {!! Form::open(['url'=>'/trabalho/store', 'method'=>'post']) !!}
             <div class="row">
                 <div class="col-md-3"></div> {{-- ./col-md-4 --}}
                 <div class="col-md-6">
@@ -87,6 +80,8 @@
                                     <div class="col-md-6">
                                         {!! Form::label('periodo', 'Período') !!}
                                         <br>
+                                        {!! Form::radio('periodo', 1, true, ['title'=>'Disciplina Anual']) !!}
+                                        {!! Form::label('tres', 'Anual') !!}
                                         {!! Form::radio('periodo', 1, false, ['title'=>'Primeiro Semestre']) !!}
                                         {!! Form::label('um', '1') !!}
                                         {!! Form::radio('periodo', 2, false, ['title'=>'Segundo Semestre']) !!}
@@ -96,12 +91,12 @@
                                 <br>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {!! Form::label('avaliador', 'Orientador(a) *') !!}
-                                        {!! Form::select('avaliador', $avaliador, null, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Orientador(a)']) !!}
+                                        {!! Form::label('orientador', 'Orientador(a) *') !!}
+                                        {!! Form::select('orientador', $orientador, null, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Orientador(a)']) !!}
                                     </div> {{-- ./col-md-6 --}}
                                     <div class="col-md-6">
-                                        {!! Form::label('avaliador', 'Coorientador(a)') !!}
-                                        {!! Form::select('avaliador', $avaliador, null, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
+                                        {!! Form::label('coorientador', 'Coorientador(a)') !!}
+                                        {!! Form::select('coorientador', $orientador, null, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
                                     </div> {{-- ./col-md-6 --}}
 
 
@@ -184,7 +179,7 @@
 	});
 
 
-    // Avaliador
+    // Orientador
     $(".s3").select2({
         language: "pt-BR",
         allowClear: true,        

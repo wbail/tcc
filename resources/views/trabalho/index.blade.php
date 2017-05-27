@@ -31,6 +31,15 @@
         <section class="content">
             <!-- Your Page Content Here -->
 
+            @if (session('message'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>{{ session('message') }}</strong>
+                </div>
+            @endif
+
+            <br>
+
             <table data-order='[["1", "asc"]]' class="table table-striped table-hover table-bordered display">
 
             	<thead>
@@ -38,9 +47,9 @@
             			<th class="col-md-3">Titulo</th>
             			<th class="text-center">Ano</th>
             			<th class="text-center">Período</th>
-            			<th  class="col-md-2">Acadêmico(as)</th>
-            			<th>Avaliador(as)</th>
-                        <th class="text-center">Aprovado</th>
+            			<th class="col-md-2">Acadêmico(as)</th>
+            			<th>Orientador(as)</th>
+                        <th class="text-center">Situação</th>
             			<th class="text-center">Ação</th>
             		</tr>
             	</thead>
@@ -53,15 +62,24 @@
             			<td class="text-center">{{ $trabalho->periodo }}</td>
             			<td>
 	            			@foreach($trabalho->academico as $academico)
-		            			<li>{{ $academico->pessoa->nome }}</li>
+		            			<li>{{ $academico->user->name }}</li>
 		            		@endforeach
             			</td>
-            			<td>{{ $trabalho->avaliador->pessoa->nome }}</td>
+            			<td>
+                            {{ $query }}
+                            {{--
+                            @foreach($query as $query)
+                                {{ $query->name }}
+                            @endforeach
+                            <li>Teste</li>
+                            --}}
+                            
+                        </td>
                         <td class="text-center">
                             @if($trabalho->aprovado == 1)
                                 <span class="label label-success">Aprovado</span>
                             @else
-                                <span class="label label-default">Pendente</span>
+                                <span class="label label-default">Não Aprovado</span>
                             @endif
                         </td>
             			<td class="text-center">

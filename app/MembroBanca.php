@@ -19,4 +19,8 @@ class MembroBanca extends Model
     				->withPivot('coordenador_id', 'curso_id', 'inicio_vigencia', 'fim_vigencia')
                     ->withTimestamps();
     }
+
+    public function trabalho() {
+        return $this->belongsToMany(Trabalho::class, 'orientador_id', 'coorientador_id');
+    }
 }

@@ -111,7 +111,7 @@ class AcademicoController extends Controller {
             
         }
 
-        return redirect('/academico')->with('message', 'Acadêmico cadastrado com sucesso!');
+        return redirect('/academico/novo')->with('message', 'Acadêmico cadastrado com sucesso!');
 
     }
 

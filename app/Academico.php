@@ -15,4 +15,11 @@ class Academico extends Model
     public function curso() {
     	return $this->belongsTo(Curso::class);
     }
+
+    public function trabalho() {
+    	return $this->belongsToMany(Trabalho::class, 'academico_trabalhos', 'trabalho_id', 'academico_id')
+    				->withPivot('trabalho_id', 'academico_id')
+                    ->withTimestamps();
+    }
+
 }

@@ -21,9 +21,22 @@ class MembroBancaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()) {
+
+            $term = $request->term;
+            $orientador = DB::table('membro_bancas as a')
+                    ->join('users as u', 'u.id', '=', 'a.user_id')
+                    ->select('u.name as text', 'a.id as id')
+                    ->where('u.name', 'LIKE', '%'. $term . '%')
+                    ->orderBy('u.name')
+                    ->pluck('id', 'text');
         
+            return Response::json(['itens' => $orientador]);
+                        
+        }
+
         return view('membrobanca.index', [
             'membrobanca' => MembroBanca::all()
         ]);

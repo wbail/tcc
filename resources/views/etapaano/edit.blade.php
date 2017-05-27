@@ -12,16 +12,17 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Nova Etapa" }}
+                {{ $page_title or "Editando a etapa " . $etapa->desc }}
                 <small>{{ $page_description or null }}</small>
             </h1>
+               
             <!-- You can dynamically generate breadcrumbs here -->
             {{-- <ol class="breadcrumb">
                 <li><a href="{{ url('/avaliador') }}"><i class="fa fa-dashboard"></i> Acadêmicos</a></li>
                 <li class="active">Novo</li>
             </ol> --}}
             <a href="{{ url('etapa') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
-            <br>
+            
         </section>
 
         <!-- Main content -->
@@ -29,11 +30,10 @@
             <!-- Your Page Content Here -->
 
             @if (count($errors) > 0)
-                <div class="alert alert-warning alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="alert alert-warning">
                     <ul>
                         @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                            <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
@@ -42,17 +42,19 @@
             <br><br>
 
             <div class="row">
-            	<div class="col-md-4"></div> {{-- ./col-md-4 --}}
-            	<div class="col-md-4">
-            		{!! Form::open(['url' => '/etapa/store', 'method'=>'post']) !!}
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    {!! Form::open(['url' => "/etapa/update/$etapa->id", 'method'=>'put']) !!}
                         
-                        {!! Form::label('desc', 'Descrição *') !!}
-                        {!! Form::text('desc', null, ['class'=>'form-control', 'title'=>'Descrição da etapa']) !!}
-            			<br>
-            			{!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
-            		{!! Form::close() !!}
-            	</div> {{-- ./col-md-4 --}}
-            	<div class="col-md-4"></div> {{-- ./col-md-4 --}}
+                        
+                        {!! Form::label('desc', 'Descrição da Etapa*') !!}
+                        {!! Form::text('desc', $etapa->desc, ['class'=>'form-control', 'title'=>'Descrição da etapa']) !!}
+                        <br>
+                        {!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
+                    {!! Form::close() !!}
+
+                </div> {{-- ./col-md-4 --}}
+
             </div> {{-- ./row --}}
 
             @yield('content')
@@ -72,23 +74,11 @@
 <script src="{{ asset ('../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
-{{-- jQuery Mask Plugin --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.9/jquery.mask.js"></script>
-{{-- Select2 --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
-{{-- Select2 - pt-BR --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/i18n/pt-BR.js"></script>
-{{-- Moment _ Datetimepicker --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/pt-br.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.45/js/bootstrap-datetimepicker.min.js"></script>
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-      Both of these plugins are recommended to enhance the
-      user experience -->
-
 
 
 </body>
 
 
 </html>
+
+

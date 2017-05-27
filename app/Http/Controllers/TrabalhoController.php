@@ -9,6 +9,7 @@ use App\Http\Requests\TrabalhoRequest;
 use App\Trabalho;
 use App\Academico;
 use App\User;
+use App\MembroBanca;
 use DB;
 use Auth;
 use View;
@@ -26,8 +27,48 @@ class TrabalhoController extends Controller {
      */
     public function index() {
 
+        // $query = DB::select('select u.name
+        //                           from trabalhos t
+        //                          inner join membro_bancas mb
+        //                             on mb.id = (t.orientador_id and t.coorientador_id)
+        //                          inner join users u
+        //                             on u.id = mb.user_id
+        //                          inner join academico_trabalhos atr
+        //                             on atr.trabalho_id = t.id
+        //                          inner join academicos a
+        //                             on a.id = atr.academico_id
+        //                          inner join users us
+        //                             on us.id = a.user_id;');
+        // $q = DB::select('select us.name as academiconome
+        //                      , u.name as orientadornome
+        //                      , t.titulo as trabalhotitulo
+        //                   from trabalhos t
+        //                  inner join membro_bancas mb
+        //                     on mb.id = (t.orientador_id and t.coorientador_id)
+        //                   left join users u
+        //                     on u.id = mb.user_id
+        //                  inner join academico_trabalhos atr
+        //                     on atr.trabalho_id = t.id
+        //                  inner join academicos a
+        //                     on a.id = atr.academico_id
+        //                  inner join users us
+        //                     on us.id = a.user_id');
+
+        $query = DB::select('select u.name
+                              from trabalhos t
+                             inner join membro_bancas mb
+                                on mb.id = t.orientador_id
+                             inner join users u
+                                on u.id = mb.user_id');
+
+        $x = array();
+        foreach ($query as $key => $value) {
+            $x = $value->name;
+        }
+
         return view('trabalho.index', [
-            'trabalho' => Trabalho::all()
+            'trabalho' => Trabalho::all(),
+            'query' => $x
         ]);
     }
 
@@ -43,14 +84,14 @@ class TrabalhoController extends Controller {
                         ->orderBy('u.name')
                         ->pluck('u.name', 'a.id');
 
-        $avaliador = DB::table('membro_bancas as mb')
+        $orientador = DB::table('membro_bancas as mb')
                         ->join('users as u', 'u.id', '=', 'mb.user_id')
                         ->orderBy('u.name')
                         ->pluck('u.name', 'mb.id');
 
         return View('trabalho.create', [
             'academico' => $academico,
-            'avaliador' => $avaliador
+            'orientador' => $orientador
         ]);
     }
 
@@ -62,60 +103,55 @@ class TrabalhoController extends Controller {
      */
     public function store(TrabalhoRequest $request) {
 
-        return $request->all();
+        // return $request->all();
         
-        if ($request->has('academico1')) {
+        if ($request->has('academico1') && $request->has('coorientador')) {
 
             $trabalho = new Trabalho;
             $trabalho->titulo = $request->input('titulo');
-            $trabalho->ano = Carbon::createFromDate($request->input('ano'), 1, 1, 'America/Sao_Paulo');
+            $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
-            $trabalho->avaliador()->associate($request->input('avaliador'));
+            $trabalho->orientador_id = $request->input('orientador');
+            $trabalho->coorientador_id = $request->input('coorientador');
             $trabalho->save();
 
-            $ultimotrabalho = DB::table('trabalhos')
-                                ->latest()
-                                ->first();
+            $lastTrabalho = DB::table('trabalhos')
+                        ->latest()
+                        ->first();
 
-            Academico::find($request->input('academico'))
-                ->trabalho()
-                ->associate($ultimotrabalho->id)
-                ->save();
-            
-            Academico::find($request->input('academico1'))
-                ->trabalho()
-                ->associate($ultimotrabalho->id)
-                ->save();
+            $lastTrabalho = Trabalho::find($lastTrabalho->id);
 
-            $directory = 'trabalhos/' . $request->input('ano') . '/' . $request->input('titulo');
-            Storage::makeDirectory($directory);
-
-            return redirect('/trabalho');
+            $lastTrabalho->academico()->sync([$request->input('academico'), $request->input('academico1')]);
             
 
-        } else {
+            // $directory = 'trabalhos/' . $request->input('ano') . '/' . $request->input('titulo');
+            // Storage::makeDirectory($directory);
+
+            return redirect('/trabalho')->with('message', 'Trabalho cadastrado com sucesso');
+            
+
+        } 
+        else {
             
             $trabalho = new Trabalho;
             $trabalho->titulo = $request->input('titulo');
-            $trabalho->ano = Carbon::createFromDate($request->input('ano'), 1, 1, 'America/Sao_Paulo');
+            $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
-            $trabalho->avaliador()->associate($request->input('avaliador'));
+            $trabalho->membrobanca()->associate($request->input('membrobanca'));
             $trabalho->save();
 
-            $ultimotrabalho = DB::table('trabalhos')
+            $lastTrabalho = DB::table('trabalhos')
                                 ->latest()
                                 ->first();
 
-            Academico::find($request->input('academico'))
-                ->trabalho()
-                ->associate($ultimotrabalho->id)
-                ->save();
+            $lastTrabalho = Trabalho::find($lastTrabalho->id);
+
+            $lastTrabalho->academico()->attach($request->input('academico'));
             
-            $directory = 'trabalhos/' . $request->input('ano') . '/' . $request->input('titulo');
-            Storage::makeDirectory($directory);
+            // $directory = 'trabalhos/' . $request->input('ano') . '/' . $request->input('titulo');
+            // Storage::makeDirectory($directory);
 
-            return redirect('/trabalho');
-
+            return redirect('/trabalho')->with('message', 'Trabalho cadastrado com sucesso');
 
         }
 

@@ -34,7 +34,7 @@
             
             
             <li class="treeview">
-                <a href="#"><span><i class="fa fa-user"></i> Acadêmico</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><span><i class="fa fa-user"></i> Aluno</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li><a href="{{ url('/academico/novo') }}"><i class="fa fa-plus"></i> Novo</a></li>
                     <li><a href="{{ url('/academico') }}"><i class="fa fa-list"></i> Listar</a></li>
@@ -42,7 +42,7 @@
             </li>
 
             <li class="treeview">
-                <a href="#"><span><i class="fa fa-users"></i> Avaliador</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><span><i class="fa fa-pencil-square-o"></i> Professor</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li><a href="{{ url('/membrobanca/novo') }}"><i class="fa fa-plus"></i> Novo</a></li>
                     <li><a href="{{ url('/membrobanca') }}"><i class="fa fa-list"></i> Listar</a></li>
@@ -58,7 +58,7 @@
             </li>
 
             <li class="treeview">
-                <a href="#"><span><i class="fa fa-globe"></i> Curso</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><span><i class="fa fa-graduation-cap"></i> Curso</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li><a href="{{ url('/curso/novo') }}"><i class="fa fa-plus"></i> Novo</a></li>
                     <li><a href="{{ url('/curso') }}"><i class="fa fa-list"></i> Listar</a></li>
@@ -66,7 +66,7 @@
             </li>
 
             <li class="treeview">
-                <a href="#"><span><i class="fa fa-language"></i> Departamento</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><span><i class="fa fa-users"></i> Departamento</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li><a href="{{ url('/departamento/novo') }}"><i class="fa fa-plus"></i> Novo</a></li>
                     <li><a href="{{ url('/departamento') }}"><i class="fa fa-list"></i> Listar</a></li>
@@ -76,8 +76,10 @@
             <li class="treeview">
                 <a href="#"><span><i class="fa fa-bell"></i> Etapa</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ url('/etapa/novo') }}"><i class="fa fa-plus"></i> Novo</a></li>
-                    <li><a href="{{ url('/etapa') }}"><i class="fa fa-list"></i> Listar</a></li>
+                    <li><a href="{{ url('/etapa/novo') }}"><i class="fa fa-plus"></i> Nova etapa primária</a></li>
+                    <li><a href="{{ url('/etapaano/novo') }}"><i class="fa fa-plus"></i> Nova etapa secundário</a></li>
+                    <li><a href="{{ url('/etapa') }}"><i class="fa fa-list"></i> Listar etapa primária</a></li>
+                    <li><a href="{{ url('/etapaano') }}"><i class="fa fa-list"></i> Listar etapa secundária</a></li>
                 </ul>
             </li>
             

@@ -12,7 +12,7 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Novo(a) Avaliador(a)" }}
+                {{ $page_title or "Novo(a) Professor(a)" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
@@ -61,13 +61,13 @@
                         <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-5">
-                                        {!! Form::label('nome', 'Nome *') !!}
-                                        {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do(a) avaliador(a)']) !!}
-                                    </div> {{-- ./col-md-5 --}}
-                                    <div class="col-md-5">
                                         {!! Form::label('departamento', 'Departamento *') !!}
                                         {!! Form::select('departamento', $departamento, null, ['class'=>'form-control', 'placeholder' => '', 'title'=>'Departamento que o(a) avaliador(a) pertence']) !!}
                                         <br>
+                                    </div> {{-- ./col-md-5 --}}
+                                    <div class="col-md-5">
+                                        {!! Form::label('nome', 'Nome *') !!}
+                                        {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do(a) avaliador(a)']) !!}
                                     </div> {{-- ./col-md-5 --}}
                                     
                                 </div> {{-- ./row --}}

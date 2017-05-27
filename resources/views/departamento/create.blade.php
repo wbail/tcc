@@ -58,7 +58,7 @@
                         <br>
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::label('nome', 'Nome *') !!}
+                                {!! Form::label('nome', 'Nome do Departamento *') !!}
                     			{!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do Departamento']) !!}
 
                             </div> <!-- ./col-md-6 -->

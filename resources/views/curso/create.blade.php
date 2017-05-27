@@ -12,7 +12,7 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Novo curso" }}
+                {{ $page_title or "Novo Curso" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
@@ -50,10 +50,19 @@
                 <div class="col-md-4">
                     {!! Form::open(['url' => '/curso/store', 'method'=>'post']) !!}
 
-                        {!! Form::label('coordenador', 'Coordenador do Curso *') !!}
-                        {!! Form::select('coordenador', $coordenador, null, ['class'=>'form-control', 'title'=>'Nome do Coordenador do curso', 'placeholder'=>'']) !!}
-                        <br>
 
+                        {!! Form::label('nome', 'Nome do Curso *') !!}
+                        {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do curso']) !!}
+                        
+                        <br>
+                        {!! Form::label('departamento', 'Departamento *') !!}
+                        {!! Form::select('departamento', $departamento, null, ['class'=>'form-control', 'title'=>'Nome do departamento da instituição de ensino', 'placeholder'=>'']) !!}
+                        <br>
+                        
+                        {!! Form::label('coordenador', 'Coordenador de TCC *') !!}
+                        {!! Form::select('coordenador', $coordenador, null, ['class'=>'form-control', 'title'=>'Nome do coordenador da disciplina de TCC', 'placeholder'=>'']) !!}
+
+                        <br>
                         <div class="row">
                             <div class="col-md-6">
                                 {!! Form::label('iniciovigencia', 'Data de Início *') !!}
@@ -63,15 +72,9 @@
                                 {!! Form::label('fimvigencia', 'Data de Término') !!}
                                 {!! Form::text('fimvigencia', null, ['class'=>'form-control', 'title'=>'Data de término da vigência como coordenador', 'id'=>'datetimepicker1']) !!}
                             </div> <!-- ./col-md-6 -->
-                        </div> <!-- ./row -->
+                        </div> <!-- ./row -->                        
                         <br>
-                        {!! Form::label('departamento', 'Departamento *') !!}
-                        {!! Form::select('departamento', $departamento, null, ['class'=>'form-control', 'title'=>'Nome do departamento da instituição de ensino', 'placeholder'=>'']) !!}
-                        <br>
-            			{!! Form::label('nome', 'Nome do Curso *') !!}
-            			{!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do curso']) !!}
-
-            			<br>
+            			
             			{!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
             		{!! Form::close() !!}
             	</div> {{-- ./col-md-4 --}}

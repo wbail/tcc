@@ -12,6 +12,6 @@ class Etapa extends Model
 
     public function etapaano()
     {
-    	// return $this->hasMany(EtapaAno::class);
+    	return $this->hasMany(EtapaAno::class);
     }
 }

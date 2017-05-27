@@ -12,7 +12,7 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Novo(a) Acadêmico(a)" }}
+                {{ $page_title or "Novo(a) Aluno(a)" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
@@ -43,7 +43,7 @@
             @endif
 
             @if (session('message'))
-                <div class="alert alert-warning alert-dismissible" role="alert">
+                <div class="alert alert-success alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <strong>{{ session('message') }}</strong>
                 </div>
@@ -62,6 +62,11 @@
                         <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-4">
+                                        {!! Form::label('curso', 'Curso *') !!}
+                                        {!! Form::select('curso', $curso, null, ['class'=>'form-control', 'title'=>'Curso do acadêmico', 'placeholder'=>'']) !!}
+                                        <br>
+                                    </div>                                  
+                                    <div class="col-md-4">
                                         {!! Form::label('nome', 'Nome *') !!}
                                         {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do acadêmico(a)']) !!}
                                         <br>
@@ -71,12 +76,6 @@
                                         {!! Form::text('ra', null, ['class'=>'form-control', 'min'=>'0', 'maxlength'=>'8', 'title'=>'Registro Acadêmico']) !!}
                                         <br>
                                     </div> {{-- ./col-md-5 --}}
-                                    <div class="col-md-4">
-                                        {!! Form::label('curso', 'Curso *') !!}
-                                        {!! Form::select('curso', $curso, null, ['class'=>'form-control', 'title'=>'Curso do acadêmico', 'placeholder'=>'']) !!}
-                                        <br>
-
-                                    </div>                                  
  
                                 </div> {{-- ./row --}}
                             
@@ -187,6 +186,11 @@
 </body>
 
 <script type="text/javascript">
+    
+    $(".alert-success").fadeTo(2000, 500).slideUp(500, function() {
+        $(".alert-success").slideUp(500);
+    });
+
     $('.phone_with_ddd').mask('(00) 00000-0000');
 
 
