@@ -11,4 +11,10 @@ class EtapaAno extends Model
     public function etapa() {
     	return $this->belongsTo(Etapa::class);
     }
+
+    public function trabalho() {
+    	return $this->belongsToMany(EtapaAno::class, 'etapa_trabalhos', 'etapaano_id', 'trabalho_id')
+    				->withPivot('etapaano_id', 'trabalho_id')
+    				->withTimestamps();
+    }
 }

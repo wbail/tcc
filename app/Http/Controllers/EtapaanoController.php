@@ -9,6 +9,7 @@ use App\Http\Requests\EtapaAnoRequest;
 use App\Etapa;
 use App\Trabalho;
 use App\EtapaAno;
+use App\EtapaTrabalho;
 use DB;
 use Carbon\Carbon;
 
@@ -49,13 +50,14 @@ class EtapaanoController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'etapa' => 'required',
             'titulo' => 'required',
             'data_final' => 'required|after:today',
         ]);
 
-        if($request->has('data_inicial')) {
+        if ($request->has('data_inicial')) {
 
             if ($request->input('data_inicial') > $request->input('data_final')) {
                 return back()->with('message', 'A Data Inicial não pode ser maior que a Data Final');
@@ -69,6 +71,13 @@ class EtapaanoController extends Controller
                 $etapa->etapa()->associate($request->input('etapa'));
                 $etapa->save();
 
+                if ($request->has('trabalho')) {
+                    $ultimoEtapaano = DB::table('etapa_anos')
+                            ->latest()
+                            ->first();        
+                    EtapaAno::find($ultimoEtapaano->id)->trabalho()->attach(array_values($request->input('trabalho')));
+                }
+
                 return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');
             }
 
@@ -79,6 +88,13 @@ class EtapaanoController extends Controller
             $etapa->ativa = $request->input('ativa');
             $etapa->etapa()->associate($request->input('etapa'));
             $etapa->save();
+
+            if ($request->has('trabalho')) {
+                $ultimoEtapaano = DB::table('etapa_anos')
+                        ->latest()
+                        ->first();        
+                EtapaAno::find($ultimoEtapaano->id)->trabalho()->attach(array_values($request->input('trabalho')));
+            }
 
             return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');
         }

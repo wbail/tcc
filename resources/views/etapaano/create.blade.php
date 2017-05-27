@@ -72,7 +72,7 @@
                             </div> <!-- ./col-md-6 -->
                         </div> <!-- ./row -->
                         <br>
-                        {!! Form::label('trabalho', 'Trabalho *') !!}
+                        {!! Form::label('trabalho', 'Trabalho') !!}
                         {!! Form::select('trabalho[]', $trabalho, null, ['class'=>'form-control', 'title'=>'Vincular trabalho à esta etapa', 'multiple'=>'multiple']) !!}
                         <br>
                         {!! Form::label('ativa', 'Etapa ativa') !!}
