@@ -48,14 +48,8 @@ class EtapaanoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EtapaAnoRequest $request)
     {
-
-        $this->validate($request, [
-            'etapa' => 'required',
-            'titulo' => 'required',
-            'data_final' => 'required|after:today',
-        ]);
 
         if ($request->has('data_inicial')) {
 
@@ -70,12 +64,9 @@ class EtapaanoController extends Controller
                 $etapa->ativa = $request->input('ativa');
                 $etapa->etapa()->associate($request->input('etapa'));
                 $etapa->save();
-
+                
                 if ($request->has('trabalho')) {
-                    $ultimoEtapaano = DB::table('etapa_anos')
-                            ->latest()
-                            ->first();        
-                    EtapaAno::find($ultimoEtapaano->id)->trabalho()->attach(array_values($request->input('trabalho')));
+                    $etapa->trabalho()->sync($request->input('trabalho'));
                 }
 
                 return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');
@@ -90,10 +81,7 @@ class EtapaanoController extends Controller
             $etapa->save();
 
             if ($request->has('trabalho')) {
-                $ultimoEtapaano = DB::table('etapa_anos')
-                        ->latest()
-                        ->first();        
-                EtapaAno::find($ultimoEtapaano->id)->trabalho()->attach(array_values($request->input('trabalho')));
+                $etapa->trabalho()->sync($request->input('trabalho'));
             }
 
             return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');
@@ -119,7 +107,11 @@ class EtapaanoController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('etapaano.edit', [
+            'etapaano' => EtapaAno::find($id),
+            'etapa' => Etapa::all()->pluck('desc', 'id'),
+            'trabalho' => Trabalho::all()->pluck('titulo', 'id'),
+        ]);
     }
 
     /**
@@ -129,9 +121,55 @@ class EtapaanoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EtapaAnoRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        //
+
+        $etapa = EtapaAno::find($id);
+        
+        if ($request->has('data_inicial')) {
+
+            if ($request->input('data_inicial') > $request->input('data_final')) {
+                return back()->with('message', 'A Data Inicial não pode ser maior que a Data Final');
+            } else {
+
+                $etapa->update([
+                    'titulo' => $request->input('titulo'),
+                    'data_inicial' => $request->input('data_inicial'),
+                    'data_final' => $request->input('data_final'),
+                    'ativa' => $request->input('ativa')
+                ]);
+
+                $etapa->etapa()->dissociate($etapa->etapa_id);
+                $etapa->etapa()->associate($request->input('etapa'));
+                $etapa->save();
+                
+                if ($request->has('trabalho')) {
+                    $etapa->trabalho()->sync($request->input('trabalho'));
+                }
+
+                return redirect('/etapaano')->with('message', 'Etapa atualizada com sucesso');
+            }
+
+        } else {
+            
+            $etapa->update([
+                'titulo' => $request->input('titulo'),
+                'data_inicial' => $request->input('data_inicial'),
+                'data_final' => $request->input('data_final'),
+                'ativa' => $request->input('ativa')
+            ]);
+
+            $etapa->etapa()->dissociate($etapa->etapa_id);
+            $etapa->etapa()->associate($request->input('etapa'));
+            $etapa->save();
+
+            if ($request->has('trabalho')) {
+                $etapa->trabalho()->sync($request->input('trabalho'));
+            }
+
+            return redirect('/etapaano')->with('message', 'Etapa atualizada com sucesso');
+        }
+        
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class EtapaAnoRequest extends FormRequest
 {
@@ -26,10 +26,14 @@ class EtapaAnoRequest extends FormRequest
     {
         return [
             'etapa' => 'required',
-            'titulo' => 'required',
-            'data_final' => 'required|after:today',
-            'data_inicial' => 'before:data_final',
-            
+            'titulo' => [
+                'required',
+                'unique:etapa_anos,titulo',
+                'min:5',
+                'max:100',
+                Rule::unique('etapa_anos')->ignore($this->id),
+            ],
+            'data_final' => 'required|after:today',            
         ];
     }
 
@@ -38,9 +42,11 @@ class EtapaAnoRequest extends FormRequest
         return [
             'etapa.required' => 'O campo Título é obrigatório.',
             'titulo.required' => 'O campo Descrição é obrigatório.',
+            'titulo.unique' => 'Título já cadaastrado.',
             'data_final.required' => 'O campo Data Final é obrigatório.',
             'data_final.after' => 'A Data Final deve ser a partir de amanhã.',
-            'data_inicial.before' => 'A Data Inicial deve ser uma data anterior que a Data Final',
         ];
     }
 }
+
+
