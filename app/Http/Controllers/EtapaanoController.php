@@ -10,9 +10,6 @@ use App\Etapa;
 use App\Trabalho;
 use App\EtapaAno;
 use App\EtapaTrabalho;
-use DB;
-use Carbon\Carbon;
-
 
 class EtapaanoController extends Controller
 {

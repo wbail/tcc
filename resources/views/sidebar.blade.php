@@ -76,10 +76,10 @@
             <li class="treeview">
                 <a href="#"><span><i class="fa fa-bell"></i> Etapa</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ url('/etapa/novo') }}"><i class="fa fa-plus"></i> Nova etapa primária</a></li>
-                    <li><a href="{{ url('/etapaano/novo') }}"><i class="fa fa-plus"></i> Nova etapa secundário</a></li>
-                    <li><a href="{{ url('/etapa') }}"><i class="fa fa-list"></i> Listar etapa primária</a></li>
-                    <li><a href="{{ url('/etapaano') }}"><i class="fa fa-list"></i> Listar etapa secundária</a></li>
+                    <li><a href="{{ url('/etapa/novo') }}"><i class="fa fa-plus"></i> Nova etapa</a></li>
+                    <li><a href="{{ url('/etapaano/novo') }}"><i class="fa fa-plus"></i> Definir Datas</a></li>
+                    <li><a href="{{ url('/etapa') }}"><i class="fa fa-list"></i> Listar Etapas</a></li>
+                    <li><a href="{{ url('/etapaano') }}"><i class="fa fa-list"></i> Listar Datas de Entrega</a></li>
                 </ul>
             </li>
             
