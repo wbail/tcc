@@ -30,7 +30,7 @@ class CursoRequest extends FormRequest
             'fimvigencia' => 'date_format:d/m/Y|after:iniciovigencia',
             'nome' => [
                 'required',
-                'regex:/([A-Z])\w.+[^0-9]/',
+                //'regex:/([A-Z])\w.+[^0-9]/',
                 Rule::unique('cursos')->ignore($this->id)
             ],
             'departamento' => [

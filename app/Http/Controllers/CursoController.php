@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CursoRequest;
 
 use App\Curso;
+use App\User;
 use App\Departamento;
 use App\MembroBanca;
 use App\CoordenadorCurso;
@@ -61,6 +62,14 @@ class CursoController extends Controller {
      */
     public function store(CursoRequest $request) {
         
+        $m = MembroBanca::find($request->input('coordenador'));
+        
+        if (User::find($m->user_id)->ativo <> 1) {
+            return back()
+                    ->with('message', 'Coordenador inativo')
+                    ->withInput();
+        } 
+
         if ($request->has('fimvigencia')) {
             $curso = new Curso;
             $curso->nome = $request->input('nome');
@@ -85,6 +94,7 @@ class CursoController extends Controller {
             $curso->nome = $request->input('nome');
             $curso->departamento()->associate($request->input('departamento'));
             $curso->save();
+            
 
             $ultimocurso = DB::table('cursos')
                             ->latest()

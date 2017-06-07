@@ -19,8 +19,8 @@ class Trabalho extends Model
     }
 
     public function etapaano() {
-    	return $this->belongsToMany(EtapaAno::class, 'etapa_trabalhos', 'trabalho_id', 'etapaano_id')
-    				->withPivot('trabalho_id', 'etapaano_id')
+    	return $this->belongsToMany(EtapaAno::class, 'etapa_trabalhos', 'etapaano_id', 'trabalho_id')
+    				->withPivot('etapaano_id', 'trabalho_id')
     				->withTimestamps();
     }
 

@@ -84,6 +84,12 @@
                                     </div> {{-- ./col-md-9 --}}
 
                                 </div> {{-- ./row --}}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {!! Form::label('ativo', 'Ativo *') !!}
+                                        {!! Form::checkbox('ativo', 1, true, ['title'=>'Situação no sistema: Ativo']) !!}
+                                    </div> {{-- ./col-md-6 --}}
+                                </div> {{-- ./row --}}
 
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}

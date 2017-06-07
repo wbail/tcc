@@ -124,7 +124,16 @@
                                         @endif
                                     </div> {{-- ./col-md-9 --}}
                                 </div> {{-- ./row --}}
-
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {!! Form::label('ativo', 'Ativo *') !!}
+                                        @if($membrobanca->user->ativo <> 1)
+                                        {!! Form::checkbox('ativo', 1, $membrobanca->user->ativo, ['title'=>'Situação no sistema: Inativo']) !!}
+                                        @else
+                                        {!! Form::checkbox('ativo', 1, $membrobanca->user->ativo, ['title'=>'Situação no sistema: Ativo']) !!}
+                                        @endif
+                                    </div> {{-- ./col-md-6 --}}
+                                </div> {{-- ./row --}}
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
 
