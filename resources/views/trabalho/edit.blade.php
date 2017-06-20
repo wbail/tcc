@@ -12,7 +12,7 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Editando o trabalho " . $trabalho->titulo}}
+                {{ $page_title or "Editando o trabalho " . $trabalho->titulo }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
@@ -22,7 +22,7 @@
             </ol> --}}
             <a href="{{ url('trabalho') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
-                           
+            	           
 
 
         </section>
@@ -31,8 +31,9 @@
         <section class="content">
             <!-- Your Page Content Here -->
 
-            @if (count($errors) > 0)
-                <div class="alert alert-warning">
+            @if(count($errors) > 0)
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <ul>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -43,7 +44,7 @@
 
             <br>
 
-             {!! Form::open(['url'=>"/trabalho/update/$trabalho->id", 'method'=>'put']) !!}
+            {!! Form::open(['url'=>'/trabalho/update/$trabalho->id', 'method'=>'put']) !!}
             <div class="row">
                 <div class="col-md-3"></div> {{-- ./col-md-4 --}}
                 <div class="col-md-6">
@@ -60,65 +61,82 @@
                                 </div> {{-- ./row --}}
                                 <br>
                                 <div class="row">
-                                    @if(count($trabalho->academico) > 1)
+                                    @if($qntacademicos > 1)
                                         <div class="col-md-6">
                                             {!! Form::label('academico', 'Acadêmico(a) *') !!}
+                                            {!! Form::select('academico', $academico, $trabalho->academico[0]->pivot->academico_id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
                                             
-                                            {!! Form::select('academico', $academico, $trabalho->academico[0]->id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
-                                        </div> {{-- ./col-md-6 --}}        
+                                        </div> {{-- ./col-md-6 --}}
                                         <div class="col-md-6">
-                                            {!! Form::label('academico', 'Acadêmico(a) *') !!}
-                                            
-                                            {!! Form::select('academico', $academico, $trabalho->academico[1]->id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
-                                        </div> {{-- ./col-md-6 --}}        
+                                            {!! Form::label('academico1', 'Acadêmico(a)') !!}
+                                            {!! Form::select('academico1', $academico, $trabalho->academico[1]->pivot->academico_id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
+                                        </div> {{-- ./col-md-6 --}}
                                     @else
                                         <div class="col-md-6">
                                             {!! Form::label('academico', 'Acadêmico(a) *') !!}
-                                            {!! Form::select('academico', $academico, $trabalho->academico[0]->id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
-                                        </div> 
+                                            {!! Form::select('academico', $academico, $trabalho->academico[0]->pivot->academico_id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
+                                            
+                                        </div> {{-- ./col-md-6 --}}
                                         <div class="col-md-6">
                                             {!! Form::label('academico1', 'Acadêmico(a)') !!}
                                             {!! Form::select('academico1', $academico, null, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
-                                        </div>     
+                                        </div> {{-- ./col-md-6 --}}
                                     @endif
-                                    {{-- <div class="col-md-6">
-                                        {!! Form::label('academico', 'Acadêmico(a) *') !!}
-                                        {!! Form::select('academico', $academico, $trabalho->academico[0]->id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
-                                        
-                                    </div> 
-                                    <div class="col-md-6">
-                                        {!! Form::label('academico1', 'Acadêmico(a)') !!}
-                                        {!! Form::select('academico1', $academico, null, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
-                                    </div>  --}}
                                 </div> {{-- ./row --}}
                                 <br>                                
                                 <div class="row">
                                     <div class="col-md-6">
                                         {!! Form::label('ano', 'Ano') !!}
-                                        {!! Form::text('ano', $trabalho->ano, ['class'=>'form-control', 'id'=>'datetimepicker']) !!}
+                                        {!! Form::text('ano', $trabalho->ano, ['class'=>'form-control', 'id'=>'datetimepicker', 'title'=>'Ano do trabalho']) !!}
                                     </div> {{-- ./col-md-2 --}}
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         {!! Form::label('periodo', 'Período') !!}
                                         <br>
-                                        {!! Form::radio('periodo', 1, $trabalho->periodo) !!}
+                                        @if($trabalho->periodo == 1)
+                                        {!! Form::radio('periodo', 3, null, ['title'=>'Disciplina Anual']) !!}
+                                        {!! Form::label('tres', 'Anual') !!}
+                                        {!! Form::radio('periodo', 1, true, ['title'=>'Primeiro Semestre']) !!}
                                         {!! Form::label('um', '1') !!}
-                                        {!! Form::radio('periodo', 2, $trabalho->periodo) !!}
+                                        {!! Form::radio('periodo', 2, null, ['title'=>'Segundo Semestre']) !!}
                                         {!! Form::label('dois', '2') !!}
+                                        @elseif($trabalho->periodo == 2)
+                                        {!! Form::radio('periodo', 3, null, ['title'=>'Disciplina Anual']) !!}
+                                        {!! Form::label('tres', 'Anual') !!}
+                                        {!! Form::radio('periodo', 1, null, ['title'=>'Primeiro Semestre']) !!}
+                                        {!! Form::label('um', '1') !!}
+                                        {!! Form::radio('periodo', 2, true, ['title'=>'Segundo Semestre']) !!}
+                                        {!! Form::label('dois', '2') !!}
+                                        @elseif($trabalho->periodo == 3)
+                                        {!! Form::radio('periodo', 3, true, ['title'=>'Disciplina Anual']) !!}
+                                        {!! Form::label('tres', 'Anual') !!}
+                                        {!! Form::radio('periodo', 1, null, ['title'=>'Primeiro Semestre']) !!}
+                                        {!! Form::label('um', '1') !!}
+                                        {!! Form::radio('periodo', 2, null, ['title'=>'Segundo Semestre']) !!}
+                                        {!! Form::label('dois', '2') !!}
+                                        @endif
+                                        
                                     </div> {{-- ./col-md-3 --}}
-                                    <div class="col-md-3">
-                                        {!! Form::label('aprovado', 'Aprovado') !!}
-                                        <br>
-                                        {!! Form::checkbox('aprovado', 1, $trabalho->aprovado) !!}
-                                    </div> {{-- ./col-md-3 --}}
+                                    
                                 </div> {{-- ./row --}}
                                 <br>
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        {!! Form::label('avaliador', 'Avaliador(a) *') !!}
-                                        {!! Form::select('avaliador', $avaliador, $trabalho->avaliador_id, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Avaliador(a)']) !!}
-                                    </div> {{-- ./col-md-12 --}}
-
+                                    <div class="col-md-6">
+                                        {!! Form::label('orientador', 'Orientador(a) *') !!}
+                                        {!! Form::select('orientador', $orientador, $trabalho->orientador_id, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Orientador(a)']) !!}
+                                    </div> {{-- ./col-md-6 --}}
+                                    <div class="col-md-6">
+                                        {!! Form::label('coorientador', 'Coorientador(a)') !!}
+                                        {!! Form::select('coorientador', $orientador, $trabalho->coorientador_id, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
+                                    </div> {{-- ./col-md-6 --}}
                                 </div> {{-- ./row --}}
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <br>
+                                        {!! Form::label('aprovado', 'Aprovado') !!}
+                                        <br>
+                                        {!! Form::checkbox('aprovado', 1, $trabalho->aprovado, ['title'=>'Situação do trabalho. Aprovado/Não Aprovado']) !!}
+                                    </div>
+                                </div>
 
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
@@ -166,43 +184,38 @@
 </body>
 
 <script type="text/javascript">
-    
+	
     // Academico
-    // $(".s2").select2({
-    //     language: "pt-BR",
-    //     allowClear: true,
-    //     placeholder: '',
-
-    //     ajax: {
-    //         dataType: 'json',
-    //         type: 'GET',
-    //         url: '{{ url("/academico") }}',
-    //         delay: 250,
-    //         data: function(params) {
-    //             return {
-    //                 term: params.term
-    //             }
-    //         },
-    //         processResults: function (data) {
-    //             return {
-                    
-    //                 results: $.map(data.itens, function(val, i) {
-    //                     return {id: val, text:i};
-    //                 })
-    //             };
-                
-    //         },
-    //     }
-
-    // });
-
-    $(".s2").select2({
-        language: "pt-BR",
+	$(".s2").select2({
+		language: "pt-BR",
         allowClear: true,
-        placeholder: ''
-    });
+        placeholder: '',
 
-    // Avaliador
+        ajax: {
+            dataType: 'json',
+            type: 'GET',
+            url: '{{ url("/academico") }}',
+            delay: 250,
+            data: function(params) {
+                return {
+                    term: params.term
+                }
+            },
+            processResults: function (data) {
+                return {
+                    
+                    results: $.map(data.itens, function(val, i) {
+                        return {id: val, text:i};
+                    })
+                };
+                
+            },
+        }
+
+	});
+
+
+    // Orientador
     $(".s3").select2({
         language: "pt-BR",
         allowClear: true,        
@@ -210,7 +223,7 @@
         ajax: {
             dataType: 'json',
             type: 'GET',
-            url: '{{ url("/avaliador") }}',
+            url: '{{ url("/membrobanca") }}',
             delay: 250,
             data: function(params) {
                 return {
@@ -232,11 +245,11 @@
 
 
 
-    $('#datetimepicker').datetimepicker({
-        locale: 'pt-br',
-        format: 'YYYY',
+	$('#datetimepicker').datetimepicker({
+		locale: 'pt-br',
+		format: 'YYYY',
         
-    });
+	});
 
     $('.datetimepicker1').datetimepicker({
         locale: 'pt-br',

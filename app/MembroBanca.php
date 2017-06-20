@@ -21,6 +21,6 @@ class MembroBanca extends Model
     }
 
     public function trabalho() {
-        return $this->belongsToMany(Trabalho::class, 'orientador_id', 'coorientador_id');
+        return $this->hasMany(Trabalho::class, 'orientador_id');
     }
 }

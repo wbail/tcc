@@ -12,7 +12,7 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Nova Etapa" }}
+                {{ $page_title or "Nova Definição de Data para Etapa" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
@@ -59,7 +59,7 @@
                         {!! Form::select('etapa', $etapa, null, ['class'=>'form-control', 'title'=>'Etapa', 'placeholder'=>'']) !!}
                         <br>
                         {!! Form::label('titulo', 'Descrição *') !!}
-                        {!! Form::text('titulo', null, ['class'=>'form-control', 'title'=>'Descrição da etapa']) !!}
+                        {!! Form::textarea('titulo', null, ['class'=>'form-control', 'title'=>'Descrição da etapa', 'rows'=>'2']) !!}
                         <br>
                         <div class="row">
                             <div class="col-md-6">
@@ -72,10 +72,10 @@
                             </div> <!-- ./col-md-6 -->
                         </div> <!-- ./row -->
                         <br>
-                        {!! Form::label('trabalho', 'Trabalho') !!}
+{{--                         {!! Form::label('trabalho', 'Trabalho') !!}
                         {!! Form::select('trabalho[]', $trabalho, null, ['class'=>'form-control', 'title'=>'Vincular trabalho à esta etapa', 'multiple'=>'multiple']) !!}
                         <br>
-                        {!! Form::label('ativa', 'Etapa ativa') !!}
+ --}}                        {!! Form::label('ativa', 'Etapa ativa') !!}
                         {!! Form::checkbox('ativa', 1, true) !!}
                         <br>
             			{!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}

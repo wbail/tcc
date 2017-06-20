@@ -12,7 +12,7 @@
         <section class="content-header">
             
             <h1>
-                Editando o acadêmico(a) {{ $academico->user->name }}
+                Editando o aluno(a) {{ $academico->user->name }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->

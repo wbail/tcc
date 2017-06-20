@@ -27,48 +27,10 @@ class TrabalhoController extends Controller {
      */
     public function index() {
 
-        // $query = DB::select('select u.name
-        //                           from trabalhos t
-        //                          inner join membro_bancas mb
-        //                             on mb.id = (t.orientador_id and t.coorientador_id)
-        //                          inner join users u
-        //                             on u.id = mb.user_id
-        //                          inner join academico_trabalhos atr
-        //                             on atr.trabalho_id = t.id
-        //                          inner join academicos a
-        //                             on a.id = atr.academico_id
-        //                          inner join users us
-        //                             on us.id = a.user_id;');
-        // $q = DB::select('select us.name as academiconome
-        //                      , u.name as orientadornome
-        //                      , t.titulo as trabalhotitulo
-        //                   from trabalhos t
-        //                  inner join membro_bancas mb
-        //                     on mb.id = (t.orientador_id and t.coorientador_id)
-        //                   left join users u
-        //                     on u.id = mb.user_id
-        //                  inner join academico_trabalhos atr
-        //                     on atr.trabalho_id = t.id
-        //                  inner join academicos a
-        //                     on a.id = atr.academico_id
-        //                  inner join users us
-        //                     on us.id = a.user_id');
-
-        $query = DB::select('select u.name
-                              from trabalhos t
-                             inner join membro_bancas mb
-                                on mb.id = t.orientador_id
-                             inner join users u
-                                on u.id = mb.user_id');
-
-        $x = array();
-        foreach ($query as $key => $value) {
-            $x = $value->name;
-        }
+        // return Trabalho::with('membrobanca')->with('coorientador')->get();
 
         return view('trabalho.index', [
-            'trabalho' => Trabalho::all(),
-            'query' => $x
+            'trabalho' => Trabalho::with('membrobanca')->with('coorientador')->get(),
         ]);
     }
 
@@ -130,8 +92,7 @@ class TrabalhoController extends Controller {
             return redirect('/trabalho')->with('message', 'Trabalho cadastrado com sucesso');
             
 
-        } 
-        else {
+        } else {
             
             $trabalho = new Trabalho;
             $trabalho->titulo = $request->input('titulo');
@@ -177,22 +138,27 @@ class TrabalhoController extends Controller {
      */
     public function edit($id) {
 
+        $qntacademicos = Trabalho::find($id)
+                            ->academico()
+                            ->count();
+
         $trabalho = Trabalho::find($id);
-
+   
         $academico = DB::table('academicos as a')
-                        ->join('pessoas as p', 'p.id', '=', 'a.pessoa_id')
-                        ->orderBy('p.nome')
-                        ->pluck('p.nome', 'a.id');
+                        ->join('users as u', 'u.id', '=', 'a.user_id')
+                        ->orderBy('u.name')
+                        ->pluck('u.name', 'a.id');
 
-        $avaliador = DB::table('avaliadors as a')
-                        ->join('pessoas as p', 'p.id', '=', 'a.pessoa_id')
-                        ->orderBy('p.nome')
-                        ->pluck('p.nome', 'a.id');
+        $orientador = DB::table('membro_bancas as mb')
+                        ->join('users as u', 'u.id', '=', 'mb.user_id')
+                        ->orderBy('u.name')
+                        ->pluck('u.name', 'mb.id');
 
         return view('trabalho.edit', [
             'trabalho' => $trabalho,
             'academico' => $academico,
-            'avaliador' => $avaliador
+            'orientador' => $orientador,
+            'qntacademicos' => $qntacademicos,
         ]);
     }
 

@@ -77,7 +77,7 @@
                                         {!! Form::label('ano', 'Ano') !!}
                                         {!! Form::text('ano', null, ['class'=>'form-control', 'id'=>'datetimepicker', 'title'=>'Ano do trabalho']) !!}
                                     </div> {{-- ./col-md-2 --}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         {!! Form::label('periodo', 'Período') !!}
                                         <br>
                                         {!! Form::radio('periodo', 1, true, ['title'=>'Disciplina Anual']) !!}
@@ -87,6 +87,7 @@
                                         {!! Form::radio('periodo', 2, false, ['title'=>'Segundo Semestre']) !!}
                                         {!! Form::label('dois', '2') !!}
                                     </div> {{-- ./col-md-3 --}}
+                                    
                                 </div> {{-- ./row --}}
                                 <br>
                                 <div class="row">
@@ -98,9 +99,15 @@
                                         {!! Form::label('coorientador', 'Coorientador(a)') !!}
                                         {!! Form::select('coorientador', $orientador, null, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
                                     </div> {{-- ./col-md-6 --}}
-
-
                                 </div> {{-- ./row --}}
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <br>
+                                        {!! Form::label('aprovado', 'Aprovado') !!}
+                                        <br>
+                                        {!! Form::checkbox('aprovado', 1, false, ['title'=>'Situação do trabalho. Aprovado/Não Aprovado']) !!}
+                                    </div>
+                                </div>
 
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}

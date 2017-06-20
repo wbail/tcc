@@ -9,7 +9,12 @@ class Trabalho extends Model
     protected $fillable = ['titulo', 'aprovado', 'ano', 'periodo'];
 
     public function membrobanca() {
-    	return $this->belongsToMany(MembroBanca::class, 'orientador_id', 'coorientador_id');
+        return $this->belongsTo(MembroBanca::class, 'orientador_id');
+    }
+
+    public function coorientador() {
+    	return $this->belongsTo(MembroBanca::class, 'coorientador_id');
+
     }
 
     public function academico() {

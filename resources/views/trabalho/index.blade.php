@@ -48,7 +48,7 @@
             			<th class="text-center">Ano</th>
             			<th class="text-center">Período</th>
             			<th class="col-md-2">Acadêmico(as)</th>
-            			<th>Orientador(as)</th>
+            			<th title="Orientador/Coorientador">Orientador(as)</th>
                         <th class="text-center">Situação</th>
             			<th class="text-center">Ação</th>
             		</tr>
@@ -59,21 +59,27 @@
             		<tr>
             			<td>{{ $trabalho->titulo }}</td>
             			<td class="text-center">{{ \Carbon\Carbon::parse($trabalho->ano)->format('Y') }}</td>
-            			<td class="text-center">{{ $trabalho->periodo }}</td>
+            			<td class="text-center">
+                            @if($trabalho->periodo == 3)
+                                Anual
+                            @else
+                            {{ $trabalho->periodo }}
+                            @endif
+                        </td>
             			<td>
 	            			@foreach($trabalho->academico as $academico)
 		            			<li>{{ $academico->user->name }}</li>
 		            		@endforeach
             			</td>
-            			<td>
-                            {{ $query }}
-                            {{--
-                            @foreach($query as $query)
-                                {{ $query->name }}
-                            @endforeach
-                            <li>Teste</li>
-                            --}}
-                            
+            			<td>                            
+                            <li>
+                                {{ $trabalho->membrobanca->user->name }}
+                                @if($trabalho->coorientador)
+                                    <li>
+                                        {{ $trabalho->coorientador->user->name }}
+                                    </li>
+                                @endif
+                            </li>                                                  
                         </td>
                         <td class="text-center">
                             @if($trabalho->aprovado == 1)
