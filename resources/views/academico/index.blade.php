@@ -51,13 +51,13 @@
                     @foreach($academico as $academico)
                     <tr>
                         <td>{{ $academico->ra }}</td>
-                        <td>{{ $academico->user->name }}</td>
-                        <td>{{ $academico->user->email }}</td>
-                        <td>{{ $academico->curso->nome }}</td>
+                        <td>{{ $academico->name }}</td>
+                        <td>{{ $academico->email }}</td>
+                        <td>{{ $academico->cursonome }}</td>
                         
                         <td class="text-center">
-                            <a id="{{ $academico->id }}" class="btn btn-link" href="{{ route('academico.edit', ['id'=>$academico->id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
-                            <button id="{{ $academico->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelAcademico" title="Excluir"><i class="fa fa-trash"></i> </button>
+                            <a id="{{ $academico->academicoid }}" class="btn btn-link" href="{{ route('academico.edit', ['id'=>$academico->academicoid]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
+                            <button id="{{ $academico->academicoid }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelAcademico" title="Excluir"><i class="fa fa-trash"></i> </button>
                         </td>
                     </tr>
                     @endforeach

@@ -25,7 +25,7 @@ class EtapaRequest extends FormRequest {
         
         return [
             
-            'desc' => 'required|unique:etapas,desc|max:45|min:1|alpha_num',
+            'desc' => 'required|unique:etapas,desc|max:45|min:1',
                     
         ];
     }

@@ -39,8 +39,21 @@ class AcademicoController extends Controller {
                         
         }
 
+
+        $academicos = DB::table('membro_bancas as mb')
+                        ->join('users as u', 'u.id', '=', 'mb.user_id')
+                        ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
+                        ->join('cursos as c', 'c.departamento_id', '=', 'd.id')
+                        ->join('academicos as a', 'a.curso_id', '=', 'c.id')
+                        ->join('users as ua', 'ua.id', '=', 'a.user_id')
+                        ->where('u.id', '=', Auth::user()->id)
+                        ->select('a.*', 'a.id as academicoid', 'ua.*', 'c.nome as cursonome')
+                        ->get();
+
+        // return $academicos;
+
         return View('academico.index', [
-            'academico' => Academico::all()
+            'academico' => $academicos
         ]);
     }
 
@@ -51,14 +64,15 @@ class AcademicoController extends Controller {
      */
     public function create() {
 
-        $curso = DB::table('cursos as c')
-            ->join('departamentos as d', 'c.departamento_id', '=', 'd.id')
-            ->join('instituicaos as i', 'i.id', 'd.instituicao_id')
-            ->where('i.sigla', '=', 'UEPG')
-            ->select('c.id', 'c.nome')
-            ->orderBy('c.nome', 'asc')
-            ->pluck('c.nome', 'c.id');
 
+        // apenas os cursos do departamento do coordenador
+        $curso = DB::table('cursos as c')
+                ->join('departamentos as d', 'd.id', '=', 'c.departamento_id')
+                ->join('membro_bancas as mb', 'mb.id', '=', 'd.id')
+                ->join('users as u', 'u.id', '=', 'mb.user_id')
+                ->where('u.id', '=', Auth::user()->id)
+                ->select('c.*')
+                ->pluck('c.nome', 'c.id');
 
         return view('academico.create', [
             'curso' => $curso
@@ -133,13 +147,14 @@ class AcademicoController extends Controller {
      */
     public function edit($id) {
 
+         // apenas os cursos do departamento do coordenador
         $curso = DB::table('cursos as c')
-            ->join('departamentos as d', 'c.departamento_id', '=', 'd.id')
-            ->join('instituicaos as i', 'i.id', 'd.instituicao_id')
-            ->where('i.sigla', '=', 'UEPG')
-            ->select('c.id', 'c.nome')
-            ->orderBy('c.nome', 'asc')
-            ->pluck('c.nome', 'c.id');
+                ->join('departamentos as d', 'd.id', '=', 'c.departamento_id')
+                ->join('membro_bancas as mb', 'mb.id', '=', 'd.id')
+                ->join('users as u', 'u.id', '=', 'mb.user_id')
+                ->where('u.id', '=', Auth::user()->id)
+                ->select('c.*')
+                ->pluck('c.nome', 'c.id');
 
         return View('academico.edit', [
             'academico' => Academico::find($id),
