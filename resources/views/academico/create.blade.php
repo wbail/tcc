@@ -92,13 +92,18 @@
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-md-12">
                                     {!! Form::label('email', 'E-mail *') !!}
                                     {!! Form::text('email', null, ['class'=>'form-control', 'title'=>'E-mail do acadêmico(a)']) !!}
                                 </div> {{-- ./col-md-6 --}}
-                                <div class="col-md-5">
-                                    {!! Form::label('telefone', 'Telefone *') !!}<br>
-                                    
+                            </div> {{-- ./row --}}
+                            <br>
+                            <div class="row">
+                                <div class="col-md-4">
+                                
+                                    {!! Form::label('tipo', 'Tipo de Telefone *') !!}<br>
+                                    {!! Form::select('tipo', $tipo, 1, ['class'=>'form-control', 'title'=>'Tipo de Telefone', 'placeholder'=>'']) !!}
+
                                     {{-- 
                                     {!! Form::text('telefone', null, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
                                     <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
@@ -107,8 +112,10 @@
                                     </div>
 
                                     --}}
-
+                                </div> {{-- ./col-md-3 --}}
+                                <div class="col-md-5">
                                     <!-- Add telefone angular -->
+                                    {!! Form::label('telefone', 'Telefone *') !!}<br>
                                     <div ng-app="numeroTelefoneList" ng-cloak ng-controller="myCtrl">
                                         <div ng-repeat="x in numero">
                                             <div class="row">
@@ -136,12 +143,10 @@
                                             </div>
                                         </div>
                                         {{-- <p class="w3-padding-left w3-text-red">@{{errortext}}</p> --}}
-                                    </div>
-                                    
-
-                                </div> {{-- ./col-md-4 --}}
+                                    </div> 
+                                
+                                </div> {{-- ./col-md-5 --}}
                             </div> {{-- ./row --}}
-                            <br>
 
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}

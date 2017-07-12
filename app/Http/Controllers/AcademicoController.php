@@ -64,6 +64,7 @@ class AcademicoController extends Controller {
      */
     public function create() {
 
+        $tipo = ['1' => 'Celular', '2' => 'Fixo', '3' => 'Comercial'];
 
         // apenas os cursos do departamento do coordenador
         $curso = DB::table('cursos as c')
@@ -75,7 +76,8 @@ class AcademicoController extends Controller {
                 ->pluck('c.nome', 'c.id');
 
         return view('academico.create', [
-            'curso' => $curso
+            'curso' => $curso,
+            'tipo' => $tipo
         ]);
     }
 

@@ -11,6 +11,7 @@ use App\Departamento;
 use App\MembroBanca;
 use App\CoordenadorCurso;
 use DB;
+use Auth;
 
 class CursoController extends Controller {
 
@@ -21,8 +22,19 @@ class CursoController extends Controller {
      */
     public function index() {
 
+        $curso = DB::table('cursos as c')
+                    ->join('departamentos as d', 'd.id', '=', 'c.departamento_id')
+                    ->join('membro_bancas as mb', 'mb.departamento_id', '=' , 'd.id')
+                    ->join('users as u', 'u.id', '=', 'mb.user_id')
+                    ->where('mb.user_id', '=', Auth::user()->id)
+                    ->select('u.name', 'c.*', 'd.*')
+                    ->get();
+
+        // return $curso;
+
         return view('curso.index', [
             'curso' => Curso::with(['membrobanca.user'])->get()
+            
         ]);
     }
 

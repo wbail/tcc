@@ -17,6 +17,7 @@ use Carbon\Carbon;
 // https://www.instagram.com/juolimon/
 // Patricia Fecher
 // https://www.facebook.com/luana.collaneri.1
+// https://www.instagram.com/lluanamelo/
 
 class TrabalhoController extends Controller {
 
