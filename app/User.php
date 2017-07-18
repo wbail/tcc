@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Auth;
 
 class User extends Authenticatable
 {
@@ -45,6 +46,13 @@ class User extends Authenticatable
 
     public function telefone() {
         return $this->hasMany(Telefone::class);
+    }
+
+    public static function userMembroDepartamento () {
+        return User::find(Auth::user()->id)
+                    ->membrobanca()
+                    ->first();
+                    
     }
 
 }

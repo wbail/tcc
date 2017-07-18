@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MembroBancaRequest extends FormRequest
 {
@@ -26,7 +27,11 @@ class MembroBancaRequest extends FormRequest
         return [
             'nome' => 'required|regex:/^[\pL\s\-]+$/u|max:80',
             'departamento' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($this->id)
+            ],
             'telefone0' => 'required|unique:telefones,numero',
             'banca' => 'required_without_all:orientador,coorientador',
             // 'orientador' => 'required_without_all:banca,coorientador',

@@ -12,14 +12,11 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Editando o(a) membrobanca(a) " . $membrobanca->user->name }}
+                {{ $page_title or "Editando o(a) professor(a) " . $membrobanca->user->name }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="{{ url('/membrobanca') }}"><i class="fa fa-dashboard"></i> Acadêmicos</a></li>
-                <li class="active">Novo</li>
-            </ol> --}}
+
             <a href="{{ url('membrobanca') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
                            
@@ -32,10 +29,11 @@
             <!-- Your Page Content Here -->
 
             @if (count($errors) > 0)
-                <div class="alert alert-warning">
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <ul>
                         @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
+                        <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>

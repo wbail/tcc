@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use App\Http\Requests\EtapaAnoRequest;
+use Response;
 
 use App\Etapa;
 use App\Trabalho;
@@ -93,7 +94,11 @@ class EtapaanoController extends Controller
      */
     public function show($id)
     {
-        //
+        // $arquivosnomes = ['name' => 'Guilhrme', 'created_at' => '2017-07-15 20:05', 'caminho' => '../storage/tcc/foo/bar'];
+        $arquivosnomes = ['name' => $id];
+
+        return Response::json($arquivosnomes);
+        
     }
 
     /**

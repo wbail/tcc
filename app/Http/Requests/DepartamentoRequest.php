@@ -38,7 +38,7 @@ class DepartamentoRequest extends FormRequest {
                 'alpha',
                 'min:3',
                 'max:10',
-                Rule::unique('departamentos')->ignore($this->id),
+                
             ],
         ];
     }

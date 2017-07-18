@@ -54,7 +54,7 @@
              {!! Form::open(['url'=>'/academico/store', 'method'=>'post']) !!}
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Informações Básicas</h3>
@@ -85,7 +85,7 @@
 
                 </div> {{-- ./col-md-6 --}}
 
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Contato</h3>
@@ -113,7 +113,7 @@
 
                                     --}}
                                 </div> {{-- ./col-md-3 --}}
-                                <div class="col-md-5">
+                                <div class="col-md-6">
                                     <!-- Add telefone angular -->
                                     {!! Form::label('telefone', 'Telefone *') !!}<br>
                                     <div ng-app="numeroTelefoneList" ng-cloak ng-controller="myCtrl">

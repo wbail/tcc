@@ -21,20 +21,17 @@ class CursoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-
+        
         $curso = DB::table('cursos as c')
-                    ->join('departamentos as d', 'd.id', '=', 'c.departamento_id')
-                    ->join('membro_bancas as mb', 'mb.departamento_id', '=' , 'd.id')
+                    ->join('coordenador_cursos as cc', 'c.id', '=', 'cc.curso_id')
+                    ->join('membro_bancas as mb', 'mb.id', '=', 'cc.coordenador_id')
                     ->join('users as u', 'u.id', '=', 'mb.user_id')
-                    ->where('mb.user_id', '=', Auth::user()->id)
-                    ->select('u.name', 'c.*', 'd.*')
+                    ->where('c.departamento_id', '=', User::userMembroDepartamento()->departamento_id)
+                    ->select('u.name as coordenador', 'c.id', 'c.nome as nome')
                     ->get();
-
-        // return $curso;
-
+        
         return view('curso.index', [
-            'curso' => Curso::with(['membrobanca.user'])->get()
-            
+            'curso' => $curso
         ]);
     }
 
@@ -48,8 +45,7 @@ class CursoController extends Controller {
         $coordenador = DB::table('membro_bancas as mb')
             ->join('users as u', 'u.id', '=', 'mb.user_id')
             ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
-            ->join('instituicaos as i', 'i.id', '=', 'd.instituicao_id')
-            ->where('i.sigla', '=', 'UEPG')
+            ->where('d.id', User::userMembroDepartamento()->departamento_id)
             ->orderBy('u.name', 'asc')
             ->pluck('u.name', 'mb.id');
 
@@ -80,7 +76,7 @@ class CursoController extends Controller {
             return back()
                     ->with('message', 'Coordenador inativo')
                     ->withInput();
-        } 
+        }
 
         if ($request->has('fimvigencia')) {
             $curso = new Curso;
@@ -100,6 +96,12 @@ class CursoController extends Controller {
                 
             ]);
 
+            MembroBanca::find($m->id)->user()->update([
+                'permissao' => 9
+            ]);
+
+
+
         } else {
 
             $curso = new Curso;
@@ -117,6 +119,11 @@ class CursoController extends Controller {
             $c->membrobanca()->attach($request->input('coordenador'), [
                 'inicio_vigencia' => date("Y-m-d",strtotime(str_replace('/','-',$request->input('iniciovigencia'))))
             ]);
+
+            MembroBanca::find($m->id)->user()->update([
+                'permissao' => 9
+            ]);
+        
         }
 
         return redirect('/curso')->with('message', 'Curso cadastrado com sucesso!');
@@ -143,7 +150,9 @@ class CursoController extends Controller {
     public function edit($id) {
 
         $coordenadorTodos = DB::table('membro_bancas as mb')
+            ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
             ->join('users as u', 'u.id', '=', 'mb.user_id')
+            ->where('mb.departamento_id', '=', User::userMembroDepartamento()->departamento_id)
             ->orderBy('u.name', 'asc')
             ->pluck('u.name', 'mb.id');
 
@@ -187,6 +196,10 @@ class CursoController extends Controller {
                 'fim_vigencia' => date("Y-m-d",strtotime(str_replace('/','-',$request->input('fimvigencia'))))
             ]);
 
+            MembroBanca::find($request->input('coordenador'))->user()->update([
+                'permissao' => 9
+            ]);
+
         } else {
 
             $curso->nome = $request->input('nome');
@@ -196,6 +209,11 @@ class CursoController extends Controller {
             $curso->membrobanca()->attach($request->input('coordenador'), [
                 'inicio_vigencia' => date("Y-m-d",strtotime(str_replace('/','-',$request->input('iniciovigencia'))))
             ]);
+
+            MembroBanca::find($request->input('coordenador'))->user()->update([
+                'permissao' => 9
+            ]);
+            
         }
 
         return redirect('/curso')->with('message', 'Curso atualizado com sucesso!');

@@ -42,25 +42,19 @@
 		            <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
 		                <thead>
 		                    <tr>
-                                <th class="col-md-3">Nome</th>
-                                <th title="Departamento">Dept</th>
-                                <th>Instituição</th>
-		                        <th>Coordenador</th>
+                                <th class="col-md-4">Nome</th>                                
+		                        <th class="col-md-5">Coordenador</th>
 		                        <th class="text-center">Ação</th>
 		                    </tr>
 		                </thead>
 		                <tbody>
-		                    @foreach($curso as $curso)
+                            @foreach($curso as $curso)
 		                    <tr>
                                 <td>{{ $curso->nome }}</td>
-                                <td>{{ $curso->departamento->sigla }}</td>
-                                <td>{{ $curso->departamento->instituicao->sigla }}</td>
                                 <td>
-                                    @foreach($curso->membrobanca as $membrobanca)
-                                        <li>
-                                            {{ $membrobanca->user->name }}
-                                        </li>
-                                    @endforeach
+                                    <li>
+                                        {{ $curso->coordenador }}
+                                    </li>
                                 </td>  
                                 <td class="text-center" style="vertical-align:middle">
 		                            <a id="{{ $curso->id }}" class="btn btn-link" href="{{ route('curso.edit', ['id'=>$curso->id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
@@ -68,7 +62,8 @@
 		                        </td>
 		                    </tr>
 		                    @endforeach
-		                </tbody>
+                        
+                        </tbody>
 		            </table>
 
             	</div> {{-- ./col-md-4 --}}

@@ -72,6 +72,7 @@ class AcademicoController extends Controller {
                 ->join('membro_bancas as mb', 'mb.id', '=', 'd.id')
                 ->join('users as u', 'u.id', '=', 'mb.user_id')
                 ->where('u.id', '=', Auth::user()->id)
+                ->orderBy('c.nome')
                 ->select('c.*')
                 ->pluck('c.nome', 'c.id');
 
@@ -106,7 +107,7 @@ class AcademicoController extends Controller {
             'name' => $request->input('nome'),
             'email' => $request->input('email'),
             'password' => bcrypt('deinfouepg'),
-            'permissao' => 1,
+            'permissao' => 8,
             'mudou_senha' => 0
         ]);
 
