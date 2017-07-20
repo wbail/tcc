@@ -98,7 +98,7 @@ class EtapaanoController extends Controller
     public function show($id)
     {
         
-        $arquivosnomes = Arquivo::where('etapatrabalho_id', DB::table('etapa_trabalhos as et')->where('etapaano_id', 24)->value('id'))
+        $arquivosnomes = Arquivo::where('etapatrabalho_id', DB::table('etapa_trabalhos as et')->where('etapaano_id', $id)->value('id'))
                             ->join('users as u', 'u.id', '=', 'arquivos.user_id')
                             ->select('arquivos.id', 'arquivos.descricao', 'arquivos.created_at', 'u.name')
                             ->get();
