@@ -27,7 +27,7 @@ class TrabalhoRequest extends FormRequest {
             'titulo' => 'required|unique:trabalhos,titulo',
             'academico' => 'required',
             'ano' => 'required|date_format:Y|after_or_equal:' . \Carbon\Carbon::now()->format('Y'),
-            'periodo' => 'required|integer|min:1|max:2',
+            'periodo' => 'required|integer|min:1|max:3',
             'orientador' => 'required'            
         ];
     }

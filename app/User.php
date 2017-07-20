@@ -32,8 +32,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function arquivo() {
-        return $this->hasMany(Arquivo::class);
+    public function etapatrabalho() {
+        return $this->belongsToMany(Arquivo::class, 'arquivos', 'user_id', 'etapatrabalho_id')
+                    ->withPivot('user_id', 'etapatrabalho_id')
+                    ->withTimestamps();
     }
 
     public function academico() {

@@ -172,11 +172,15 @@ class TrabalhoController extends Controller {
      */
     public function update(TrabalhoRequest $request, $id) {
        
-        // return $request->all();
+        if($request->input('aprovado') == null) {
+            $aprovado = 0;
+        } else {
+            $aprovado = 1;
+        }
 
         if(Trabalho::find($id)->titulo != $request->input('titulo')) {
-            Storage::move('trabalhos/' . Carbon::parse(Trabalho::find($id)->ano)->format('Y') . '/' . Trabalho::find($id)->titulo, 
-                'trabalhos/' . Carbon::parse(Trabalho::find($id)->ano)->format('Y') . '/' . $request->input('titulo'));
+            //Storage::move('trabalhos/' . Carbon::parse(Trabalho::find($id)->ano)->format('Y') . '/' . Trabalho::find($id)->titulo, 
+              //  'trabalhos/' . Carbon::parse(Trabalho::find($id)->ano)->format('Y') . '/' . $request->input('titulo'));
         }
 
         if ($request->input('academico1') != null) {
@@ -184,15 +188,15 @@ class TrabalhoController extends Controller {
             Trabalho::find($id)->update([
                 'titulo' => $request->input('titulo'),
                 'periodo' => $request->input('periodo'),
-                'ano' => Carbon::createFromDate($request->input('ano'), 1, 1, 'America/Sao_Paulo'),
-                'aprovado' => $request->input('aprovado'),
+                'ano' => $request->input('ano'),
+                'aprovado' => $aprovado,
                 'avaliador_id' => $request->input('avaliador')
             ]);
 
 
             Academico::find($request->input('academico1'))
                         ->trabalho()
-                        ->associate($id)
+                        ->attach($id)
                         ->save();
 
             return redirect('/trabalho');
@@ -212,7 +216,7 @@ class TrabalhoController extends Controller {
                     if ($qntacademicos[$i]->id != $request->input('academico')) {
                         Academico::find($qntacademicos[$i]->id)
                                 ->trabalho()
-                                ->dissociate($id)
+                                ->disattach($id)
                                 ->save();
                     }
                 }
@@ -222,8 +226,8 @@ class TrabalhoController extends Controller {
             Trabalho::find($id)->update([
                 'titulo' => $request->input('titulo'),
                 'periodo' => $request->input('periodo'),
-                'ano' => Carbon::createFromDate($request->input('ano'), 1, 1, 'America/Sao_Paulo'),
-                'aprovado' => $request->input('aprovado'),
+                'ano' => $request->input('ano'),
+                'aprovado' => $aprovado,
                 'avaliador_id' => $request->input('avaliador')
             ]);
 

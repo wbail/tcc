@@ -196,7 +196,7 @@
                 
                 for(var i = 0; i < data.length; i++) {
                     
-                    meio += '<tr><td>' + data[i].name + '<br>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') 
+                    meio += '<tr><td>' + data[i].descricao + '<br>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') 
                     + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].arquivo + '</a></li></td></tr>';
                 };
                 
@@ -367,7 +367,7 @@
                     <h4 class="modal-title" id="myModalLabel">Lista de Arquivos</h4>
                 </div>
                 <div class="modal-body list-arquivos">
-                
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -442,8 +442,9 @@
             dataType: 'json',
         })
         .done(function(data) {
-            //console.log("success");
-
+            // console.log("success"); 
+            console.log(data);
+            
             if (data.length < 1) {
             
                 $modal.find('.list-arquivos').html('Nenhum Arquivo');    
@@ -456,7 +457,7 @@
                 for(var i = 0; i < data.length; i++) {
                     
                     meio += '<tr><td>' + data[i].name + '<br>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') 
-                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].arquivo + '</a></li></td></tr>';
+                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td></tr>';
                 };
                 
                 html = '<table class="table table-striped table-bordered table-hover">'+

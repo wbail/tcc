@@ -44,7 +44,7 @@
 
             <br>
 
-            {!! Form::open(['url'=>'/trabalho/update/$trabalho->id', 'method'=>'put']) !!}
+            {!! Form::open(['url'=>"/trabalho/update/$trabalho->id", 'method'=>'put']) !!}
             <div class="row">
                 <div class="col-md-3"></div> {{-- ./col-md-4 --}}
                 <div class="col-md-6">

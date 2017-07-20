@@ -6,11 +6,14 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use App\Http\Requests\EtapaAnoRequest;
 use Response;
+use DB;
 
 use App\Etapa;
 use App\Trabalho;
 use App\EtapaAno;
 use App\EtapaTrabalho;
+use App\Arquivo;
+use App\User;
 
 class EtapaanoController extends Controller
 {
@@ -94,8 +97,11 @@ class EtapaanoController extends Controller
      */
     public function show($id)
     {
-        // $arquivosnomes = ['name' => 'Guilhrme', 'created_at' => '2017-07-15 20:05', 'caminho' => '../storage/tcc/foo/bar'];
-        $arquivosnomes = ['name' => $id];
+        
+        $arquivosnomes = Arquivo::where('etapatrabalho_id', DB::table('etapa_trabalhos as et')->where('etapaano_id', 24)->value('id'))
+                            ->join('users as u', 'u.id', '=', 'arquivos.user_id')
+                            ->select('arquivos.id', 'arquivos.descricao', 'arquivos.created_at', 'u.name')
+                            ->get();
 
         return Response::json($arquivosnomes);
         

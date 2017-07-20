@@ -17,4 +17,5 @@ class EtapaAno extends Model
     				->withPivot('etapaano_id', 'trabalho_id')
     				->withTimestamps();
     }
+
 }
