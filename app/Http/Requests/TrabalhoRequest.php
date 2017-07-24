@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TrabalhoRequest extends FormRequest {
 
@@ -24,7 +25,10 @@ class TrabalhoRequest extends FormRequest {
     public function rules() {
 
         return [
-            'titulo' => 'required|unique:trabalhos,titulo',
+            'titulo' => [
+                'required',
+                Rule::unique('trabalhos')->ignore($this->id),
+            ],
             'academico' => 'required',
             'ano' => 'required|date_format:Y|after_or_equal:' . \Carbon\Carbon::now()->format('Y'),
             'periodo' => 'required|integer|min:1|max:3',

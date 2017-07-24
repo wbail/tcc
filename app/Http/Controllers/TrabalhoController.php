@@ -14,10 +14,6 @@ use DB;
 use Auth;
 use View;
 use Carbon\Carbon;
-// https://www.instagram.com/juolimon/
-// Patricia Fecher
-// https://www.facebook.com/luana.collaneri.1
-// https://www.instagram.com/lluanamelo/
 
 class TrabalhoController extends Controller {
 
@@ -99,7 +95,7 @@ class TrabalhoController extends Controller {
             $trabalho->titulo = $request->input('titulo');
             $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
-            $trabalho->membrobanca()->associate($request->input('membrobanca'));
+            $trabalho->orientador_id = $request->input('orientador');
             $trabalho->save();
 
             $lastTrabalho = DB::table('trabalhos')
@@ -172,6 +168,10 @@ class TrabalhoController extends Controller {
      */
     public function update(TrabalhoRequest $request, $id) {
        
+        // return $request->all();
+
+        $trabalho = Trabalho::find($id);
+
         if($request->input('aprovado') == null) {
             $aprovado = 0;
         } else {
@@ -183,54 +183,32 @@ class TrabalhoController extends Controller {
               //  'trabalhos/' . Carbon::parse(Trabalho::find($id)->ano)->format('Y') . '/' . $request->input('titulo'));
         }
 
-        if ($request->input('academico1') != null) {
+        if ($request->input('academico1') != null && $request->input('coorientador') != null) {
             
-            Trabalho::find($id)->update([
-                'titulo' => $request->input('titulo'),
-                'periodo' => $request->input('periodo'),
-                'ano' => $request->input('ano'),
-                'aprovado' => $aprovado,
-                'avaliador_id' => $request->input('avaliador')
-            ]);
+            $trabalho->titulo = $request->input('titulo');
+            $trabalho->ano = $request->input('ano');
+            $trabalho->periodo = $request->input('periodo');
+            $trabalho->aprovado = $aprovado;
+            $trabalho->orientador_id = $request->input('orientador');
+            $trabalho->coorientador_id = $request->input('coorientador');
+            $trabalho->save();
 
-
-            Academico::find($request->input('academico1'))
-                        ->trabalho()
-                        ->attach($id)
-                        ->save();
+            $trabalho->academico()->updateExistingPivot($request->input('academico'), [$request->input('academico')]);
+            $trabalho->academico()->updateExistingPivot($request->input('academico1'), [$request->input('academico1')]);
 
             return redirect('/trabalho');
 
         } else {
 
-            // Retornou os dois academicos
-            $qntacademicos = DB::table('academicos as a')
-                        ->where('a.trabalho_id', '=', $id)
-                        ->get();
-        
-        
-            if (count($qntacademicos) > 1) {
-                // Ver qual academico foi retirado          
-            
-                for ($i = 0; $i < 2; $i++) { 
-                    if ($qntacademicos[$i]->id != $request->input('academico')) {
-                        Academico::find($qntacademicos[$i]->id)
-                                ->trabalho()
-                                ->disattach($id)
-                                ->save();
-                    }
-                }
+            $trabalho->titulo = $request->input('titulo');
+            $trabalho->ano = $request->input('ano');
+            $trabalho->periodo = $request->input('periodo');
+            $trabalho->aprovado = $aprovado;
+            $trabalho->orientador_id = $request->input('orientador');
+            $trabalho->coorientador_id = $request->input('coorientador');
+            $trabalho->save();
 
-            }
-
-            Trabalho::find($id)->update([
-                'titulo' => $request->input('titulo'),
-                'periodo' => $request->input('periodo'),
-                'ano' => $request->input('ano'),
-                'aprovado' => $aprovado,
-                'avaliador_id' => $request->input('avaliador')
-            ]);
-
+            $trabalho->academico()->updateExistingPivot($request->input('academico'), [$request->input('academico')]);
 
             return redirect('/trabalho');
            

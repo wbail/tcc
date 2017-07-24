@@ -80,7 +80,7 @@
                                     <div class="col-md-4">
                                         {!! Form::label('periodo', 'Período') !!}
                                         <br>
-                                        {!! Form::radio('periodo', 1, true, ['title'=>'Disciplina Anual']) !!}
+                                        {!! Form::radio('periodo', 3, true, ['title'=>'Disciplina Anual']) !!}
                                         {!! Form::label('tres', 'Anual') !!}
                                         {!! Form::radio('periodo', 1, false, ['title'=>'Primeiro Semestre']) !!}
                                         {!! Form::label('um', '1') !!}

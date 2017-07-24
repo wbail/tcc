@@ -109,7 +109,7 @@ Route::group(['prefix'=>'etapaano','where'=>['id'=>'[0-9]+']], function() {
 	Route::put('update/{id}', ['as'=>'etapaano.update', 'uses'=>'EtapaanoController@update', 'middleware' => 'auth']);
 	Route::get('destroy/{id}', ['as'=>'etapaano.destroy', 'uses'=>'EtapaanoController@destroy', 'middleware' => 'auth']);
 	// Route::get('show/{id}', ['as'=>'etapaano.show', 'uses'=>'EtapaanoController@show', 'middleware' => 'auth']);
-	Route::get('show/{id}', ['as'=>'etapaano.show', 'uses'=>'EtapaanoController@show']);
+	Route::get('show/{id}/{trabalhoid}', ['as'=>'etapaano.show', 'uses'=>'EtapaanoController@show']);
 	
 });
 

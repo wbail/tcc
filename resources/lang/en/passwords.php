@@ -17,6 +17,6 @@ return [
     'reset' => 'Sua senha foi resetada!',
     'sent' => 'Link para resetar a senha enviado ao e-mail cadastrado.',
     'token' => 'Token inválido.',
-    'user' => "Não há usuários com este e-mail.",
+    'user' => "Não há usuário com este e-mail.",
 
 ];

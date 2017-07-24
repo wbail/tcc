@@ -69,7 +69,7 @@ class AcademicoController extends Controller {
         // apenas os cursos do departamento do coordenador
         $curso = DB::table('cursos as c')
                 ->join('departamentos as d', 'd.id', '=', 'c.departamento_id')
-                ->join('membro_bancas as mb', 'mb.id', '=', 'd.id')
+                ->join('membro_bancas as mb', 'mb.departamento_id', '=', 'd.id')
                 ->join('users as u', 'u.id', '=', 'mb.user_id')
                 ->where('u.id', '=', Auth::user()->id)
                 ->orderBy('c.nome')

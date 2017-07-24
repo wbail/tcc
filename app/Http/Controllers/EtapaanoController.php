@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\EtapaAnoRequest;
 use Response;
 use DB;
+use Auth;
 
 use App\Etapa;
 use App\Trabalho;
@@ -14,6 +15,15 @@ use App\EtapaAno;
 use App\EtapaTrabalho;
 use App\Arquivo;
 use App\User;
+use App\Academico;
+use App\MembroBanca;
+
+// 1 = strognoff carne
+
+// pure, 4 queijos e marguerita dividida em 3 a pizza
+
+// meia portuguesa e bolonhesa
+
 
 class EtapaanoController extends Controller
 {
@@ -24,9 +34,72 @@ class EtapaanoController extends Controller
      */
     public function index()
     {
-        return view('etapaano.index', [
-            'etapaano' => EtapaAno::all()
-        ]);
+        $membrobanca = MembroBanca::where('user_id', '=', Auth::user()->id)
+                                    ->first();
+
+        $academico = Academico::where('user_id', '=', Auth::user()->id)
+                                    ->first();
+        
+        if($membrobanca) {
+
+            $trabalho = Trabalho::where('orientador_id', '=', $membrobanca->id)
+                                ->orWhere('coorientador_id', '=', $membrobanca->id)
+                                ->get();
+
+            for ($i = 0; $i < count($trabalho); $i++) { 
+                
+                $objetos[] = DB::select('select distinct ea.titulo as descricao, t.titulo, ea.ativa, ea.data_final, ea.id, t.id as trabalho_id
+                                        from etapa_anos as ea
+                                        left join etapa_trabalhos as et
+                                            on et.etapaano_id = ea.id
+                                        left join trabalhos as t
+                                            on t.id = ?', [$trabalho[$i]->id]);
+
+            }
+
+            // return $objetos;
+            
+            return view('etapaano.index', [
+                'etapaano' => $objetos
+            ]);
+
+        } elseif($academico) {
+
+            $trabalho = DB::table('academico_trabalhos as at')
+                            ->where('at.academico_id', '=', $academico->id)
+                            ->get();
+                
+            // $objetos[] = DB::table('etapa_anos as ea')
+            //             ->leftJoin('etapa_trabalhos as et', 'ea.id', '=', 'et.etapaano_id')
+            //             ->join('trabalhos as t', 't.id', '=', 'et.trabalho_id')
+            //             ->where('t.id', '=', $trabalho[0]->trabalho_id)
+            //             ->distinct()
+            //             ->select('ea.titulo as descricao', 't.titulo', 'ea.ativa', 'ea.data_final', 'ea.id', 't.id as trabalho_id')
+            //             ->get();
+            
+            $objetos[] = DB::select('select distinct ea.titulo as descricao, t.titulo, ea.ativa, ea.data_final, ea.id, t.id as trabalho_id
+                                        from etapa_anos as ea
+                                        left join etapa_trabalhos as et
+                                            on et.etapaano_id = ea.id
+                                        inner join trabalhos as t
+                                            on t.id = ?', [$trabalho[0]->trabalho_id]);
+                        
+            
+            // return $objetos;
+
+            return view('etapaano.index', [
+                'etapaano' => $objetos
+            ]);
+
+        } else {
+
+            return view('etapaano.index', [
+                'etapaano' => EtapaAno::all()
+            ]);
+        }
+
+
+
     }
 
     /**
@@ -95,15 +168,21 @@ class EtapaanoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $trabalhoid)
     {
-        
-        $arquivosnomes = Arquivo::where('etapatrabalho_id', DB::table('etapa_trabalhos as et')->where('etapaano_id', $id)->value('id'))
-                            ->join('users as u', 'u.id', '=', 'arquivos.user_id')
-                            ->select('arquivos.id', 'arquivos.descricao', 'arquivos.created_at', 'u.name')
-                            ->get();
 
-        return Response::json($arquivosnomes);
+        $trabalho = DB::table('arquivos as a')
+                    ->join('users as u', 'u.id', '=', 'a.user_id')
+                    ->join('etapa_trabalhos as et', 'et.id', '=', 'a.etapatrabalho_id')
+                    ->join('etapa_anos as ea', 'ea.id', '=', 'et.etapaano_id')
+                    ->join('trabalhos as t', 't.id', '=', 'et.trabalho_id')
+                    ->where('ea.id', '=', $id)
+                    ->where('t.id', '=', $trabalhoid)
+                    ->select('a.descricao', 'a.created_at', 'u.name')
+                    ->orderBy('a.created_at', 'desc')
+                    ->get();
+        
+        return Response::json($trabalho);
         
     }
 

@@ -1,4 +1,4 @@
-@if(Auth::user()->permissao >= 1 && Auth::user()->permissao <= 7 || Auth::user()->permissao == 9)
+@if(Auth::user()->permissao == 9)
 
 @include('includes')
 
@@ -44,30 +44,42 @@
                 <table data-order='[[0, "desc"]]' class="table table-hover table-striped table-bordered display">
                     <thead>
                         <tr>
-                            <th class="col-md-2">Etapa</th>
+                            {{--  <th class="col-md-2">Etapa</th>  --}}
+                            <th class="col-md-3">Trabalho</th>
                             <th class="col-md-3">Descrição</th>
                             <th class="col-md-2">Data Entrega</th>
-                            <th class="text-center">Situação</th>
+                            <th class="text-center col-md-1">Situação</th>
+                            <th class="col-md-3">Arquivo</th>
                             <th class="text-center">Ação</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($etapaano as $etapaano)
+                        @foreach($etapaano as $etapaano)
                         <tr>
-                            <td>{{ $etapaano->etapa->desc }}</td>
+                            {{--  <td>{{ $etapaano->etapa->desc }}</td>  --}}
                             <td>{{ $etapaano->titulo }}</td>
+                            <td>{{ $etapaano->descricao }}</td>
                             <td>{{ \Carbon\Carbon::parse($etapaano->data_final)->format('d/m/Y H:m') }}</td>
                             @if($etapaano->ativa == 1)
                                 <td class="text-center"><span class="label label-success">Ativa</span></td>
                             @else
                                 <td class="text-center"><span class="label label-default">Não Ativa</span></td>
                             @endif
-                            
+                            <td class="text-center">
+                                @if($etapaano->ativa == 1)
+                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
+                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-primary btn-sm" title="Enviar Arquivo" data-toggle="modal" data-target="#myModalUploadArquivos"><i class="fa fa-upload"></i> Enviar</button> 
+                                @else
+                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
+                                @endif
+                            </td>
                             <td class="text-center">
                                 <a id="{{ $etapaano->id }}" class="btn btn-link" href="{{ route('etapaano.edit', ['id'=>$etapaano->id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
                                 <button id="{{ $etapaano->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelEtapa" title="Excluir"><i class="fa fa-trash"></i></button>
                             </td>
                         </tr>
+                        @endforeach
                         @endforeach
                     </tbody>
                 </table> {{-- ./table --}}
@@ -136,6 +148,8 @@
         </div>
     </div>
 
+    
+
 
 </div><!-- ./wrapper -->
 
@@ -176,14 +190,18 @@
     $('#myModalListArquivos').on('show.bs.modal', function(e) {
         var $modal = $(this);
         var etapaanoid = e.relatedTarget.id;
+        var trabalhoid = e.relatedTarget.value;
+
     
         $.ajax({
-            url: "etapaano/show/" + etapaanoid,
+            url: "etapaano/show/" + etapaanoid + '/' + trabalhoid,
             type: 'GET',
             dataType: 'json',
         })
         .done(function(data) {
             //console.log("success");
+            //console.log("etapaid = " + etapaid);
+            //console.log("trabalho = " + trabalho);
 
             if (data.length < 1) {
             
@@ -196,8 +214,8 @@
                 
                 for(var i = 0; i < data.length; i++) {
                     
-                    meio += '<tr><td>' + data[i].descricao + '<br>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') 
-                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].arquivo + '</a></li></td></tr>';
+                    meio += '<tr><td>' + data[i].name + '<br>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') 
+                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td></tr>';
                 };
                 
                 html = '<table class="table table-striped table-bordered table-hover">'+
@@ -274,7 +292,7 @@
 
 </html>
 
-@elseif(Auth::user()->permissao == 8)
+@elseif(Auth::user()->permissao >= 1 && Auth::user()->permissao <= 8)
 
 @include('includes')
 
@@ -314,10 +332,11 @@
                     </div>
                 @endif
 
-                <table data-order='[[0, "desc"]]' class="table table-hover table-striped table-bordered display">
+                <table data-order='[[2, "desc"]]' class="table table-hover table-striped table-bordered display">
                     <thead>
                         <tr>
-                            <th class="col-md-2">Etapa</th>
+                            {{--  <th class="col-md-2">Etapa</th>  --}}
+                            <th class="col-md-3">Trabalho</th>
                             <th class="col-md-3">Descrição</th>
                             <th class="col-md-2">Data Entrega</th>
                             <th class="text-center">Situação</th>
@@ -326,9 +345,11 @@
                     </thead>
                     <tbody>
                         @foreach($etapaano as $etapaano)
+                        @foreach($etapaano as $etapaano)
                         <tr>
-                            <td>{{ $etapaano->etapa->desc }}</td>
+                            {{--  <td>{{ $etapaano->etapa->desc }}</td>  --}}
                             <td>{{ $etapaano->titulo }}</td>
+                            <td>{{ $etapaano->descricao }}</td>
                             <td>{{ \Carbon\Carbon::parse($etapaano->data_final)->format('d/m/Y H:m') }}</td>
                             @if($etapaano->ativa == 1)
                                 <td class="text-center"><span class="label label-success">Ativa</span></td>
@@ -338,13 +359,14 @@
                             
                             <td class="text-center">
                                 @if($etapaano->ativa == 1)
-                                    <button id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista dos Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
-                                     <button id="{{ $etapaano->id }}" class="btn btn-primary btn-sm" title="Enviar Arquivos" data-toggle="modal" data-target="#myModalUploadArquivos"><i class="fa fa-upload"></i> Enviar</button> 
+                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
+                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-primary btn-sm" title="Enviar Arquivo" data-toggle="modal" data-target="#myModalUploadArquivos"><i class="fa fa-upload"></i> Enviar</button> 
                                 @else
-                                    <button id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista dos Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
+                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
                                 @endif
                             </td>
                         </tr>
+                        @endforeach
                         @endforeach
                     </tbody>
                 </table> {{-- ./table --}}
@@ -376,7 +398,7 @@
         </div>
     </div>
     
-    <!-- Modal lista arquivos -->
+    <!-- Modal upload arquivos -->
     <div id="myModalUploadArquivos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -435,16 +457,20 @@
     $('#myModalListArquivos').on('show.bs.modal', function(e) {
         var $modal = $(this);
         var etapaanoid = e.relatedTarget.id;
+        var trabalhoid = e.relatedTarget.value;
+
     
         $.ajax({
-            url: "etapaano/show/" + etapaanoid,
+            // url: "etapaano/show/" + etapaanoid + trabalhoid, 
+            url: "etapaano/show/" + etapaanoid + '/' + trabalhoid,
             type: 'GET',
             dataType: 'json',
         })
         .done(function(data) {
             // console.log("success"); 
-            console.log(data);
-            
+            // console.log('trabalhoid = ' + trabalhoid);
+            // console.log('etapaanoid = ' + etapaanoid); 
+             
             if (data.length < 1) {
             
                 $modal.find('.list-arquivos').html('Nenhum Arquivo');    
@@ -456,15 +482,16 @@
                 
                 for(var i = 0; i < data.length; i++) {
                     
-                    meio += '<tr><td>' + data[i].name + '<br>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') 
-                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td></tr>';
+                    meio += '<tr><td>' + data[i].name + '<br>' 
+                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td><td>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') + '</td></tr>';
                 };
                 
                 html = '<table class="table table-striped table-bordered table-hover">'+
                     '<thead>'+
                         '<tr>'+
                             '<th class"col-md-1">Usuário</th>'+
-                            '<th class"col-md-1">Arquivo(s)</th>'+
+                            '<th class"col-md-1">Arquivo</th>'+
+                            '<th class"col-md-1">Enviado em</th>'+
                         '</tr>'+
                     '</thead>'+
                     '<tbody>'+
