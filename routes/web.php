@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('/unauthorized', function() {
+	return view('unauthorized');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
@@ -22,7 +26,6 @@ Route::get('/home', 'HomeController@index');
 Route::get('/admin', function() {
 	return view('admin');
 });
-
 
 Route::get('primeiroacesso', function() {
 	return view('primeiroacesso');
@@ -35,7 +38,13 @@ Route::post('/primeiroacesso/update', function(\Illuminate\Http\Request $request
 		'mudou_senha' => 1
 	]);
 
-	return redirect('/admin'); 
+	if(Auth::user()->permissao >= 1 && Auth::user()->permissao <= 8) {
+		return redirect('/etapaano');
+	} elseif(Auth::user()->permissao == 9) {
+		return redirect('/admin');
+	} else {
+		return redirect('/trabalho');
+	}
 
 })->middleware('auth');
 

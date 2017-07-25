@@ -21,18 +21,36 @@ class CursoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
+
+        $instituicao = 0;
+
+        $departamento_id = Auth::user()
+                            ->membrobanca()
+                            ->value('departamento_id');
+                            
+        if($departamento_id) {
+
+            $instituicao = Departamento::find($departamento_id)
+                            ->instituicao()
+                            ->first();
+
+            $this->authorize('view', $instituicao);
         
-        $curso = DB::table('cursos as c')
-                    ->join('coordenador_cursos as cc', 'c.id', '=', 'cc.curso_id')
-                    ->join('membro_bancas as mb', 'mb.id', '=', 'cc.coordenador_id')
-                    ->join('users as u', 'u.id', '=', 'mb.user_id')
-                    ->where('c.departamento_id', '=', User::userMembroDepartamento()->departamento_id)
-                    ->select('u.name as coordenador', 'c.id', 'c.nome as nome')
-                    ->get();
+            $curso = DB::table('cursos as c')
+                ->join('coordenador_cursos as cc', 'c.id', '=', 'cc.curso_id')
+                ->join('membro_bancas as mb', 'mb.id', '=', 'cc.coordenador_id')
+                ->join('users as u', 'u.id', '=', 'mb.user_id')
+                ->where('c.departamento_id', '=', User::userMembroDepartamento()->departamento_id)
+                ->select('u.name as coordenador', 'c.id', 'c.nome as nome')
+                ->get();
         
-        return view('curso.index', [
-            'curso' => $curso
-        ]);
+            return view('curso.index', [
+                'curso' => $curso
+            ]);
+            
+        } else {
+            return abort(403, 'Usuário não Autorizado.');
+        }
     }
 
     /**
@@ -41,6 +59,8 @@ class CursoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
+
+        $this->authorize('create', Curso::class);
 
         $coordenador = DB::table('membro_bancas as mb')
             ->join('users as u', 'u.id', '=', 'mb.user_id')
@@ -70,6 +90,8 @@ class CursoController extends Controller {
      */
     public function store(CursoRequest $request) {
         
+        $this->authorize('create', Curso::class);
+
         $m = MembroBanca::find($request->input('coordenador'));
         
         if (User::find($m->user_id)->ativo <> 1) {
@@ -149,6 +171,8 @@ class CursoController extends Controller {
      */
     public function edit($id) {
 
+        $this->authorize('create', Curso::class);
+
         $coordenadorTodos = DB::table('membro_bancas as mb')
             ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
             ->join('users as u', 'u.id', '=', 'mb.user_id')
@@ -172,6 +196,8 @@ class CursoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(CursoRequest $request, $id) {
+
+        $this->authorize('update', Curso::class);
 
         $curso = Curso::find($id);
 
@@ -226,6 +252,8 @@ class CursoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
+
+        $this->authorize('delete', Curso::class);
 
         Curso::find($id)->delete();
 

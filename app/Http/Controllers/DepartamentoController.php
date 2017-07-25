@@ -20,6 +20,8 @@ class DepartamentoController extends Controller {
      */
     public function index() {
 
+        $this->authorize('create', Departamento::class);
+
         return View('departamento.index', [
             'departamento' => Departamento::all()
         ]);
@@ -31,6 +33,8 @@ class DepartamentoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
+
+        $this->authorize('create', Departamento::class);
 
         return View('departamento.create', [
             'inst' => Instituicao::all()->pluck('nome', 'id')
@@ -44,6 +48,8 @@ class DepartamentoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(DepartamentoRequest $request) {
+
+        $this->authorize('create', Departamento::class);
 
         $departamento = new Departamento;
         $departamento->nome = $request->input('nome');
@@ -73,6 +79,8 @@ class DepartamentoController extends Controller {
      */
     public function edit($id) {
 
+        $this->authorize('create', Departamento::class);
+
         return View('departamento.edit', [
             'departamento' => Departamento::find($id),
             'inst' => Instituicao::all()->pluck('nome', 'id')
@@ -87,6 +95,8 @@ class DepartamentoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(DepartamentoRequest $request, $id) {
+
+        $this->authorize('update', Departamento::class);
 
         $departamento = Departamento::find($id);
         $departamento->nome = $request->input('nome');
@@ -105,6 +115,6 @@ class DepartamentoController extends Controller {
      */
     public function destroy($id) {
 
-        //
+        $this->authorize('delete', Departamento::class);
     }
 }

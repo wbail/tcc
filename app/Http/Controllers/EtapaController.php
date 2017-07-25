@@ -16,6 +16,8 @@ class EtapaController extends Controller
      */
     public function index()
     {
+        $this->authorize('create', Etapa::class);
+
         return view('etapa.index', [
             'etapa' => Etapa::all()
         ]);
@@ -28,6 +30,7 @@ class EtapaController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Etapa::class);
         return view('etapa.create');
     }
 
@@ -39,6 +42,7 @@ class EtapaController extends Controller
      */
     public function store(EtapaRequest $request)
     {
+        $this->authorize('create', Etapa::class);
         Etapa::create($request->all());
 
         return redirect('/etapa')->with('message', 'Etapa cadastrada com sucesso!');
@@ -63,6 +67,7 @@ class EtapaController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('create', Etapa::class);
         return view('etapa.edit', [
             'etapa' => Etapa::find($id)
         ]);
@@ -77,6 +82,7 @@ class EtapaController extends Controller
      */
     public function update(EtapaRequest $request, $id)
     {
+        $this->authorize('create', Etapa::class);
         Etapa::find($id)->update($request->all());
         return redirect('/etapa')->with('message', 'Etapa atualizada com sucesso!');;
     }
@@ -89,6 +95,7 @@ class EtapaController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('create', Etapa::class);
         Etapa::find($id)->delete();
         return redirect('/etapa');
     }

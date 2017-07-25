@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\InstituicaoRequest;
 
 use App\Instituicao;
+use App\Departamento;
+use App\User;
+// use App\Http\Policies\InstituicaoPolicy;
+
+use Auth;
 
 class InstituicaoController extends Controller {
 
@@ -15,10 +20,28 @@ class InstituicaoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
+        
+        $instituicao = 0;
 
-        return view('instituicao.index', [
-            'instituicao' => Instituicao::all()
-        ]);
+        $departamento_id = Auth::user()
+                            ->membrobanca()
+                            ->value('departamento_id');
+        if($departamento_id) {
+
+            $instituicao = Departamento::find($departamento_id)
+                            ->instituicao()
+                            ->first();
+
+            $this->authorize('view', $instituicao);
+        
+            return view('instituicao.index', [
+                'instituicao' => Instituicao::all()
+            ]);
+            
+        } else {
+            return abort(403, 'Usuário não Autorizado.');
+        }
+
     }
 
     /**
@@ -28,7 +51,10 @@ class InstituicaoController extends Controller {
      */
     public function create() {
 
+        $this->authorize('create', Instituicao::class);
+        
         return view('instituicao.create');
+
     }
 
     /**
@@ -39,6 +65,9 @@ class InstituicaoController extends Controller {
      */
     public function store(InstituicaoRequest $request) {
     
+        
+        $this->authorize('create', \App\Instituicao::class);
+
         $i = new Instituicao;
         $i->nome = $request->input('nome');
         $i->sigla = $request->input('sigla');
@@ -66,6 +95,8 @@ class InstituicaoController extends Controller {
      */
     public function edit($id) {
 
+        $this->authorize('create', \App\Instituicao::class);
+        
         return view('instituicao.edit', [
             'instituicao' => Instituicao::find($id)
         ]);
@@ -80,6 +111,8 @@ class InstituicaoController extends Controller {
      */
     public function update(InstituicaoRequest $request, $id) {
 
+        $this->authorize('update', \App\Instituicao::class);
+        
         Instituicao::find($id)
             ->update($request->all());
 
@@ -94,6 +127,7 @@ class InstituicaoController extends Controller {
      */
     public function destroy($id) {
 
+        $this->authorize('delete', \App\Instituicao::class);
         //
     }
 }

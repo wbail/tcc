@@ -9,6 +9,7 @@ use App\Http\Requests\TrabalhoRequest;
 use App\Trabalho;
 use App\Academico;
 use App\User;
+use App\Departamento;
 use App\MembroBanca;
 use DB;
 use Auth;
@@ -23,12 +24,59 @@ class TrabalhoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
+       
+        $instituicao = 0;
 
-        // return Trabalho::with('membrobanca')->with('coorientador')->get();
+        $departamento_id = Auth::user()
+                            ->membrobanca()
+                            ->value('departamento_id');
 
-        return view('trabalho.index', [
-            'trabalho' => Trabalho::with('membrobanca')->with('coorientador')->get(),
-        ]);
+        if($departamento_id) {
+
+            $instituicao = Departamento::find($departamento_id)
+                            ->instituicao()
+                            ->first();
+
+            $this->authorize('view', $instituicao);
+
+            // $trabalho = DB::table('trabalhos as t')
+            //         ->join('membro_bancas as mb', function($join) {
+            //             $join->on('mb.id', '=', 't.orientador_id')
+            //                 ->orOn('mb.id', '=', 't.coorientador_id');
+            //         })
+            //         ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
+            //         ->join('academico_trabalhos as at', 'at.trabalho_id', '=', 't.id')
+            //         ->join('academicos as a', 'a.id', '=', 'at.academico_id')
+            //         ->join('users as u', function($join) {
+            //             $join->on('u.id', '=', 'a.user_id')
+            //                 ->orOn('u.id', '=', 'mb.user_id');
+            //         })
+            //         ->where('mb.departamento_id', '=', $departamento_id)
+            //         ->select('t.id', 't.titulo', 't.periodo', 't.aprovado', 'u.name')
+            //         ->get();
+
+            $trabalho = Trabalho::with('membrobanca')->with('coorientador')
+                    ->join('membro_bancas as mb', function($join) {
+                        $join->on('mb.id', '=', 'trabalhos.orientador_id')
+                            ->orOn('mb.id', '=', 'trabalhos.coorientador_id');
+                    })
+                    ->join('academico_trabalhos as at', 'at.trabalho_id', '=', 'trabalhos.id')
+                    ->join('academicos as a', 'a.id', '=', 'at.academico_id')
+                    ->join('users as u', 'u.id', '=', 'a.user_id')
+                    ->where('mb.departamento_id', '=', $departamento_id)
+                    ->get();
+
+            // return $trabalho;
+
+            return view('trabalho.index',
+                        [
+                'trabalho' => $trabalho,
+            ]);
+            
+        } else {
+            return abort(403, 'Usuário não Autorizado.');
+        }
+
     }
 
     /**
@@ -37,6 +85,9 @@ class TrabalhoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
+
+        $this->authorize('create', Trabalho::class);
+
 
         $academico = DB::table('academicos as a')
                         ->join('users as u', 'u.id', '=', 'a.user_id')
@@ -63,6 +114,7 @@ class TrabalhoController extends Controller {
     public function store(TrabalhoRequest $request) {
 
         // return $request->all();
+        $this->authorize('create', Trabalho::class);
         
         if ($request->has('academico1') && $request->has('coorientador')) {
 
@@ -135,6 +187,8 @@ class TrabalhoController extends Controller {
      */
     public function edit($id) {
 
+        $this->authorize('update', Trabalho::class);
+
         $qntacademicos = Trabalho::find($id)
                             ->academico()
                             ->count();
@@ -169,6 +223,7 @@ class TrabalhoController extends Controller {
     public function update(TrabalhoRequest $request, $id) {
        
         // return $request->all();
+        $this->authorize('update', Trabalho::class);
 
         $trabalho = Trabalho::find($id);
 
@@ -213,9 +268,6 @@ class TrabalhoController extends Controller {
             return redirect('/trabalho');
            
         }
-
-
-
     }
 
     /**
@@ -226,6 +278,6 @@ class TrabalhoController extends Controller {
      */
     public function destroy($id) {
 
-        //
+        $this->authorize('delete', Trabalho::class);
     }
 }

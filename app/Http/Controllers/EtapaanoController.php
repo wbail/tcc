@@ -109,6 +109,7 @@ class EtapaanoController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', EtapaAno::class);
 
         return view('etapaano.create', [
             'etapa' => Etapa::all()->pluck('desc', 'id'),
@@ -124,6 +125,7 @@ class EtapaanoController extends Controller
      */
     public function store(EtapaAnoRequest $request)
     {
+        $this->authorize('create', EtapaAno::class);
 
         if ($request->has('data_inicial')) {
 
@@ -194,6 +196,8 @@ class EtapaanoController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('create', EtapaAno::class);
+
         return view('etapaano.edit', [
             'etapaano' => EtapaAno::find($id),
             'etapa' => Etapa::all()->pluck('desc', 'id'),
@@ -210,6 +214,7 @@ class EtapaanoController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('update', EtapaAno::class);
 
         $etapa = EtapaAno::find($id);
         
@@ -267,6 +272,6 @@ class EtapaanoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('delete', EtapaAno::class);
     }
 }

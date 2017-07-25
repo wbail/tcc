@@ -19,6 +19,14 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
         'App\Arquivo' => 'App\Policies\ArquivoPolicy',
+        'App\Instituicao' => 'App\Policies\InstituicaoPolicy',
+        'App\Trabalho' => 'App\Policies\TrabalhoPolicy',
+        'App\Curso' => 'App\Policies\CursoPolicy',
+        'App\Departamento' => 'App\Policies\DepartamentoPolicy',
+        'App\Etapa' => 'App\Policies\EtapaPolicy',
+        'App\Academico' => 'App\Policies\AcademicoPolicy',
+        'App\MembroBanca' => 'App\Policies\MembroBancaPolicy',
+        'App\EtapaAno' => 'App\Policies\EtapaAnoPolicy',
     ];
 
     /**
@@ -29,18 +37,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        Gate::define('aluno-view', function(Academico $academico, Trabalho $trabalho) {
-            $academicoTrabalho = DB::table('academico_trabalhos as atr')
-                                        ->where('atr.academico_id', '=', $academico->id)
-                                        ->where('atr.trabalho_id', '=', $trabalho->id)
-                                        ->first();
-            if($academicoTrabalho) {
-                return true;
-            } else {
-                return false;
-            }
-        });
-    
     }
 }

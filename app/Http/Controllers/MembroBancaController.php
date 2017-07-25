@@ -23,6 +23,8 @@ class MembroBancaController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('create', MembroBanca::class);
+
         if($request->ajax()) {
 
             $term = $request->term;
@@ -49,6 +51,8 @@ class MembroBancaController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', MembroBanca::class);
+
         $permissao = array(
             '1' => 'Orientador',
             '2' => 'Coorientador',
@@ -75,6 +79,8 @@ class MembroBancaController extends Controller
      */
     public function store(MembroBancaRequest $request)
     {
+        $this->authorize('create', MembroBanca::class);
+
         $telefone = $request->except('_token', 'nome', 'email', 'banca', 'coorientador', 'orientador', 'departamento');
         
         for ($i = 0; $i < count($telefone); $i++) { 
@@ -136,6 +142,8 @@ class MembroBancaController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('create', MembroBanca::class);
+
         return view('membrobanca.edit', [
             'membrobanca' => MembroBanca::find($id),
             'departamento' => Departamento::all()->pluck('nome', 'id')
@@ -151,6 +159,7 @@ class MembroBancaController extends Controller
      */
     public function update(MembroBancaRequest $request, $id)
     {
+        $this->authorize('update', MembroBanca::class);
         return $request->all();
     }
 
@@ -162,6 +171,6 @@ class MembroBancaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('delete', MembroBanca::class);
     }
 }

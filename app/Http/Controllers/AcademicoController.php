@@ -25,6 +25,8 @@ class AcademicoController extends Controller {
      */
     public function index(Request $request) {
 
+        $this->authorize('create', Academico::class);
+
         if($request->ajax()) {
 
             $term = $request->term;
@@ -38,7 +40,6 @@ class AcademicoController extends Controller {
             return Response::json(['itens' => $academico]);
                         
         }
-
 
         $academicos = DB::table('membro_bancas as mb')
                         ->join('users as u', 'u.id', '=', 'mb.user_id')
@@ -63,6 +64,8 @@ class AcademicoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
+
+        $this->authorize('create', Academico::class);
 
         $tipo = ['1' => 'Celular', '2' => 'Fixo', '3' => 'Comercial'];
 
@@ -89,6 +92,8 @@ class AcademicoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(AcademicoRequest $request) {
+
+        $this->authorize('create', Academico::class);
         
         $telefone = $request->except('_token', 'nome', 'email', 'ra', 'curso');
         
@@ -150,6 +155,8 @@ class AcademicoController extends Controller {
      */
     public function edit($id) {
 
+        $this->authorize('create', Academico::class);
+
          // apenas os cursos do departamento do coordenador
         $curso = DB::table('cursos as c')
                 ->join('departamentos as d', 'd.id', '=', 'c.departamento_id')
@@ -173,8 +180,10 @@ class AcademicoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(AcademicoRequest $request, $id) {
+
+        $this->authorize('update', Academico::class);
         
-        return $request->all();
+        // return $request->all();
 
         // Atualiza os campos relacionado a user
         Academico::find($id)->user()->update($request->all());
@@ -227,7 +236,10 @@ class AcademicoController extends Controller {
      */
     public function destroy($id) {
         
+        $this->authorize('delete', Academico::class);
+
         Academico::find($id)->delete();
+        
         return redirect('/academico');
 
     }
