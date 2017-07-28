@@ -52,85 +52,88 @@
                                 <div class="row">
                                     <div class="col-md-5">
                                         {!! Form::label('nome', 'Nome *') !!}
-                                        {!! Form::text('nome', $membrobanca->user->name, ['class'=>'form-control', 'title'=>'Nome do acadêmico(a)']) !!}
+                                        {!! Form::text('nome', $membrobanca->user->name, ['class'=>'form-control', 'title'=>'Nome do(a) professor(a)']) !!}
                                     </div> {{-- ./col-md-5 --}}
                                     <div class="col-md-6">
                                         {!! Form::label('departamento', 'Departamento *') !!}
-                                        {!! Form::select('departamento', $departamento, $membrobanca->departamento_id, ['class'=>'form-control', 'placeholder' => 'Escolha um departamento']) !!}
+                                        {!! Form::select('departamento', $departamento, $membrobanca->departamento_id, ['class'=>'form-control', 'placeholder' => 'Escolha um departamento', 'title'=>'Departamento que o professor pertence']) !!}
                                         <br>
                                     </div> {{-- ./col-md-5 --}}
                                     
                                 </div> {{-- ./row --}}
                                 <div class="row">
-                                    <div class="col-md-9">
+                                    <div class="col-md-5">
                                         @if($membrobanca->user->permissao == 1)                                           
                                             {!! Form::label('permissao', 'Permissão *') !!}
                                             {!! Form::checkbox('orientador', 4, false) !!}
                                             {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coordenador', 2, false) !!}
-                                            {!! Form::label('coordenador', 'Coordenador') !!}
+                                            {!! Form::checkbox('coorientador', 2, false) !!}
+                                            {!! Form::label('coorientador', 'Coorientador') !!}
                                             {!! Form::checkbox('banca', 1, true) !!}
                                             {!! Form::label('banca', 'Banca') !!}
                                         @elseif($membrobanca->user->permissao == 2)
                                             {!! Form::label('permissao', 'Permissão *') !!}
-                                            {!! Form::checkbox('orientador', 4, false) !!}
-                                            {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coordenador', 2, true) !!}
-                                            {!! Form::label('coordenador', 'Coordenador') !!}
+                                            <br>
                                             {!! Form::checkbox('banca', 1, false) !!}
                                             {!! Form::label('banca', 'Banca') !!}
+                                            <br>
+                                            {!! Form::checkbox('coorientador', 2, true) !!}
+                                            {!! Form::label('coorientador', 'Coorientador') !!}
+                                            <br>
+                                            {!! Form::checkbox('orientador', 4, false) !!}
+                                            {!! Form::label('orientador', 'Orientador') !!}
                                         @elseif($membrobanca->user->permissao == 4)
                                             {!! Form::label('permissao', 'Permissão *') !!}
                                             {!! Form::checkbox('orientador', 4, true) !!}
                                             {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coordenador', 2, false) !!}
-                                            {!! Form::label('coordenador', 'Coordenador') !!}
+                                            {!! Form::checkbox('coorientador', 2, false) !!}
+                                            {!! Form::label('coorientador', 'Coorientador') !!}
                                             {!! Form::checkbox('banca', 1, false) !!}
                                             {!! Form::label('banca', 'Banca') !!}
                                         @elseif($membrobanca->user->permissao == 3)
                                             {!! Form::label('permissao', 'Permissão *') !!}
                                             {!! Form::checkbox('orientador', 4, false) !!}
                                             {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coordenador', 2, true) !!}
-                                            {!! Form::label('coordenador', 'Coordenador') !!}
+                                            {!! Form::checkbox('coorientador', 2, true) !!}
+                                            {!! Form::label('coorientador', 'Coorientador') !!}
                                             {!! Form::checkbox('banca', 1, true) !!}
                                             {!! Form::label('banca', 'Banca') !!}
                                         @elseif($membrobanca->user->permissao == 5)
                                             {!! Form::label('permissao', 'Permissão *') !!}
                                             {!! Form::checkbox('orientador', 4, true) !!}
                                             {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coordenador', 2, false) !!}
-                                            {!! Form::label('coordenador', 'Coordenador') !!}
+                                            {!! Form::checkbox('coorientador', 2, false) !!}
+                                            {!! Form::label('coorientador', 'Coorientador') !!}
                                             {!! Form::checkbox('banca', 1, true) !!}
                                             {!! Form::label('banca', 'Banca') !!}
                                         @elseif($membrobanca->user->permissao == 6)
                                             {!! Form::label('permissao', 'Permissão *') !!}
                                             {!! Form::checkbox('orientador', 4, true) !!}
                                             {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coordenador', 2, true) !!}
-                                            {!! Form::label('coordenador', 'Coordenador') !!}
+                                            {!! Form::checkbox('coorientador', 2, true) !!}
+                                            {!! Form::label('coorientador', 'Coorientador') !!}
                                             {!! Form::checkbox('banca', 1, false) !!}
                                             {!! Form::label('banca', 'Banca') !!}
                                         @elseif($membrobanca->user->permissao == 7)
                                             {!! Form::label('permissao', 'Permissão *') !!}
                                             {!! Form::checkbox('orientador', 4, true) !!}
                                             {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coordenador', 2, true) !!}
-                                            {!! Form::label('coordenador', 'Coordenador') !!}
+                                            {!! Form::checkbox('coorientador', 2, true) !!}
+                                            {!! Form::label('coorientador', 'Coorientador') !!}
                                             {!! Form::checkbox('banca', 1, true) !!}
                                             {!! Form::label('banca', 'Banca') !!}
                                         @endif
                                     </div> {{-- ./col-md-9 --}}
-                                </div> {{-- ./row --}}
-                                <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-2">
                                         {!! Form::label('ativo', 'Ativo *') !!}
                                         @if($membrobanca->user->ativo <> 1)
                                         {!! Form::checkbox('ativo', 1, $membrobanca->user->ativo, ['title'=>'Situação no sistema: Inativo']) !!}
                                         @else
                                         {!! Form::checkbox('ativo', 1, $membrobanca->user->ativo, ['title'=>'Situação no sistema: Ativo']) !!}
                                         @endif
-                                    </div> {{-- ./col-md-6 --}}
+                                    </div> {{-- ./col-md-2 --}}
+                                </div> {{-- ./row --}}
+                                <div class="row">
                                 </div> {{-- ./row --}}
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
@@ -147,7 +150,7 @@
                             <div class="row">
                                 <div class="col-md-5">
                                     {!! Form::label('email', 'E-mail *') !!}
-                                    {!! Form::text('email', $membrobanca->user->email, ['class'=>'form-control', 'title'=>'E-mail do acadêmico(a)']) !!}
+                                    {!! Form::text('email', $membrobanca->user->email, ['class'=>'form-control', 'title'=>'E-mail do(a) professor(a)']) !!}
                                 </div> {{-- ./col-md-6 --}}
                                 <div class="col-md-5 add-telefone">
                                     {!! Form::label('telefone', 'Telefone *') !!}<br>

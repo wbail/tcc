@@ -146,6 +146,17 @@ Route::group(['prefix'=>'curso','where'=>['id'=>'[0-9]+']], function() {
 
 });
 
+Route::group(['prefix'=>'arquivo','where'=>['id'=>'[0-9]+']], function() {
+
+	Route::get('', ['as'=>'arquivo', 'uses'=>'ArquivoController@index', 'middleware' => 'auth']);
+	Route::get('novo', ['as'=>'arquivo.create', 'uses'=>'ArquivoController@create', 'middleware' => 'auth']);
+	Route::post('store/{etapaanoid}/{trabalhoid}', ['as'=>'arquivo.store', 'uses'=>'ArquivoController@store', 'middleware' => 'auth']);
+	Route::get('edit/{id}', ['as'=>'arquivo.edit', 'uses'=>'ArquivoController@edit', 'middleware' => 'auth']);
+	Route::put('update/{id}', ['as'=>'arquivo.update', 'uses'=>'ArquivoController@update', 'middleware' => 'auth']);
+	Route::get('destroy/{id}', ['as'=>'arquivo.destroy', 'uses'=>'ArquivoController@destroy', 'middleware' => 'auth']);
+	Route::get('show/{id}', ['as'=>'arquivo.show', 'uses'=>'ArquivoController@show', 'middleware' => 'auth']);
+
+});
 
 Route::get('/contato/destroy/{id}', function($id) {
 	\App\Contato::find($id)->delete();

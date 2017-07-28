@@ -41,6 +41,19 @@
                     </div>
                 @endif
 
+                @if (count($errors) > 0)
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <br>
+
                 <table data-order='[[0, "desc"]]' class="table table-hover table-striped table-bordered display">
                     <thead>
                         <tr>
@@ -49,7 +62,7 @@
                             <th class="col-md-3">Descrição</th>
                             <th class="col-md-2">Data Entrega</th>
                             <th class="text-center col-md-1">Situação</th>
-                            <th class="col-md-3">Arquivo</th>
+                            <th class="text-center col-md-3">Arquivo</th>
                             <th class="text-center">Ação</th>
                         </tr>
                     </thead>
@@ -125,7 +138,7 @@
         </div>
     </div>
     
-    <!-- Modal lista arquivos -->
+    <!-- Modal upload arquivos -->
     <div id="myModalUploadArquivos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -133,17 +146,15 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title" id="myModalLabel">Submeter Arquivo</h4>
                 </div>
-                <div class="modal-body">
-                    {!! Form::open(['url' => '/home/importdoc', 'files' => true]) !!}
-                        {!! Form::label('doc', 'Arquivo') !!}
-                        {!! Form::file('doc') !!}
-                        <br>
+                <div id="modalBodyArquivo" class="modal-body">
+                	
                 </div>
-                <div class="modal-footer">
+                {{--  <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                     <button type="submit" class="btn btn-primary pull-right" title="Enviar Arquivo">Enviar</button>
-                </div>
-                    {!! Form::close() !!}
+                </div>  --}}
+                    
+                    
             </div>
         </div>
     </div>
@@ -243,6 +254,16 @@
             //console.log("complete");
         });
 
+    });
+
+    $('#myModalUploadArquivos').on('show.bs.modal', function(e) {        
+        var $modal = $(this);
+        var etapaanoid = e.relatedTarget.id;
+        var trabalhoid = e.relatedTarget.value;         
+
+        console.log('etapaanoid = ' + etapaanoid + ' / ' + 'trabalhoid = ' + trabalhoid);
+        
+		$('#modalBodyArquivo').html('<form method="POST" enctype=multipart/form-data action="{{ url("arquivo/store") }}/'+etapaanoid+'/'+trabalhoid+'" file="true">{{ csrf_field() }}<label for="descricao">Arquivo *</label><input type="file" name="descricao" /></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><button id="enviaArquivo" type="submit" class="btn btn-primary pull-right" title="Enviar Arquivo">Enviar</button></div></form>');
     });
 
 
@@ -410,9 +431,9 @@
                     <h4 class="modal-title" id="myModalLabel">Submeter Arquivo</h4>
                 </div>
                 <div class="modal-body">
-                    {!! Form::open(['url' => '/home/importdoc', 'files' => true]) !!}
-                        {!! Form::label('doc', 'Arquivo') !!}
-                        {!! Form::file('doc') !!}
+                    {!! Form::open(['url' => '/arquivo/store/', 'files' => true]) !!}
+                        {!! Form::label('descricao', 'Arquivo *') !!}
+                        {!! Form::file('descricao') !!}
                         <br>
                 </div>
                 <div class="modal-footer">

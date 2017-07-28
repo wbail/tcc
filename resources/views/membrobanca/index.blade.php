@@ -64,9 +64,11 @@
                         @elseif($membrobanca->user->permissao == 4)
                             <td>Orientador</td>
                         @elseif($membrobanca->user->permissao == 2)
-                            <td>Coordenador</td>
+                            <td>Coorientador</td>
                         @elseif($membrobanca->user->permissao == 6)
                             <td>Orientador/Coordenador</td>
+                        @elseif($membrobanca->user->permissao == 9)
+                            <td>Coordenador</td>
                         @endif
                         <td class="text-center">
                             <a id="{{ $membrobanca->id }}" class="btn btn-link" href="{{ route('membrobanca.edit', ['id'=>$membrobanca->id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>

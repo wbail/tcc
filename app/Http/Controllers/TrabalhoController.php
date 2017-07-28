@@ -24,13 +24,13 @@ class TrabalhoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-       
+
         $instituicao = 0;
 
         $departamento_id = Auth::user()
                             ->membrobanca()
                             ->value('departamento_id');
-
+        
         if($departamento_id) {
 
             $instituicao = Departamento::find($departamento_id)
@@ -38,41 +38,20 @@ class TrabalhoController extends Controller {
                             ->first();
 
             $this->authorize('view', $instituicao);
+            
+            $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
+                $q->where('departamento_id', '=', $departamento_id);
+            })
+            ->orWhereHas('coorientador', function($q) use ($departamento_id) {
+                $q->where('departamento_id', '=', $departamento_id);
+            })
+            ->with('academico')
+            ->get();
 
-            // $trabalho = DB::table('trabalhos as t')
-            //         ->join('membro_bancas as mb', function($join) {
-            //             $join->on('mb.id', '=', 't.orientador_id')
-            //                 ->orOn('mb.id', '=', 't.coorientador_id');
-            //         })
-            //         ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
-            //         ->join('academico_trabalhos as at', 'at.trabalho_id', '=', 't.id')
-            //         ->join('academicos as a', 'a.id', '=', 'at.academico_id')
-            //         ->join('users as u', function($join) {
-            //             $join->on('u.id', '=', 'a.user_id')
-            //                 ->orOn('u.id', '=', 'mb.user_id');
-            //         })
-            //         ->where('mb.departamento_id', '=', $departamento_id)
-            //         ->select('t.id', 't.titulo', 't.periodo', 't.aprovado', 'u.name')
-            //         ->get();
-
-            $trabalho = Trabalho::with('membrobanca')->with('coorientador')
-                    ->join('membro_bancas as mb', function($join) {
-                        $join->on('mb.id', '=', 'trabalhos.orientador_id')
-                            ->orOn('mb.id', '=', 'trabalhos.coorientador_id');
-                    })
-                    ->join('academico_trabalhos as at', 'at.trabalho_id', '=', 'trabalhos.id')
-                    ->join('academicos as a', 'a.id', '=', 'at.academico_id')
-                    ->join('users as u', 'u.id', '=', 'a.user_id')
-                    ->where('mb.departamento_id', '=', $departamento_id)
-                    ->get();
-
-            // return $trabalho;
-
-            return view('trabalho.index',
-                        [
+            return view('trabalho.index', [
                 'trabalho' => $trabalho,
             ]);
-            
+                        
         } else {
             return abort(403, 'Usuário não Autorizado.');
         }

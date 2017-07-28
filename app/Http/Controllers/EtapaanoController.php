@@ -42,6 +42,8 @@ class EtapaanoController extends Controller
         
         if($membrobanca) {
 
+            $objetos = array();
+
             $trabalho = Trabalho::where('orientador_id', '=', $membrobanca->id)
                                 ->orWhere('coorientador_id', '=', $membrobanca->id)
                                 ->get();

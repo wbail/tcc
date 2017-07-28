@@ -91,7 +91,6 @@
             			<td class="text-center">
             				<a href="{{ route('trabalho.edit', ['id'=>$trabalho->id]) }}" class="btn btn-link" title="Editar"><i class="fa fa-pencil"></i></a>
             				<button id="{{ $trabalho->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelTrabalho" title="Excluir"><i class="fa fa-trash"></i></button>
-            				
             			</td>
             		</tr>
             		@endforeach
