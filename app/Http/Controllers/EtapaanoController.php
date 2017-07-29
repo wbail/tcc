@@ -182,7 +182,8 @@ class EtapaanoController extends Controller
                     ->join('trabalhos as t', 't.id', '=', 'et.trabalho_id')
                     ->where('ea.id', '=', $id)
                     ->where('t.id', '=', $trabalhoid)
-                    ->select('a.descricao', 'a.created_at', 'u.name')
+                    ->where('a.deleted_at', '=', null)
+                    ->select('a.id', 'a.descricao', 'a.created_at', 'u.name')
                     ->orderBy('a.created_at', 'desc')
                     ->get();
         
@@ -203,7 +204,7 @@ class EtapaanoController extends Controller
         return view('etapaano.edit', [
             'etapaano' => EtapaAno::find($id),
             'etapa' => Etapa::all()->pluck('desc', 'id'),
-            'trabalho' => Trabalho::all()->pluck('titulo', 'id'),
+            //'trabalho' => Trabalho::all()->pluck('titulo', 'id'),
         ]);
     }
 
@@ -216,9 +217,9 @@ class EtapaanoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->authorize('update', EtapaAno::class);
-
         $etapa = EtapaAno::find($id);
+
+        $this->authorize('update', $etapa);
         
         if ($request->has('data_inicial')) {
 
@@ -236,10 +237,6 @@ class EtapaanoController extends Controller
                 $etapa->etapa()->dissociate($etapa->etapa_id);
                 $etapa->etapa()->associate($request->input('etapa'));
                 $etapa->save();
-                
-                if ($request->has('trabalho')) {
-                    $etapa->trabalho()->sync($request->input('trabalho'));
-                }
 
                 return redirect('/etapaano')->with('message', 'Etapa atualizada com sucesso');
             }
@@ -256,11 +253,7 @@ class EtapaanoController extends Controller
             $etapa->etapa()->dissociate($etapa->etapa_id);
             $etapa->etapa()->associate($request->input('etapa'));
             $etapa->save();
-
-            if ($request->has('trabalho')) {
-                $etapa->trabalho()->sync($request->input('trabalho'));
-            }
-
+            
             return redirect('/etapaano')->with('message', 'Etapa atualizada com sucesso');
         }
         

@@ -29,10 +29,12 @@ class TrabalhoRequest extends FormRequest {
                 'required',
                 Rule::unique('trabalhos')->ignore($this->id),
             ],
-            'academico' => 'required',
+            'academico' => 'required|unique:academico_trabalhos,academico_id',
+            'academico1' => 'different:academico|unique:academico_trabalhos,academico_id',
             'ano' => 'required|date_format:Y|after_or_equal:' . \Carbon\Carbon::now()->format('Y'),
             'periodo' => 'required|integer|min:1|max:3',
-            'orientador' => 'required'            
+            'orientador' => 'required',
+            'coorientador' => 'different:orientador'
         ];
     }
 
@@ -46,7 +48,9 @@ class TrabalhoRequest extends FormRequest {
             'titulo.required' => 'O campo Título é obrigatório.',
             'titulo.unique' => 'Trabalho já cadastrado.',
             'academico.required' => 'O campo Acadêmico(a) é obrigatório.',
-            'academico.different' => 'Os(as) acadêmicos(as) devem ser diferentes.',
+            'academico.unique' => 'O Acadêmico já está vinculado a um trabalho',
+            'academico1.different' => 'Os(as) acadêmicos(as) devem ser diferentes.',
+            'academico1.unique' => 'O segundo Acadêmico já está vinculado a um trabalho',
             'ano.required' => 'O campo Ano é obrigatório.',
             'ano.date_format' => 'O campo Ano deve ter quatro dígitos.',
             'ano.after_or_equal' => 'O campo Ano deve ser igual ou maior ao ano atual.',

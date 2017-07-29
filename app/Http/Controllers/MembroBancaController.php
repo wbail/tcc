@@ -79,9 +79,10 @@ class MembroBancaController extends Controller
      */
     public function store(MembroBancaRequest $request)
     {
+
         $this->authorize('create', MembroBanca::class);
 
-        $telefone = $request->except('_token', 'nome', 'email', 'banca', 'coorientador', 'orientador', 'departamento');
+        $telefone = $request->except('_token', 'nome', 'email', 'banca', 'coorientador', 'orientador', 'departamento', 'ativo');
         
         for ($i = 0; $i < count($telefone); $i++) { 
             

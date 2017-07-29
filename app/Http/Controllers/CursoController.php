@@ -197,7 +197,7 @@ class CursoController extends Controller {
      */
     public function update(CursoRequest $request, $id) {
 
-        $this->authorize('update', Curso::class);
+        $this->authorize('update', Curso::find($id));
 
         $curso = Curso::find($id);
 

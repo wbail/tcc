@@ -140,6 +140,12 @@
 
 <script type="text/javascript">
 
+    $(document).ready (function() {
+        $(".alert-success").fadeTo(2000, 500).slideUp(500, function() {
+            $(".alert-success").slideUp(500);
+        });
+    });
+
     $(document).ready( function () {
         $('table.display').DataTable({
             "language": {

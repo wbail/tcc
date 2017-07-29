@@ -148,13 +148,21 @@
                 </div>
                 <div id="modalBodyArquivo" class="modal-body">
                 	
+                </div>                    
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal del Arquivos-->
+    <div id="myModalDeleteArquivos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Deseja realmente excluir o arquivo?</h4>
                 </div>
-                {{--  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-primary pull-right" title="Enviar Arquivo">Enviar</button>
-                </div>  --}}
-                    
-                    
+                <div class="modal-footer del-arquivos">
+                </div>
             </div>
         </div>
     </div>
@@ -187,9 +195,6 @@
 
 <script type="text/javascript">
 
-    $('.envia-arquivo').click(function(){
-        $('#arquivo').click();
-    });
 
     $(document).ready (function() {
         $(".alert-success").fadeTo(2000, 500).slideUp(500, function() {
@@ -226,7 +231,7 @@
                 for(var i = 0; i < data.length; i++) {
                     
                     meio += '<tr><td>' + data[i].name + '<br>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') 
-                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td></tr>';
+                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td><td class="text-center"><button id="'+data[i].id+'" class="btn btn-link" title="Excluir Arquivo" data-toggle="modal" data-target="#myModalDeleteArquivos"><i class="fa fa-trash"></i></a></td></tr>';
                 };
                 
                 html = '<table class="table table-striped table-bordered table-hover">'+
@@ -234,6 +239,7 @@
                         '<tr>'+
                             '<th class"col-md-1">Usuário</th>'+
                             '<th class"col-md-1">Arquivo(s)</th>'+
+                            '<th text-center">Ação</th>'+
                         '</tr>'+
                     '</thead>'+
                     '<tbody>'+
@@ -261,10 +267,17 @@
         var etapaanoid = e.relatedTarget.id;
         var trabalhoid = e.relatedTarget.value;         
 
-        console.log('etapaanoid = ' + etapaanoid + ' / ' + 'trabalhoid = ' + trabalhoid);
+        // console.log('etapaanoid = ' + etapaanoid + ' / ' + 'trabalhoid = ' + trabalhoid);
         
 		$('#modalBodyArquivo').html('<form method="POST" enctype=multipart/form-data action="{{ url("arquivo/store") }}/'+etapaanoid+'/'+trabalhoid+'" file="true">{{ csrf_field() }}<label for="descricao">Arquivo *</label><input type="file" name="descricao" /></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><button id="enviaArquivo" type="submit" class="btn btn-primary pull-right" title="Enviar Arquivo">Enviar</button></div></form>');
     });
+
+    $('#myModalDeleteArquivos').on('show.bs.modal', function(e) {
+        var $modal = $(this);
+        var arquivoid = e.relatedTarget.id;
+        $('.del-arquivos').html('<a href="arquivo/destroy/' + arquivoid + '" class="btn btn-danger"> Excluir </a><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
+    });
+
 
 
     $(document).ready( function () {
@@ -294,7 +307,7 @@
                     "sortAscending":  ": activate to sort column ascending",
                     "sortDescending": ": activate to sort column descending"
                 },
-            }, //fim language
+            }, // fim language
 
             "ordering": true,
         });
@@ -306,7 +319,7 @@
         var $modal = $(this);
         var etapaid = e.relatedTarget.id;
         $modal.find('.modal-title').html('Deseja realmente excluir?');
-        $modal.find('.del-etapa').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="etapa/destroy/' + etapaid + '" class="btn btn-danger"> Excluir </a>');           
+        $modal.find('.del-etapa').html('<a href="etapa/destroy/' + etapaid + '" class="btn btn-danger"> Excluir </a><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');           
     });
 
 </script>
@@ -355,6 +368,19 @@
                         <strong>{{ session('message') }}</strong>
                     </div>
                 @endif
+
+                @if (count($errors) > 0)
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <br><br>
 
                 <table data-order='[[2, "desc"]]' class="table table-hover table-striped table-bordered display">
                     <thead>
@@ -430,17 +456,23 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title" id="myModalLabel">Submeter Arquivo</h4>
                 </div>
-                <div class="modal-body">
-                    {!! Form::open(['url' => '/arquivo/store/', 'files' => true]) !!}
-                        {!! Form::label('descricao', 'Arquivo *') !!}
-                        {!! Form::file('descricao') !!}
-                        <br>
+                <div id="modalBodyArquivo" class="modal-body">
+
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-primary pull-right" title="Enviar Arquivo">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal del Arquivos-->
+    <div id="myModalDeleteArquivos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Deseja realmente excluir o arquivo?</h4>
                 </div>
-                    {!! Form::close() !!}
+                <div class="modal-footer del-arquivos">
+                </div>
             </div>
         </div>
     </div>
@@ -507,7 +539,7 @@
                 for(var i = 0; i < data.length; i++) {
                     
                     meio += '<tr><td>' + data[i].name + '<br>' 
-                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td><td>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') + '</td></tr>';
+                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td><td>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') + '</td><td class="text-center"><button id="'+data[i].id+'" class="btn btn-link" title="Excluir Arquivo" data-toggle="modal" data-target="#myModalDeleteArquivos"><i class="fa fa-trash"></i></button></td></tr>';
                 };
                 
                 html = '<table class="table table-striped table-bordered table-hover">'+
@@ -516,6 +548,7 @@
                             '<th class"col-md-1">Usuário</th>'+
                             '<th class"col-md-1">Arquivo</th>'+
                             '<th class"col-md-1">Enviado em</th>'+
+                            '<th class"col-md-1">Ação</th>'+
                         '</tr>'+
                     '</thead>'+
                     '<tbody>'+
@@ -538,6 +571,21 @@
 
     });
 
+    $('#myModalUploadArquivos').on('show.bs.modal', function(e) {        
+        var $modal = $(this);
+        var etapaanoid = e.relatedTarget.id;
+        var trabalhoid = e.relatedTarget.value;         
+
+        // console.log('etapaanoid = ' + etapaanoid + ' / ' + 'trabalhoid = ' + trabalhoid);
+        
+		$('#modalBodyArquivo').html('<form method="POST" enctype=multipart/form-data action="{{ url("arquivo/store") }}/'+etapaanoid+'/'+trabalhoid+'" file="true">{{ csrf_field() }}<label for="descricao">Arquivo *</label><input type="file" name="descricao" /></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><button id="enviaArquivo" type="submit" class="btn btn-primary pull-right" title="Enviar Arquivo">Enviar</button></div></form>');
+    });
+
+    $('#myModalDeleteArquivos').on('show.bs.modal', function(e) {
+        var $modal = $(this);
+        var arquivoid = e.relatedTarget.id;
+        $('.del-arquivos').html('<a href="arquivo/destroy/' + arquivoid + '" class="btn btn-danger"> Excluir </a><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
+    });
 
     $(document).ready( function () {
         $('table.display').DataTable({

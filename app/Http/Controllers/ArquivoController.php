@@ -41,18 +41,48 @@ class ArquivoController extends Controller
      */
     public function store(ArquivoRequest $request, EtapaAno $etapaanoid, Trabalho $trabalhoid)
     {
+        
         if($request->hasFile('descricao')) {
-            return [$etapaanoid, $trabalhoid];
-            return [
-                $request->descricao->path(),
-                $request->descricao->getClientOriginalName(),
-                $request->descricao->getClientOriginalExtension(),
-                $request->descricao->getClientSize(),
-                $request->descricao->guessClientExtension(),
-                $request->descricao->getMimeType(),
-            ];
-        } else {
-        }
+            
+            // return [
+            //     $request->descricao->path(),
+            //     $request->descricao->getClientOriginalName(),
+            //     $request->descricao->getClientOriginalExtension(),
+            //     $request->descricao->getClientSize(),
+            //     $request->descricao->guessClientExtension(),
+            //     $request->descricao->getMimeType(),
+            // ];
+
+            $etapaTrabalho = DB::table('etapa_trabalhos as et')
+                                ->where('et.trabalho_id', $trabalhoid->id)
+                                ->where('et.etapaano_id', $etapaanoid->id)
+                                ->first();
+
+            if($etapaTrabalho) {
+                Auth::user()
+                    ->etapatrabalho()
+                    ->attach($etapaTrabalho->id, [
+                        'descricao' => $request->descricao->getClientOriginalName()
+                    ]);
+                    
+            } else {
+
+                $etapaanoid->trabalho()->attach($trabalhoid);
+
+                $etapaTrabalho = DB::table('etapa_trabalhos')
+                                    ->latest()
+                                    ->first();
+                
+                Auth::user()
+                    ->etapatrabalho()
+                    ->attach($etapaTrabalho->id, [
+                        'descricao' => $request->descricao->getClientOriginalName()
+                    ]);
+            }
+
+            return redirect('/etapaano')->with('message', 'Arquivo enviado com sucesso');
+        
+        } 
 
     }
 
@@ -98,6 +128,7 @@ class ArquivoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Arquivo::find($id)->delete();
+        return back()->with('message', 'Arquivo excluído com sucesso');
     }
 }

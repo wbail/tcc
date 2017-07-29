@@ -64,9 +64,6 @@
                             </div> <!-- ./col-md-6 -->
                         </div> <!-- ./row -->
                         <br>
-                        {!! Form::label('trabalho', 'Trabalho') !!}
-                        {!! Form::select('trabalho[]', $trabalho, $etapaano->trabalho->pluck('id')->toArray() , ['class'=>'form-control', 'title'=>'Vincular trabalho à esta etapa', 'multiple'=>'multiple']) !!}                        
-                        <br>
                         {!! Form::label('ativa', 'Etapa ativa') !!}
                         {!! Form::checkbox('ativa', 1, $etapaano->ativa) !!}
                         <br>

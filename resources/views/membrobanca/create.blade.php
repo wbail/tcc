@@ -147,9 +147,7 @@
                                         </div>
                                         {{-- <p class="w3-padding-left w3-text-red">@{{errortext}}</p> --}}
                                     </div>
-                                    <br><br><br>
-
-
+                                    <br><br><br><br>
 
                                 </div> {{-- ./col-md-6 --}}
                             </div> {{-- ./row --}}

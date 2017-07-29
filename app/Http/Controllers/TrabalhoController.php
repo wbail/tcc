@@ -96,29 +96,36 @@ class TrabalhoController extends Controller {
         $this->authorize('create', Trabalho::class);
         
         if ($request->has('academico1') && $request->has('coorientador')) {
-
+        
             $trabalho = new Trabalho;
             $trabalho->titulo = $request->input('titulo');
             $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
             $trabalho->coorientador_id = $request->input('coorientador');
+            $trabalho->academico()->sync([$request->input('academico'), $request->input('academico1')]);
             $trabalho->save();
-
-            $lastTrabalho = DB::table('trabalhos')
-                        ->latest()
-                        ->first();
-
-            $lastTrabalho = Trabalho::find($lastTrabalho->id);
-
-            $lastTrabalho->academico()->sync([$request->input('academico'), $request->input('academico1')]);
-            
 
             // $directory = 'trabalhos/' . $request->input('ano') . '/' . $request->input('titulo');
             // Storage::makeDirectory($directory);
 
             return redirect('/trabalho')->with('message', 'Trabalho cadastrado com sucesso');
             
+        } elseif($request->has('academico1')) {
+            
+            $trabalho = new Trabalho;
+            $trabalho->titulo = $request->input('titulo');
+            $trabalho->ano = $request->input('ano');
+            $trabalho->periodo = $request->input('periodo');
+            $trabalho->orientador_id = $request->input('orientador');
+            $trabalho->academico()->sync([$request->input('academico'), $request->input('academico1')]);
+            $trabalho->save();
+            
+            // $directory = 'trabalhos/' . $request->input('ano') . '/' . $request->input('titulo');
+            // Storage::makeDirectory($directory);
+
+            return redirect('/trabalho')->with('message', 'Trabalho cadastrado com sucesso');
+           
 
         } else {
             
@@ -127,15 +134,8 @@ class TrabalhoController extends Controller {
             $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
+            $trabalho->academico()->attach($request->input('academico'));
             $trabalho->save();
-
-            $lastTrabalho = DB::table('trabalhos')
-                                ->latest()
-                                ->first();
-
-            $lastTrabalho = Trabalho::find($lastTrabalho->id);
-
-            $lastTrabalho->academico()->attach($request->input('academico'));
             
             // $directory = 'trabalhos/' . $request->input('ano') . '/' . $request->input('titulo');
             // Storage::makeDirectory($directory);
@@ -166,13 +166,14 @@ class TrabalhoController extends Controller {
      */
     public function edit($id) {
 
-        $this->authorize('update', Trabalho::class);
+        $trabalho = Trabalho::find($id);
+
+        $this->authorize('update', $trabalho);
 
         $qntacademicos = Trabalho::find($id)
                             ->academico()
                             ->count();
 
-        $trabalho = Trabalho::find($id);
    
         $academico = DB::table('academicos as a')
                         ->join('users as u', 'u.id', '=', 'a.user_id')
@@ -202,9 +203,12 @@ class TrabalhoController extends Controller {
     public function update(TrabalhoRequest $request, $id) {
        
         // return $request->all();
-        $this->authorize('update', Trabalho::class);
 
         $trabalho = Trabalho::find($id);
+
+        $this->authorize('update', $trabalho);
+
+        $aprovado = 0;
 
         if($request->input('aprovado') == null) {
             $aprovado = 0;
@@ -212,13 +216,22 @@ class TrabalhoController extends Controller {
             $aprovado = 1;
         }
 
-        if(Trabalho::find($id)->titulo != $request->input('titulo')) {
+        if($trabalho->titulo != $request->input('titulo')) {
             //Storage::move('trabalhos/' . Carbon::parse(Trabalho::find($id)->ano)->format('Y') . '/' . Trabalho::find($id)->titulo, 
               //  'trabalhos/' . Carbon::parse(Trabalho::find($id)->ano)->format('Y') . '/' . $request->input('titulo'));
         }
 
         if ($request->input('academico1') != null && $request->input('coorientador') != null) {
             
+            $qntacademicos = DB::table('academico_trabalhos as at')
+                                    ->where('academico_id', $request->input('academico'))
+                                    ->orWhere('academico_id', $request->input('academico1'))
+                                    ->count();
+            
+            if($qntacademicos > 1) {
+                return back()->with('message', 'Acadêmico já vinculado a um trabalho');
+            }
+
             $trabalho->titulo = $request->input('titulo');
             $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
@@ -227,13 +240,21 @@ class TrabalhoController extends Controller {
             $trabalho->coorientador_id = $request->input('coorientador');
             $trabalho->save();
 
-            $trabalho->academico()->updateExistingPivot($request->input('academico'), [$request->input('academico')]);
-            $trabalho->academico()->updateExistingPivot($request->input('academico1'), [$request->input('academico1')]);
+            //$trabalho->academico()->sync([$request->input('academico') => $request->input('academico')]);
+            //$trabalho->academico()->sync([$request->input('academico1') => $request->input('academico1')]);
 
-            return redirect('/trabalho');
+            return redirect('/trabalho')->with('message', 'Trabalho atualizado com sucesso');
 
         } else {
 
+            $qntacademicos = DB::table('academico_trabalhos as at')
+                                    ->where('academico_id', $request->input('academico'))
+                                    ->count();
+            
+            if($qntacademicos > 1) {
+                return back()->with('message', 'Acadêmico já vinculado a um trabalho');
+            }
+
             $trabalho->titulo = $request->input('titulo');
             $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
@@ -242,9 +263,9 @@ class TrabalhoController extends Controller {
             $trabalho->coorientador_id = $request->input('coorientador');
             $trabalho->save();
 
-            $trabalho->academico()->updateExistingPivot($request->input('academico'), [$request->input('academico')]);
+            //$trabalho->academico()->updateExistingPivot($request->input('academico'), [$request->input('academico')]);
 
-            return redirect('/trabalho');
+            return redirect('/trabalho')->with('message', 'Trabalho atualizado com sucesso');
            
         }
     }
