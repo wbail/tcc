@@ -43,7 +43,7 @@
                                     <div class="col-md-2"></div>
                                     <div class="col-md-9">
                                         <div class="form-group has-feedback">
-                                            <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                                            <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus title="Endereço de E-Mail">
                                             <span class="fa fa-envelope form-control-feedback"></span>
                                             @if ($errors->has('email'))
                                             <span class="help-block">
@@ -58,7 +58,7 @@
                                     <div class="col-md-2"></div>
                                     <div class="col-md-9">
                                         <div class="form-group has-feedback">
-                                            <input id="password" type="password" class="form-control" name="password" required>
+                                            <input id="password" type="password" class="form-control" name="password" required title="Senha">
                                             <span class="fa fa-lock form-control-feedback"></span>
                                         </div>
                                         @if ($errors->has('password'))
@@ -73,7 +73,7 @@
                                     <div class="col-md-9">
                                         <div class="row">
                                             <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Lembrar-me
-                                            <button type="submit" class="btn btn-primary btn-flat pull-right">Login</button>
+                                            <button type="submit" class="btn btn-primary btn-flat pull-right">Entrar</button>
                                         </div> {{-- ./row --}}
                                     </div>
                                 </div>

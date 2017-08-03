@@ -62,19 +62,18 @@ class CursoController extends Controller {
 
         $this->authorize('create', Curso::class);
 
+        $departamento_id = User::userMembroDepartamento()->departamento_id;
+
         $coordenador = DB::table('membro_bancas as mb')
             ->join('users as u', 'u.id', '=', 'mb.user_id')
             ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
-            ->where('d.id', User::userMembroDepartamento()->departamento_id)
+            ->where('d.id', $departamento_id)
             ->orderBy('u.name', 'asc')
             ->pluck('u.name', 'mb.id');
 
-        $dept = DB::table('departamentos as d')
-            ->join('instituicaos as i', 'i.id', 'd.instituicao_id')
-            ->where('i.sigla', '=', 'UEPG')
-            ->select('d.id', 'd.nome')
-            ->orderBy('d.nome', 'asc')
-            ->pluck('d.nome', 'd.id');
+        $dept = Departamento::where('instituicao_id', Departamento::where('id', $departamento_id)->first()->value('instituicao_id'))
+                    ->orderBy('nome', 'asc')
+                    ->pluck('nome', 'id');
 
         return view('curso.create', [
             'coordenador' => $coordenador,
@@ -173,6 +172,8 @@ class CursoController extends Controller {
 
         $this->authorize('create', Curso::class);
 
+        $departamento_id = User::userMembroDepartamento()->departamento_id;
+
         $coordenadorTodos = DB::table('membro_bancas as mb')
             ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
             ->join('users as u', 'u.id', '=', 'mb.user_id')
@@ -180,11 +181,15 @@ class CursoController extends Controller {
             ->orderBy('u.name', 'asc')
             ->pluck('u.name', 'mb.id');
 
+        $dept = Departamento::where('instituicao_id', Departamento::where('id', $departamento_id)->first()->value('instituicao_id'))
+                    ->orderBy('nome', 'asc')
+                    ->pluck('nome', 'id');
+
         return view('curso.edit', [
             'curso' => Curso::find($id),
             'coordenadortodos' => $coordenadorTodos,
             'coordenador' => Curso::find($id)->membrobanca[0]->pivot->coordenador_id,
-            'departamento' => Departamento::all()->pluck('nome', 'id'),
+            'departamento' => $dept,
         ]);
     }
 
@@ -199,6 +204,7 @@ class CursoController extends Controller {
 
         $this->authorize('update', Curso::find($id));
 
+
         $curso = Curso::find($id);
 
         $curso->update([
@@ -209,7 +215,18 @@ class CursoController extends Controller {
         $coordenadorCurso = Curso::find($id)->membrobanca[0];
         
         if ($coordenadorCurso->pivot->coordenador_id !== $request->input('coordenador')) {
-            $curso->membrobanca()->detach($coordenadorCurso->pivot->coordenador_id);   
+            $curso->membrobanca()->detach($coordenadorCurso->pivot->coordenador_id); 
+            
+            if(DB::table('coordenador_cursos')->where('coordenador_id', $coordenadorCurso->pivot->coordenador_id)->count() > 0) {
+
+                MembroBanca::find($coordenadorCurso->pivot->coordenador_id)->user()->update([
+                    'permissao' => 9
+                ]);  
+            } else {
+                MembroBanca::find($coordenadorCurso->pivot->coordenador_id)->user()->update([
+                    'permissao' => 7
+                ]);
+            }
         }
 
         if ($request->has('fimvigencia')) {

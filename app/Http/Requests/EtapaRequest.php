@@ -25,8 +25,12 @@ class EtapaRequest extends FormRequest {
         
         return [
             
-            'desc' => 'required|unique:etapas,desc|max:45|min:1',
-                    
+            'desc' => [
+                'required',
+                'max:45',
+                'min:1',
+                Rule::unique('etapas')->ignore($this->id)
+            ]                    
         ];
     }
 

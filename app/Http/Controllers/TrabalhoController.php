@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\TrabalhoRequest;
+use Response;
 
 use App\Trabalho;
 use App\Academico;
+use App\AcademicoTrabalho;
 use App\User;
 use App\Departamento;
 use App\MembroBanca;
@@ -155,7 +157,19 @@ class TrabalhoController extends Controller {
      */
     public function show($id) {
 
-        //
+        $trabalho = AcademicoTrabalho::where('trabalho_id', $id)
+                    ->join('academicos as a', 'a.id', '=', 'academico_trabalhos.academico_id')
+                    ->join('users as u', 'u.id', '=', 'a.user_id')
+                    ->join('trabalhos as t', 't.id', '=', 'academico_trabalhos.trabalho_id')
+                    ->join('membro_bancas as mb', function($q) {
+                        $q->on('mb.id', '=', 't.orientador_id')
+                        ->orOn('mb.id', '=', 't.coorientador_id');
+                    })
+                    ->join('users as us', 'us.id', '=', 'mb.user_id')
+                    ->select('u.name as nome_aluno', 'us.name as nome_ori')
+                    ->get();
+                
+        return Response::json($trabalho);
     }
 
     /**

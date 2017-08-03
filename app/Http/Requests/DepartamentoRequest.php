@@ -4,11 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-// use Auth;
-// use DB;
-// use App\Academico;
-// use App\MembroBanca;
-// use App\CoordenadorCurso;
 
 class DepartamentoRequest extends FormRequest {
 
@@ -19,11 +14,6 @@ class DepartamentoRequest extends FormRequest {
      */
     public function authorize() {
 
-        // if(!Academico::where('user_id', '=', Auth::user()->id)->first() && (MembroBanca::where('user_id', '=', Auth::user()->id)->first() && CoordenadorCurso::where('coordenador_id', '=', DB::table('membro_bancas')->where('user_id', '=', Auth::user()->id)->value('id'))->first())) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
         return true;
     
     }

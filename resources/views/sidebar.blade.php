@@ -50,10 +50,10 @@
             </li>
 
             <li class="treeview">
-                <a href="#"><span><i class="fa fa-calendar"></i> Banca</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><span><i class="fa fa-calendar"></i> Banca de Avaliação</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ url('/departamento/novo') }}"><i class="fa fa-plus"></i> Novo</a></li>
-                    <li><a href="{{ url('/departamento') }}"><i class="fa fa-list"></i> Listar</a></li>
+                    <li><a href="{{ url('/banca/novo') }}"><i class="fa fa-plus"></i> Membros de Avaliação</a></li>
+                    <li><a href="{{ url('/banca') }}"><i class="fa fa-list"></i> Listar</a></li>
                 </ul>
             </li>
 

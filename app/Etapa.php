@@ -8,6 +8,7 @@ class Etapa extends Model
 {
     protected $fillable = [
     	'desc',
+        'banca',
     ];
 
     public function etapaano()

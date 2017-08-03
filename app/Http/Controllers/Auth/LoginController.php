@@ -35,10 +35,15 @@ class LoginController extends Controller {
      */
     public function redirectTo() {
 
-        if (Auth::user()->mudou_senha) {
-            return '/admin';
-        } else {
+        if (Auth::user()->mudou_senha == 0) {
             return '/primeiroacesso';
+        } else {
+            
+            if(Auth::user()->permissao >= 1 && Auth::user()->permissao <= 8) {
+                return '/etapaano';
+            } elseif(Auth::user()->permissao == 9) {
+                return '/admin';
+            }
         }
         
     }

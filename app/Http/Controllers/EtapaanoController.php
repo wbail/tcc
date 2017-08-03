@@ -18,13 +18,6 @@ use App\User;
 use App\Academico;
 use App\MembroBanca;
 
-// 1 = strognoff carne
-
-// pure, 4 queijos e marguerita dividida em 3 a pizza
-
-// meia portuguesa e bolonhesa
-
-
 class EtapaanoController extends Controller
 {
     /**
@@ -142,10 +135,6 @@ class EtapaanoController extends Controller
                 $etapa->ativa = $request->input('ativa');
                 $etapa->etapa()->associate($request->input('etapa'));
                 $etapa->save();
-                
-                if ($request->has('trabalho')) {
-                    $etapa->trabalho()->sync($request->input('trabalho'));
-                }
 
                 return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');
             }
@@ -157,10 +146,6 @@ class EtapaanoController extends Controller
             $etapa->ativa = $request->input('ativa');
             $etapa->etapa()->associate($request->input('etapa'));
             $etapa->save();
-
-            if ($request->has('trabalho')) {
-                $etapa->trabalho()->sync($request->input('trabalho'));
-            }
 
             return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');
         }
@@ -204,7 +189,6 @@ class EtapaanoController extends Controller
         return view('etapaano.edit', [
             'etapaano' => EtapaAno::find($id),
             'etapa' => Etapa::all()->pluck('desc', 'id'),
-            //'trabalho' => Trabalho::all()->pluck('titulo', 'id'),
         ]);
     }
 
@@ -219,6 +203,7 @@ class EtapaanoController extends Controller
     {
         $etapa = EtapaAno::find($id);
 
+        
         $this->authorize('update', $etapa);
         
         if ($request->has('data_inicial')) {

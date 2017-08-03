@@ -5,10 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-use App\Academico;
-use App\Trabalho;
-use DB;
-
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -27,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Academico' => 'App\Policies\AcademicoPolicy',
         'App\MembroBanca' => 'App\Policies\MembroBancaPolicy',
         'App\EtapaAno' => 'App\Policies\EtapaAnoPolicy',
+        'App\Banca' => 'App\Policies\BancaPolicy',
     ];
 
     /**

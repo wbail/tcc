@@ -83,7 +83,18 @@ class EtapaController extends Controller
     public function update(EtapaRequest $request, $id)
     {
         $this->authorize('create', Etapa::class);
-        Etapa::find($id)->update($request->all());
+        
+        $banca = $request->input('banca');
+        
+        if($banca == null) {
+            $banca = 0;
+        }
+
+        Etapa::find($id)->update([
+            'desc' => $request->input('desc'),
+            'banca' => $banca
+        ]);
+
         return redirect('/etapa')->with('message', 'Etapa atualizada com sucesso!');;
     }
 

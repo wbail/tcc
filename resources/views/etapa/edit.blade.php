@@ -30,16 +30,17 @@
             <!-- Your Page Content Here -->
 
             @if (count($errors) > 0)
-                <div class="alert alert-warning">
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <ul>
                         @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
+                        <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
             @endif
 
-            <br><br>
+            <br>
 
             <div class="row">
                 <div class="col-md-4"></div>
@@ -49,6 +50,9 @@
                         
                         {!! Form::label('desc', 'Descrição da Etapa*') !!}
                         {!! Form::text('desc', $etapa->desc, ['class'=>'form-control', 'title'=>'Descrição da etapa']) !!}
+                        <br>
+                        {!! Form::label('banca', 'Esta etapa é Banca? *') !!}
+                        {!! Form::checkbox('banca', 1, $etapa->banca, ['title'=>'Etapa de bancas de avaliação']) !!}
                         <br>
                         {!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
                     {!! Form::close() !!}

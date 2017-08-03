@@ -158,6 +158,18 @@ Route::group(['prefix'=>'arquivo','where'=>['id'=>'[0-9]+']], function() {
 
 });
 
+Route::group(['prefix'=>'banca','where'=>['id'=>'[0-9]+']], function() {
+
+	Route::get('', ['as'=>'banca', 'uses'=>'BancaController@index', 'middleware' => 'auth']);
+	Route::get('novo', ['as'=>'banca.create', 'uses'=>'BancaController@create', 'middleware' => 'auth']);
+	Route::post('store', ['as'=>'banca.store', 'uses'=>'BancaController@store', 'middleware' => 'auth']);
+	Route::get('edit/{id}', ['as'=>'banca.edit', 'uses'=>'BancaController@edit', 'middleware' => 'auth']);
+	Route::put('update/{id}', ['as'=>'banca.update', 'uses'=>'BancaController@update', 'middleware' => 'auth']);
+	Route::get('destroy/{id}', ['as'=>'banca.destroy', 'uses'=>'BancaController@destroy', 'middleware' => 'auth']);
+	Route::get('show/{id}', ['as'=>'banca.show', 'uses'=>'BancaController@show', 'middleware' => 'auth']);
+
+});
+
 Route::get('/contato/destroy/{id}', function($id) {
 	\App\Contato::find($id)->delete();
 	return back();

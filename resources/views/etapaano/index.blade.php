@@ -230,8 +230,8 @@
                 
                 for(var i = 0; i < data.length; i++) {
                     
-                    meio += '<tr><td>' + data[i].name + '<br>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') 
-                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td><td class="text-center"><button id="'+data[i].id+'" class="btn btn-link" title="Excluir Arquivo" data-toggle="modal" data-target="#myModalDeleteArquivos"><i class="fa fa-trash"></i></a></td></tr>';
+                   meio += '<tr><td>' + data[i].name + '<br>' 
+                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td><td>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') + '</td><td class="text-center"><button id="'+data[i].id+'" class="btn btn-link" title="Excluir Arquivo" data-toggle="modal" data-target="#myModalDeleteArquivos"><i class="fa fa-trash"></i></button></td></tr>';
                 };
                 
                 html = '<table class="table table-striped table-bordered table-hover">'+
@@ -334,7 +334,7 @@
     @include('header') 
 
     <!-- Sidebar -->
-    @include('sidebar') 
+    @include('sidebar')          
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">

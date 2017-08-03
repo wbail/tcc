@@ -12,7 +12,7 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Nova Etapa" }}
+                {{ $page_title or "Editando a Banca " . $departamento->descricao }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
@@ -20,8 +20,11 @@
                 <li><a href="{{ url('/avaliador') }}"><i class="fa fa-dashboard"></i> Acadêmicos</a></li>
                 <li class="active">Novo</li>
             </ol> --}}
-            <a href="{{ url('etapa') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
+            <a href="{{ url('banca') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
+            	           
+
+
         </section>
 
         <!-- Main content -->
@@ -44,14 +47,23 @@
             <div class="row">
             	<div class="col-md-4"></div> {{-- ./col-md-4 --}}
             	<div class="col-md-4">
-            		{!! Form::open(['url' => '/etapa/store', 'method'=>'post']) !!}
-                        
-                        {!! Form::label('desc', 'Descrição *') !!}
-                        {!! Form::text('desc', null, ['class'=>'form-control', 'title'=>'Descrição da etapa']) !!}
-            			<br>
-                        {!! Form::label('banca', 'Esta etapa é Banca? *') !!}
-                        {!! Form::checkbox('banca', null, false, ['title'=>'Etapa de bancas de avaliação']) !!}
+            		{!! Form::open(['url' => "/banca/update/$departamento->id", 'method'=>'put']) !!}
+            			{!! Form::label('instituicao', 'Instituição de Ensino *') !!}
+                        {!! Form::select('instituicao', $inst, $departamento->instituicao_id, ['class'=>'form-control', 'title'=>'Instituição de Ensino', 'placeholder'=>'']) !!}
                         <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {!! Form::label('nome', 'Nome *') !!}
+                                {!! Form::text('nome', $departamento->nome, ['class'=>'form-control', 'title'=>'Nome do Departamento']) !!}
+
+                            </div> <!-- ./col-md-6 -->
+                            <div class="col-md-6">
+                                {!! Form::label('sigla', 'Sigla *') !!}
+                                {!! Form::text('sigla', $departamento->sigla, ['class'=>'form-control', 'title'=>'Sigla do Departamento']) !!}
+
+                            </div> <!-- ./col-md-6 -->
+                        </div> <!-- ./row -->
+            			<br>
             			{!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
             		{!! Form::close() !!}
             	</div> {{-- ./col-md-4 --}}
@@ -77,21 +89,13 @@
 <script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
 {{-- jQuery Mask Plugin --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.9/jquery.mask.js"></script>
-{{-- Select2 --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
-{{-- Select2 - pt-BR --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/i18n/pt-BR.js"></script>
-{{-- Moment _ Datetimepicker --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/pt-br.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.45/js/bootstrap-datetimepicker.min.js"></script>
+
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the
       user experience -->
-
-
 
 </body>
 
 
 </html>
+

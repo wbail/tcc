@@ -23,4 +23,10 @@ class MembroBanca extends Model
     public function trabalho() {
         return $this->hasMany(Trabalho::class, 'orientador_id');
     }
+
+    public function etapatrabalho() {
+        return $this->belongsToMany(EtapaTrabalho::class, 'bancas', 'papel', 'membrobanca_id', 'etapatrabalho_id')
+    				->withPivot('papel', 'membrobanca_id', 'etapatrabalho_id')
+                    ->withTimestamps();
+    }
 }

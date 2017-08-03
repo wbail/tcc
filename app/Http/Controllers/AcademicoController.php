@@ -100,7 +100,7 @@ class AcademicoController extends Controller {
 
         $this->authorize('create', Academico::class);
         
-        $telefone = $request->except('_token', 'nome', 'email', 'ra', 'curso');
+        $telefone = $request->except('_token', 'nome', 'email', 'ra', 'curso', 'tipo');
         
         for ($i = 0; $i < count($telefone); $i++) { 
             
@@ -121,7 +121,9 @@ class AcademicoController extends Controller {
             'mudou_senha' => 0
         ]);
 
-        $lastUser = DB::table('users')->latest()->first();
+        $lastUser = DB::table('users')
+                        ->latest()
+                        ->first();
 
         $academico = new Academico;
         $academico->ra = $request->input('ra');
