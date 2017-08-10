@@ -8,7 +8,7 @@ class Banca extends Model
 {
     protected $fillable = ['papel', 'data'];
 
-    public function academicotrabalho() {
-        return $this->belongsTo(AcademicoTrabalho::class);
+    public function trabalho() {
+        return $this->belongsTo(Trabalho::class);
     }
 }

@@ -31,6 +31,7 @@ class MembroBancaController extends Controller
             $orientador = DB::table('membro_bancas as a')
                     ->join('users as u', 'u.id', '=', 'a.user_id')
                     ->select('u.name as text', 'a.id as id')
+                    ->where('a.departamento_id', '=', User::userMembroDepartamento()->departamento_id)
                     ->where('u.name', 'LIKE', '%'. $term . '%')
                     ->orderBy('u.name')
                     ->pluck('id', 'text');

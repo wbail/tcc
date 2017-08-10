@@ -44,21 +44,26 @@
 		            <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
 		                <thead>
 		                    <tr>
-                                <th>Nome</th>
-                                <th>Instituição</th>
-		                        <th>Sigla</th>
+                                <th>Trabalho</th>
+                                <th>Data</th>
 		                        <th class="text-center">Ação</th>
 		                    </tr>
 		                </thead>
 		                <tbody>
-		                    @foreach($departamento as $departamento)
+		                    @foreach($banca as $banca)
 		                    <tr>
-                                <td>{{ $departamento->nome }}</td>
-                                <td>{{ $departamento->instituicao->sigla }}</td>
-		                        <td>{{ $departamento->sigla }}</td>
+                                <td>{{ $banca->titulo }}</td>
+                                <td>
+                                    @if($banca->data == null)
+                                    Data a definir
+                                    @else
+                                    {{ \Carbon\Carbon::parse($banca->data)->format('d/m/Y H:i') }}
+                                    @endif                                
+                                </td>
 		                        <td class="text-center">
-		                            <a id="{{ $departamento->id }}" class="btn btn-link" href="{{ route('departamento.edit', ['id'=>$departamento->id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
-		                            <button id="{{ $departamento->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelDepartamento" title="Excluir"><i class="fa fa-trash"></i> </button>
+		                            <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Definir Data"><i class="fa fa-calendar"></i></a>
+		                            <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
+		                            <button id="{{ $banca->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelbanca" title="Excluir"><i class="fa fa-trash"></i> </button>
 		                        </td>
 		                    </tr>
 		                    @endforeach
@@ -75,15 +80,15 @@
 
     <!-- Footer -->
     
-    <!-- Modal del departamento-->
-    <div id="myModalDelDepartamento" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <!-- Modal del banca-->
+    <div id="myModalDelbanca" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title" id="myModalLabel"></h4>
                 </div>
-                <div class="modal-footer del-departamento">
+                <div class="modal-footer del-banca">
                 </div>
             </div>
         </div>
@@ -150,13 +155,13 @@
     });
 
 
-// Deletar departamento
-$('#myModalDelDepartamento').on('show.bs.modal', function(e) {
+// Deletar banca
+$('#myModalDelbanca').on('show.bs.modal', function(e) {
     
     var $modal = $(this);
-    var departamentoid = e.relatedTarget.id;
+    var bancaid = e.relatedTarget.id;
     $modal.find('.modal-title').html('Deseja realmente excluir?');
-    $modal.find('.del-departamento').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="departamento/destroy/' + departamentoid + '" class="btn btn-danger"> Excluir </a>');           
+    $modal.find('.del-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="banca/destroy/' + bancaid + '" class="btn btn-danger"> Excluir </a>');           
 });
 
 

@@ -11,6 +11,8 @@
 |
 */
 
+
+
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -175,3 +177,29 @@ Route::get('/contato/destroy/{id}', function($id) {
 	return back();
 });
 
+Route::get('/h/{email}', function($email) {
+
+	$user = DB::table('users as u')
+                    ->where('u.email', $email)
+                    ->first();
+
+	$isProf = DB::table('membro_bancas as mb')
+				->where('mb.user_id', $user->id)
+				->first();
+
+	$isAluno = DB::table('academicos as a')
+				->where('a.user_id', $user->id)
+				->first();
+
+	if($isProf) {
+		return \App\Curso::where('departamento_id', $isProf->departamento_id)
+			->select('id', 'nome')
+			->get();
+	} else if($isAluno) {
+		return \App\Curso::where('id', $isAluno->curso_id)
+			->select('id', 'nome')
+			->get();
+	}
+
+
+});

@@ -77,12 +77,19 @@ class TrabalhoController extends Controller {
 
         $orientador = DB::table('membro_bancas as mb')
                         ->join('users as u', 'u.id', '=', 'mb.user_id')
+                        ->where('mb.departamento_id', User::userMembroDepartamento()->departamento_id)
+                        ->orderBy('u.name')
+                        ->pluck('u.name', 'mb.id');
+
+        $coorientador = DB::table('membro_bancas as mb')
+                        ->join('users as u', 'u.id', '=', 'mb.user_id')
                         ->orderBy('u.name')
                         ->pluck('u.name', 'mb.id');
 
         return View('trabalho.create', [
             'academico' => $academico,
-            'orientador' => $orientador
+            'orientador' => $orientador,
+            'coorientador' => $coorientador
         ]);
     }
 
@@ -94,7 +101,7 @@ class TrabalhoController extends Controller {
      */
     public function store(TrabalhoRequest $request) {
 
-        // return $request->all();
+        //return $request->all();
         $this->authorize('create', Trabalho::class);
         
         if ($request->has('academico1') && $request->has('coorientador')) {
@@ -136,8 +143,8 @@ class TrabalhoController extends Controller {
             $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
-            $trabalho->academico()->attach($request->input('academico'));
             $trabalho->save();
+            $trabalho->academico()->attach($request->input('academico'));
             
             // $directory = 'trabalhos/' . $request->input('ano') . '/' . $request->input('titulo');
             // Storage::makeDirectory($directory);
@@ -166,7 +173,7 @@ class TrabalhoController extends Controller {
                         ->orOn('mb.id', '=', 't.coorientador_id');
                     })
                     ->join('users as us', 'us.id', '=', 'mb.user_id')
-                    ->select('u.name as nome_aluno', 'us.name as nome_ori')
+                    ->select('a.id as aid', 'u.name as nome_aluno', 'mb.id as mid', 'us.name as nome_ori')
                     ->get();
                 
         return Response::json($trabalho);

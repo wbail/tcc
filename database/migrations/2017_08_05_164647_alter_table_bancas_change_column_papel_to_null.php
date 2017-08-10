@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDataColumnOnBancasTable extends Migration
+class AlterTableBancasChangeColumnPapelToNull extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddDataColumnOnBancasTable extends Migration
     public function up()
     {
         Schema::table('bancas', function (Blueprint $table) {
-            $table->dateTime('banca')->nullable()->after('papel');
+            $table->string('papel', 1)->default(0)->change();
         });
     }
 

@@ -93,11 +93,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         {!! Form::label('orientador', 'Orientador(a) *') !!}
-                                        {!! Form::select('orientador', $orientador, null, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Orientador(a)']) !!}
+                                        {!! Form::select('orientador', $orientador, null, ['class'=>'form-control', 'placeholder'=>'', 'title'=>'Nome do(a) Orientador(a)']) !!}
                                     </div> {{-- ./col-md-6 --}}
                                     <div class="col-md-6">
                                         {!! Form::label('coorientador', 'Coorientador(a)') !!}
-                                        {!! Form::select('coorientador', $orientador, null, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
+                                        {!! Form::select('coorientador', $coorientador, null, ['class'=>'form-control', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
                                     </div> {{-- ./col-md-6 --}}
                                 </div> {{-- ./row --}}
                                 <div class="row">

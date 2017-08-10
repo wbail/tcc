@@ -20,7 +20,7 @@
                 <li><a href="{{ url('/avaliador') }}"><i class="fa fa-dashboard"></i> Acadêmicos</a></li>
                 <li class="active">Novo</li>
             </ol> --}}
-            <a href="{{ url('etapa') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
+            <a href="{{ url('banca') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
         </section>
 
@@ -64,48 +64,32 @@
                                 {!! Form::label('aluno', 'Aluno(s) *') !!}
                                 <div class="row">
                                     <div class="col-md-6">
-                                         {!! Form::text('aluno', null, ['id'=>'aluno', 'class'=>'form-control', 'title'=>'Aluno', 'disabled']) !!} 
+                                        {!! Form::label('aluno', " ", ['id'=>'aluno', 'title'=>'Aluno']) !!}
                                     </div> <!-- ./col-md-6 -->
                                     <div class="col-md-6">
-                                         {!! Form::text('aluno1', null, ['id'=>'aluno1', 'class'=>'form-control', 'title'=>'Aluno', 'disabled']) !!}                                         
+                                        {!! Form::label('aluno1', " ", ['id'=>'aluno1', 'title'=>'Aluno']) !!}
                                     </div> <!-- ./col-md-6 -->
                                 </div> <!-- ./row -->
                                 <br>
+                                {!! Form::label('orientador', 'Orientadore(s) *') !!}
                                 <div class="row">
                                     <div class="col-md-6">
-                                         {!! Form::label('orientador', 'Orientador(a) *') !!}
-                                         {!! Form::text('orientador', null, ['id'=>'orientador', 'class'=>'form-control', 'title'=>'Orientador', 'disabled']) !!} 
+                                        {!! Form::label('orientador', " ", ['id'=>'orientador', 'title'=>'Orientador']) !!} 
                                     </div> <!-- ./col-md-6 -->
                                     <div class="col-md-6">
-                                         {!! Form::label('coorientador', 'Corientador(a) *') !!} 
-                                         {!! Form::text('coorientador', null, ['id'=>'coorientador', 'class'=>'form-control', 'title'=>'Coorientador', 'disabled']) !!}   
+										{!! Form::label('coorientador', " ", ['id'=>'coorientador', 'title'=>'Coorientador']) !!}   
                                     </div> <!-- ./col-md-6 -->
                                 </div> <!-- ./row -->
-                                <br>
-                                
+                                <br> 
                         </div>
                     </div> {{-- ./panel --}}
                 </div> {{-- ./col-md-6 --}}
             	<div class="col-md-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Informações Adicionais</h3>
+                            <h3 class="panel-title">Membros de Banca</h3>
                         </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Semana de bancas</label>
-                                    <label>
-                                        <h4>{{ \Carbon\Carbon::parse($data->data_inicial)->format('d/m/Y H:m') }} a {{ \Carbon\Carbon::parse($data->data_final)->format('d/m/Y H:m') }}</h4>
-                                    </label>
-                                </div>
-                            
-                                <div class="col-md-6">
-                                    {!! Form::label('data', 'Data *') !!}
-                                    {!! Form::text('data', null, ['class'=>'form-control', 'title'=>'Data da banca', 'id'=>'datetimepicker']) !!}
-                                </div> <!-- ./col-md-12 -->
-                            </div> <!-- ./row -->
-                            <br>
+                        <div class="panel-body">                            
                             <div class="row">
                                 <div class="col-md-6">
                                     {!! Form::label('membro', 'Membro de Banca *') !!}
@@ -127,16 +111,13 @@
                                     {!! Form::select('suplente2', $membros, null, ['class'=>'form-control', 'title'=>'Membro Suplente', 'placeholder'=>'']) !!}
                                 </div> <!-- ./col-md-6 -->
                             </div> <!-- ./row -->
-    
                         </div>
                     </div> {{-- ./panel --}}
+            	</div> {{-- ./col-md-6 --}}
+            </div> {{-- ./row --}}
                                 <br>
                                 {!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
                             {!! Form::close() !!}
-            	</div> {{-- ./col-md-6 --}}
-
-            </div> {{-- ./row --}}
-
             @yield('content')
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
@@ -212,19 +193,40 @@
         })
         .done(function(data) {
             console.log(data);
-            /*
-            $('#aluno').html(data[0].nome_aluno);
-            $('#aluno1').html(data[1].nome_aluno);
-            $('#orientador').html(data[1].nome_ori);
-            $('#coorientador').html(data[1].nome_ori);
-            */
 
-            
+            $('#aluno').html(" ");
+            $('#aluno1').html(" ");
+            $('#orientador').html(" ");
+            $('#coorientador').html(" ");
+
+            if(data.length == 1) {
+                $('#aluno').html(data[0].nome_aluno);
+                $('#orientador').html(data[0].nome_ori);
+            } else if(data.length == 2) {
+                $('#aluno').html(data[0].nome_aluno);
+                $('#orientador').html(data[0].nome_ori);
+                $('#coorientador').html(data[1].nome_ori);
+            } else if(data.length == 4) {
+                $('#aluno').html(data[0].nome_aluno);
+                $('#aluno1').html(data[2].nome_aluno);
+                $('#orientador').html(data[0].nome_ori);
+                $('#coorientador').html(data[1].nome_ori);
+            }
+
+
+			
+            /*
+            document.getElementById("alunoid").value = data[1].aid;
+            document.getElementById("aluno1id").value = data[1].aid;
+            document.getElementById("orientadorid").value = data[2].mid;
+            document.getElementById("coorientadorid").value = data[3].mid;
+
             document.getElementById("aluno").value = data[0].nome_aluno;
-            document.getElementById("aluno1").value = data[0].nome_aluno;
-            document.getElementById("orientador").value = data[1].nome_ori;
-            document.getElementById("coorientador").value = data[1].nome_ori;
-            
+            document.getElementById("aluno1").value = data[2].nome_aluno;
+            document.getElementById("orientador").value = data[0].nome_ori;
+            document.getElementById("coorientador").value = data[1].nome_ori;  
+            */
+                        
         })
         .fail(function() {
             console.log("error");

@@ -22,32 +22,38 @@ class CursoController extends Controller {
      */
     public function index() {
 
-        $instituicao = 0;
-
-        $departamento_id = Auth::user()
+        $membrobanca = Auth::user()
                             ->membrobanca()
-                            ->value('departamento_id');
-                            
-        if($departamento_id) {
-
-            $instituicao = Departamento::find($departamento_id)
-                            ->instituicao()
                             ->first();
 
-            $this->authorize('view', $instituicao);
-        
-            $curso = DB::table('cursos as c')
-                ->join('coordenador_cursos as cc', 'c.id', '=', 'cc.curso_id')
+        if($membrobanca){
+
+            $curso = DB::table('coordenador_cursos as cc')
                 ->join('membro_bancas as mb', 'mb.id', '=', 'cc.coordenador_id')
                 ->join('users as u', 'u.id', '=', 'mb.user_id')
-                ->where('c.departamento_id', '=', User::userMembroDepartamento()->departamento_id)
+                ->join('cursos as c', 'c.id', '=', 'cc.curso_id')
+                ->where('coordenador_id', $membrobanca->id)
                 ->select('u.name as coordenador', 'c.id', 'c.nome as nome')
                 ->get();
-        
-            return view('curso.index', [
-                'curso' => $curso
-            ]);
-            
+
+
+            if(count($curso) > 0) {
+
+                for ($i = 0; $i < count($curso); $i++) {
+
+                    if($this->authorize('view', Curso::find($curso[$i]->id))) {
+                        return view('curso.index', [
+                            'curso' => $curso
+                        ]);
+                    } else {
+                        return abort(403, 'Usuário não Autorizado.');
+                    }
+                }
+
+            } else {
+                return abort(403, 'Usuário não Autorizado.');
+            }
+
         } else {
             return abort(403, 'Usuário não Autorizado.');
         }

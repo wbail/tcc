@@ -18,4 +18,10 @@ class EtapaAno extends Model
     				->withTimestamps();
     }
 
+    public function membrobanca() {
+        return $this->belongsToMany(MembroBanca::class, 'bancas', 'papel', 'data', 'membrobanca_id', 'etapatrabalho_id')
+    				->withPivot('papel', 'data', 'membrobanca_id', 'trabalho_id')
+                    ->withTimestamps();
+    }
+
 }

@@ -239,6 +239,7 @@
                         '<tr>'+
                             '<th class"col-md-1">Usuário</th>'+
                             '<th class"col-md-1">Arquivo(s)</th>'+
+                            '<th text-center">Data</th>'+
                             '<th text-center">Ação</th>'+
                         '</tr>'+
                     '</thead>'+

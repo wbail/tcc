@@ -35,28 +35,49 @@ class EtapaanoController extends Controller
         
         if($membrobanca) {
 
-            $objetos = array();
+            if(Auth::user()->permissao == 9) {
+                $objetos = array();
 
-            $trabalho = Trabalho::where('orientador_id', '=', $membrobanca->id)
-                                ->orWhere('coorientador_id', '=', $membrobanca->id)
-                                ->get();
+                $trabalho = Trabalho::all();
 
-            for ($i = 0; $i < count($trabalho); $i++) { 
+                for ($i = 0; $i < count($trabalho); $i++) { 
+                    
+                    $objetos[] = DB::select('select distinct ea.titulo as descricao, t.titulo, ea.ativa, ea.data_final, ea.id, t.id as trabalho_id
+                                            from etapa_anos as ea
+                                            left join etapa_trabalhos as et
+                                                on et.etapaano_id = ea.id
+                                            left join trabalhos as t
+                                                on t.id = ?', [$trabalho[$i]->id]);
+
+                }
                 
-                $objetos[] = DB::select('select distinct ea.titulo as descricao, t.titulo, ea.ativa, ea.data_final, ea.id, t.id as trabalho_id
-                                        from etapa_anos as ea
-                                        left join etapa_trabalhos as et
-                                            on et.etapaano_id = ea.id
-                                        left join trabalhos as t
-                                            on t.id = ?', [$trabalho[$i]->id]);
+                return view('etapaano.index', [
+                    'etapaano' => $objetos
+                ]);
 
+            } else {
+                $objetos = array();
+
+                $trabalho = Trabalho::where('orientador_id', '=', $membrobanca->id)
+                                    ->orWhere('coorientador_id', '=', $membrobanca->id)
+                                    ->get();
+
+                for ($i = 0; $i < count($trabalho); $i++) { 
+                    
+                    $objetos[] = DB::select('select distinct ea.titulo as descricao, t.titulo, ea.ativa, ea.data_final, ea.id, t.id as trabalho_id
+                                            from etapa_anos as ea
+                                            left join etapa_trabalhos as et
+                                                on et.etapaano_id = ea.id
+                                            left join trabalhos as t
+                                                on t.id = ?', [$trabalho[$i]->id]);
+
+                }
+                
+                return view('etapaano.index', [
+                    'etapaano' => $objetos
+                ]);
             }
 
-            // return $objetos;
-            
-            return view('etapaano.index', [
-                'etapaano' => $objetos
-            ]);
 
         } elseif($academico) {
 

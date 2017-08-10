@@ -14,7 +14,6 @@ class Trabalho extends Model
 
     public function coorientador() {
     	return $this->belongsTo(MembroBanca::class, 'coorientador_id');
-
     }
 
     public function academico() {
@@ -27,6 +26,10 @@ class Trabalho extends Model
     	return $this->belongsToMany(EtapaAno::class, 'etapa_trabalhos', 'etapaano_id', 'trabalho_id')
     				->withPivot('etapaano_id', 'trabalho_id')
     				->withTimestamps();
+    }
+
+    public function banca() {
+        return $this->hasMany(Banca::class);
     }
 
 }

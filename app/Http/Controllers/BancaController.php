@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\BancaRequest;
 
 // use App\Policies\BancaPolicy;
-// use App\Http\Requests\BancaRequest;
 
 use Auth;
 use DB;
 use App\Banca;
 use App\Etapa;
 use App\EtapaAno;
+use App\User;
+use App\Academico;
 use App\Trabalho;
 use App\MembroBanca;
+use \Carbon\Carbon;
 
 class BancaController extends Controller
 {
@@ -26,7 +29,22 @@ class BancaController extends Controller
     {
         $this->authorize('create', Banca::class);
 
-        return view('banca.index');
+        $d = User::userMembroDepartamento()->departamento_id;
+
+        $banca = DB::table('bancas as b')
+            ->join('trabalhos as t', 't.id', '=', 'b.trabalho_id')
+            ->join('membro_bancas as mb', 'mb.id', '=', 't.orientador_id')
+            ->where('mb.departamento_id', $d)
+            ->get();
+
+        $banca = collect($banca)
+            ->unique('trabalho_id')
+            ->values()
+            ->all();
+
+        return view('banca.index', [
+            'banca' => $banca
+        ]);
     }
 
     /**
@@ -38,21 +56,23 @@ class BancaController extends Controller
     {
         $this->authorize('create', Banca::class);
 
+        $departamento_id = User::userMembroDepartamento()->departamento_id;
+
+        $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
+            $q->where('departamento_id', '=', $departamento_id);
+        })
+        ->orWhereHas('coorientador', function($q) use ($departamento_id) {
+            $q->where('departamento_id', '=', $departamento_id);
+        })
+        ->orderBy('titulo')
+        ->pluck('titulo', 'id');
+
         $membros = MembroBanca::join('users as u', 'u.id', '=', 'membro_bancas.user_id')
                     ->orderBy('u.name')
                     ->pluck('u.name', 'membro_bancas.id');
-
-        $data = Etapa::where('banca', 1)
-                    ->join('etapa_anos as ea', 'ea.etapa_id', '=', 'etapas.id')
-                    ->select('data_inicial', 'data_final')
-                    ->first();
         
-        $trabalho = Trabalho::where('ano', '=', \Carbon\Carbon::now()->format('Y'))
-                    ->pluck('titulo', 'id');
-
         return view('banca.create', [
             'trabalho' => $trabalho,
-            'data' => $data,
             'membros' => $membros
         ]);
     }
@@ -63,11 +83,56 @@ class BancaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BancaRequest $request)
     {
         $this->authorize('create', Banca::class);
         
-        return $request->all();
+        // return $request->all();
+        
+        $trabalho = Trabalho::find($request->input('trabalho'));
+
+        $valores_membros = array(
+            $request->input('membro'),
+            $request->input('membro2'),
+            $request->input('suplente'),
+            $request->input('suplente2')
+        );
+
+        if(in_array(2,array_count_values($valores_membros))) {
+            return back()
+                    ->with('message', 'Os Membros de Banca devem ser distintos.')
+                    ->withInput();
+        }
+
+        if(in_array($trabalho->orientador_id, $valores_membros)) {
+            return back()
+                    ->with('message', 'O Orientador já faz parte da banca.')
+                    ->withInput();
+        } else if(in_array($trabalho->coorientador_id, $valores_membros)) {
+            return back()
+                    ->with('message', 'O Coorientador não participa da banca.')
+                    ->withInput();
+        }
+
+        $etapaano = Etapa::where('banca', 1)
+                        ->first();
+                        
+        $etapaano = EtapaAno::where('etapa_id', $etapaano->id)
+                ->first();
+        
+        for ($i = 0; $i < count($valores_membros); $i++) { 
+            DB::insert('insert into bancas (papel, membrobanca_id, etapaano_id, trabalho_id, created_at, updated_at) values (?, ?, ?, ?, ?, ?)', [
+                ($i+1),
+                $valores_membros[$i],
+                $etapaano->id,
+                $trabalho->id,
+                Carbon::now(),
+                Carbon::now()
+            ]);
+        }
+
+        return redirect('/banca')->with('message', 'Banca cadastrada com sucesso');
+
     }
 
     /**
@@ -90,6 +155,25 @@ class BancaController extends Controller
     public function edit($id)
     {
         $this->authorize('create', Banca::class);
+        
+        $banca =  Banca::where('trabalho_id', $id)
+                ->get();
+
+        $data = Etapa::where('banca', 1)
+                    ->join('etapa_anos as ea', 'ea.etapa_id', '=', 'etapas.id')
+                    ->select('data_inicial', 'data_final')
+                    ->first();
+        
+        $membros = MembroBanca::join('users as u', 'u.id', '=', 'membro_bancas.user_id')
+                    ->orderBy('u.name')
+                    ->pluck('u.name', 'membro_bancas.id');
+        
+        return view('banca.edit', [
+            'banca' => Banca::find($banca[0]->id),
+            'data' => $data,
+            'membros' => $membros,
+            'membro' => $banca
+        ]);
     }
 
     /**
@@ -102,6 +186,23 @@ class BancaController extends Controller
     public function update(Request $request, $id)
     {
         $this->authorize('create', Banca::class);
+
+        $data = Etapa::where('banca', 1)
+                    ->join('etapa_anos as ea', 'ea.etapa_id', '=', 'etapas.id')
+                    ->select('data_inicial', 'data_final')
+                    ->first();
+
+        if($request->input('data') > $data->data_final || $request->input('data') < $data->data_inicial) {
+            return back()
+                ->with('message', 'A data deve estar no período de Semana de Bancas')
+                ->withInput();
+        }
+
+        DB::update('update bancas as b set b.data = ? where b.trabalho_id = ?', [$request->input('data'), $id]);
+
+        return redirect('/banca')
+            ->with('message', 'Data adicionada com sucesso');
+
     }
 
     /**

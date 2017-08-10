@@ -36,8 +36,9 @@
                         <!-- /.login-logo -->
                         <div class="login-box-body">
                             <p class="login-box-msg">Login</p>
-                            <form class="form-horizontal" role="form" method="post" action="{{ route('login') }}">
-                                {{ csrf_field() }}
+                            <form class="form-horizontal" role="form" method="post" action="{{ route('login') }}">  
+                                {{ csrf_field() }} 
+                                
                                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                     {{-- <label for="email" class="col-md-4 control-label">E-Mail</label> --}}
                                     <div class="col-md-2"></div>
@@ -51,10 +52,21 @@
                                             </span>
                                             @endif
                                         </div>
+                                        <div class="form-group has-feedback">
+                                            <div id="cursos">
+                                                <select name="curso" placeholder="" class="form-control" title="Curso" required></select>
+                                            </div>
+                                            
+                                            {{--  <span class="a fa-graduation-cap form-control-feedback"></span>  --}}
+                                            @if ($errors->has('curso'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('curso') }}</strong>
+                                            </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                    
                                     <div class="col-md-2"></div>
                                     <div class="col-md-9">
                                         <div class="form-group has-feedback">
@@ -85,7 +97,7 @@
                                         </div> {{-- ./row --}}
                                     </div>
                                 </div>
-                            </form>
+                            </form>  
                         </div>
                         <!-- /.login-box-body -->
                     </div>
@@ -99,10 +111,43 @@
 <script src="../bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function() { 
+    
+        $('#email').on("focusout", function() {
+
+            $.ajax({
+                url: "h/" + $('#email').val(),
+                type: 'GET',
+                dataType: 'json',
+            })
+            .done(function(data) {
+
+                var html = '<select class="form-control" required name="curso" placeholder="Curso"><option value=" "></option>';
+                
+                for(var i = 0; i < data.length; i++) {
+                    html += '<option placeholder="'+ data[i].nome +'" value="'+ data[i].id +'">' + data[i].nome + '</option>';
+                }
+
+                html += '</select>';
+
+                $('#cursos').html(html);
+
+            })
+            .fail(function() {
+                //console.log("error");
+            })
+            .always(function() {
+                //console.log("complete");
+            });
+            
+
+        });
+
+    });
+
+</script>
+
 @endsection
-{{--
-<!DOCTYPE html>
-<html>
-    <body class="hold-transition login-page">
-    </body>
-</html> --}}
