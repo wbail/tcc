@@ -30,18 +30,28 @@ class EtapaanoController extends Controller
         $membrobanca = MembroBanca::where('user_id', '=', Auth::user()->id)
                                     ->first();
 
+        $departamento_id = $membrobanca->departamento_id;
+
         $academico = Academico::where('user_id', '=', Auth::user()->id)
                                     ->first();
         
         if($membrobanca) {
 
             if(Auth::user()->permissao == 9) {
+
                 $objetos = array();
 
-                $trabalho = Trabalho::all();
+                $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
+                    $q->where('departamento_id', '=', $departamento_id);
+                })
+                    ->orWhereHas('coorientador', function($q) use ($departamento_id) {
+                        $q->where('departamento_id', '=', $departamento_id);
+                    })
+                    ->with('academico')
+                    ->get();
 
-                for ($i = 0; $i < count($trabalho); $i++) { 
-                    
+                for ($i = 0; $i < count($trabalho); $i++) {
+
                     $objetos[] = DB::select('select distinct ea.titulo as descricao, t.titulo, ea.ativa, ea.data_final, ea.id, t.id as trabalho_id
                                             from etapa_anos as ea
                                             left join etapa_trabalhos as et
@@ -50,7 +60,7 @@ class EtapaanoController extends Controller
                                                 on t.id = ?', [$trabalho[$i]->id]);
 
                 }
-                
+
                 return view('etapaano.index', [
                     'etapaano' => $objetos
                 ]);

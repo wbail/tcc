@@ -100,14 +100,7 @@
                                         {!! Form::select('coorientador', $coorientador, null, ['class'=>'form-control', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
                                     </div> {{-- ./col-md-6 --}}
                                 </div> {{-- ./row --}}
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <br>
-                                        {!! Form::label('aprovado', 'Aprovado') !!}
-                                        <br>
-                                        {!! Form::checkbox('aprovado', 1, false, ['title'=>'Situação do trabalho. Aprovado/Não Aprovado']) !!}
-                                    </div>
-                                </div>
+
 
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
@@ -115,7 +108,6 @@
 
                 </div> {{-- ./col-md-4 --}}
                 <div class="col-md-4"></div> {{-- ./col-md-4 --}}
-
 
             </div> {{-- ./row --}}
                                 {!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
