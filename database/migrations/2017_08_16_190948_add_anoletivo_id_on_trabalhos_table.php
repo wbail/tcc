@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDeletedAtColumnOnCursosTable extends Migration
+class AddAnoletivoIdOnTrabalhosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddDeletedAtColumnOnCursosTable extends Migration
      */
     public function up()
     {
-        Schema::table('cursos', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::table('trabalhos', function (Blueprint $table) {
+            $table->integer('anoletivo_id')->unsigned()->nullable()->after('coorientador_id');
+            $table->foreign('anoletivo_id')->references('id')->on('ano_letivos');
         });
     }
 
@@ -25,7 +26,7 @@ class AddDeletedAtColumnOnCursosTable extends Migration
      */
     public function down()
     {
-        Schema::table('cursos', function (Blueprint $table) {
+        Schema::table('trabalhos', function (Blueprint $table) {
             //
         });
     }

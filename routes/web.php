@@ -172,6 +172,18 @@ Route::group(['prefix'=>'banca','where'=>['id'=>'[0-9]+']], function() {
 
 });
 
+Route::group(['prefix'=>'anoletivo','where'=>['id'=>'[0-9]+']], function() {
+
+    Route::get('', ['as'=>'anoletivo', 'uses'=>'AnoLetivoController@index', 'middleware' => 'auth']);
+    Route::get('novo', ['as'=>'anoletivo.create', 'uses'=>'AnoLetivoController@create', 'middleware' => 'auth']);
+    Route::post('store', ['as'=>'anoletivo.store', 'uses'=>'AnoLetivoController@store', 'middleware' => 'auth']);
+    Route::get('edit/{id}', ['as'=>'anoletivo.edit', 'uses'=>'AnoLetivoController@edit', 'middleware' => 'auth']);
+    Route::put('update/{id}', ['as'=>'anoletivo.update', 'uses'=>'AnoLetivoController@update', 'middleware' => 'auth']);
+    Route::get('destroy/{id}', ['as'=>'anoletivo.destroy', 'uses'=>'AnoLetivoController@destroy', 'middleware' => 'auth']);
+    Route::get('show/{id}', ['as'=>'anoletivo.show', 'uses'=>'AnoLetivoController@show', 'middleware' => 'auth']);
+
+});
+
 Route::get('/contato/destroy/{id}', function($id) {
 	\App\Contato::find($id)->delete();
 	return back();

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\EtapaRequest;
 
-use App\Etapa;
+use App\Http\Requests\AnoLetivoRequest;
 
-class EtapaController extends Controller
+use App\AnoLetivo;
+
+class AnoLetivoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +17,8 @@ class EtapaController extends Controller
      */
     public function index()
     {
-        $this->authorize('create', Etapa::class);
-
-        return view('etapa.index', [
-            'etapa' => Etapa::all()
+        return view('anoletivo.index', [
+            'anoletivo' => AnoLetivo::all()
         ]);
     }
 
@@ -30,8 +29,7 @@ class EtapaController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', Etapa::class);
-        return view('etapa.create');
+        return view('anoletivo.create');
     }
 
     /**
@@ -40,12 +38,23 @@ class EtapaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EtapaRequest $request)
+    public function store(AnoLetivoRequest $request)
     {
-        $this->authorize('create', Etapa::class);
-        Etapa::create($request->all());
+        $ativo = $request->input('ativo');
 
-        return redirect('/etapa')->with('message', 'Etapa cadastrada com sucesso!');
+        if ($ativo == null) {
+            $ativo = 0;
+        } else {
+            $ativo = 1;
+        }
+
+        AnoLetivo::create([
+            'rotulo' => $request->input('rotulo'),
+            'data' => $request->input('data'),
+            'ativo' => $ativo
+        ]);
+
+        return redirect('/anoletivo')->with('message', 'Ano Letivo cadastrado com sucesso');
     }
 
     /**
@@ -67,9 +76,8 @@ class EtapaController extends Controller
      */
     public function edit($id)
     {
-        $this->authorize('create', Etapa::class);
-        return view('etapa.edit', [
-            'etapa' => Etapa::find($id)
+        return view('anoletivo.edit', [
+            'anoletivo' => AnoLetivo::find($id)
         ]);
     }
 
@@ -80,22 +88,22 @@ class EtapaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EtapaRequest $request, $id)
+    public function update(AnoLetivoRequest $request, $id)
     {
-        $this->authorize('create', Etapa::class);
-        
-        $banca = $request->input('banca');
-        
-        if($banca == null) {
-            $banca = 0;
+        $ativo = $request->input('ativo');
+
+        if ($ativo == null) {
+            $ativo = 0;
+        } else {
+            $ativo = 1;
         }
 
-        Etapa::find($id)->update([
-            'desc' => $request->input('desc'),
-            'banca' => $banca
+        AnoLetivo::find($id)->update([
+            'rotulo' => $request->input('rotulo'),
+            'data' => $request->input('data'),
+            'ativo' => $ativo
         ]);
-
-        return redirect('/etapa')->with('message', 'Etapa atualizada com sucesso!');;
+        return redirect('/anoletivo')->with('message', 'Ano Letivo atualizado com sucesso');
     }
 
     /**
@@ -106,8 +114,6 @@ class EtapaController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('create', Etapa::class);
-        Etapa::find($id)->delete();
-        return redirect('/etapa');
+        //
     }
 }

@@ -12,7 +12,7 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Etapas" }}
+                {{ $page_title or "Ano Letivo" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
@@ -28,8 +28,8 @@
         <section class="content">
             <!-- Your Page Content Here -->
 
-            <div class="col-md-2"></div> <!-- ./col-md-4 -->
-            <div class="col-md-8">
+            <div class="col-md-3"></div> <!-- ./col-md-4 -->
+            <div class="col-md-6">
 
                 @if (session('message'))
                     <div class="alert alert-success alert-dismissible" role="alert">
@@ -38,46 +38,51 @@
                     </div>
                 @endif
 
-                @section('indexaluno')
                 <table data-order='[[0, "desc"]]' class="table table-hover table-striped table-bordered display">
                     <thead>
                         <tr>
-                            <th class="col-md-2">Etapa</th>
-                            <th class="col-md-3">Descrição</th>
-                            <th class="col-md-2">Data Entrega</th>
-                            <th class="text-center">Situação</th>
-                            <th class="text-center">Arquivo</th>
+                            
+                            <th>Rotulo</th>
+                            <th>Situaçao</th>
+                            <th>Data</th>
+                            <th class="text-center">Ação</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($etapaano as $etapaano)
+                        @foreach($anoletivo as $anoletivo)
                         <tr>
-                            <td>{{ $etapaano->etapa->desc }}</td>
-                            <td>{{ $etapaano->titulo }}</td>
-                            <td>{{ \Carbon\Carbon::parse($etapaano->data_final)->format('d/m/Y H:m') }}</td>
-                            @if($etapaano->ativa == 1)
-                                <td class="text-center"><span class="label label-success">Ativa</span></td>
-                            @else
-                                <td class="text-center"><span class="label label-default">Não Ativa</span></td>
-                            @endif
+                            
+                            <td>{{ $anoletivo->rotulo }}</td>
                             <td>
-                                <button class="btn btn-primary btn-sm"><i class="fa fa-upload"></i> Enviar</button>
+                                @if($anoletivo->ativo != 1)
+                                    <label>Nao Ativo</label>
+                                @else
+                                    <label>Ativo</label>
+                                @endif
+                            </td>
+                            <td>{{ Carbon\Carbon::parse($anoletivo->data)->format('d/m/Y') }}</td>
+
+                            <td class="text-center">
+                                <a id="{{ $anoletivo->id }}" class="btn btn-link" href="{{ route('anoletivo.edit', ['id'=>$anoletivo->id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
+                                <button id="{{ $anoletivo->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelAnoLetivo" title="Excluir"><i class="fa fa-trash"></i></button>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table> {{-- ./table --}}
-                @endsection
 
             </div> <!-- ./col-md-4 -->
             <div class="col-md-4"></div> <!-- ./col-md-4 -->
+
+
+            @yield('content')
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
 
     <!-- Footer -->
     
     <!-- Modal del etapa-->
-    <div id="myModalDelEtapa" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="myModalDelAnoLetivo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -215,12 +220,12 @@ $(document).ready (function() {
 
 
     // Deletar etapa
-    $('#myModalDelEtapa').on('show.bs.modal', function(e) {
+    $('#myModalDelAnoLetivo').on('show.bs.modal', function(e) {
         
         var $modal = $(this);
-        var etapaid = e.relatedTarget.id;
+        var anoletivoid = e.relatedTarget.id;
         $modal.find('.modal-title').html('Deseja realmente excluir?');
-        $modal.find('.del-etapa').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="etapa/destroy/' + etapaid + '" class="btn btn-danger"> Excluir </a>');           
+        $modal.find('.del-etapa').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="anoletivo/destroy/' + anoletivoid + '" class="btn btn-danger"> Excluir </a>');
     });
 
 
