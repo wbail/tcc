@@ -83,12 +83,6 @@
 <script src="{{ asset ('../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
-{{-- jQuery Mask Plugin --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.9/jquery.mask.js"></script>
-{{-- Select2 --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
-{{-- Select2 - pt-BR --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/i18n/pt-BR.js"></script>
 {{-- Moment _ Datetimepicker --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/pt-br.js"></script>
@@ -97,7 +91,26 @@
       Both of these plugins are recommended to enhance the
       user experience -->
 
+<script>
 
+    $('#datetimepicker').datetimepicker({
+        locale: 'pt-br',
+        format: 'DD/MM/YYYY',
+    });
+
+    $('.btn-primary').click(function() {
+
+        if ($('#datetimepicker').val() == '') {
+            var originalDateFinal = $('#datetimepicker').val();
+        } else {
+            var originalDateInicial = $('#datetimepicker').val();
+            var convertedDateInicial = moment(originalDateInicial, 'DD/MM/YYYY HH:mm').format('YYYY-MM-DD HH:mm');
+            $('#datetimepicker').val(convertedDateInicial);
+        }
+    });
+
+
+</script>
 
 </body>
 

@@ -44,6 +44,17 @@
                                     <div class="col-md-2"></div>
                                     <div class="col-md-9">
                                         <div class="form-group has-feedback">
+                                            <div id="anoletivosnovo">
+                                                <select id="anoletivos" name="anoletivo" class="form-control" title="Ano Letivo" ></select>
+                                            </div>
+                                            <span class="fa fa-calendar form-control-feedback"></span>
+                                            @if ($errors->has('anoletivo'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('anoletivo') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div class="form-group has-feedback">
                                             <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus title="Endereço de E-Mail">
                                             <span class="fa fa-envelope form-control-feedback"></span>
                                             @if ($errors->has('email'))
@@ -54,10 +65,9 @@
                                         </div>
                                         <div class="form-group has-feedback">
                                             <div id="cursos">
-                                                <select name="curso" placeholder="" class="form-control" title="Curso" required></select>
+                                                <select name="curso" class="form-control" title="Curso" required></select>
                                             </div>
-                                            
-                                            {{--  <span class="a fa-graduation-cap form-control-feedback"></span>  --}}
+                                            <span class="fa fa-graduation-cap form-control-feedback"></span>
                                             @if ($errors->has('curso'))
                                             <span class="help-block">
                                                 <strong>{{ $errors->first('curso') }}</strong>
@@ -128,7 +138,7 @@
                 var html = '<select class="form-control" required name="curso" placeholder="Curso"><option value=" "></option>';
                 
                 for(var i = 0; i < data.length; i++) {
-                    html += '<option placeholder="'+ data[i].nome +'" value="'+ data[i].id +'">' + data[i].nome + '</option>';
+                    html += '<option value="'+ data[i].id +'">' + data[i].nome + '</option>';
                 }
 
                 html += '</select>';
@@ -142,9 +152,36 @@
             .always(function() {
                 //console.log("complete");
             });
-            
-
         });
+
+        $('#anoletivos').on("click", function() {
+
+            $.ajax({
+                url: "{{ url('anoletivo/anoletivoativo') }}",
+                type: 'GET',
+                dataType: 'json',
+            })
+            .done(function(data) {
+
+                var html = '<select id="anoletivos" class="form-control" name="anoletivo" required><option value=" "></option>';
+
+                for(var i = 0; i < data.length; i++) {
+                    html += '<option value="'+ data[i].id +'">' + data[i].rotulo + '</option>';
+                }
+
+                html += '</select>';
+
+                $('#anoletivosnovo').html(html);
+
+            })
+            .fail(function() {
+                //console.log("error");
+            })
+            .always(function() {
+                //console.log("complete");
+            });
+        });
+
 
     });
 

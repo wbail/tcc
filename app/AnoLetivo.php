@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AnoLetivo extends Model
 {
-    protected $fillable = ['rotulo', 'data', 'ativo'];
+    use SoftDeletes;
+
+    protected $fillable = ['rotulo', 'data', 'ativo', 'deleted_at'];
 
     public function trabalho() {
         return $this->hasMany(Trabalho::class);

@@ -55,9 +55,9 @@
                             <td>{{ $anoletivo->rotulo }}</td>
                             <td>
                                 @if($anoletivo->ativo != 1)
-                                    <label>Nao Ativo</label>
+                                    <span class="label label-default">Nao Ativo</span>
                                 @else
-                                    <label>Ativo</label>
+                                    <span class="label label-success">Ativo</span>
                                 @endif
                             </td>
                             <td>{{ Carbon\Carbon::parse($anoletivo->data)->format('d/m/Y') }}</td>

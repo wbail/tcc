@@ -114,6 +114,23 @@ class AnoLetivoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        AnoLetivo::find($id)
+            ->delete();
+
+        return redirect('/anoletivo');
+    }
+
+    public function getAnoLetivoAtivo(Request $request)
+    {
+        $anoletivoativo = AnoLetivo::where('ativo', 1)
+                            ->select('rotulo', 'id')
+                            ->get();
+
+        if ($request->ajax()) {
+            return response()->json($anoletivoativo);
+        } else {
+            return $anoletivoativo;
+        }
+
     }
 }

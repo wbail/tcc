@@ -43,10 +43,9 @@ class LoginController extends Controller {
             if(Auth::user()->permissao >= 1 && Auth::user()->permissao <= 8) {
                 return '/etapaano';
             } elseif(Auth::user()->permissao == 9) {
-                return '/admin';
+              return '/admin';
             }
         }
-        
     }
 
 

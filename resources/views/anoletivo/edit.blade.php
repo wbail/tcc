@@ -58,7 +58,7 @@
                             </div>
                             <div class="col-md-6">
                                 {!! Form::label('data', 'Ano valido ate *') !!}
-                                {!! Form::text('data', $anoletivo->data, ['class'=>'form-control', 'title'=>'Ultimo dia para o ano letivo']) !!}
+                                {!! Form::text('data', \Carbon\Carbon::parse($anoletivo->data)->format('d/m/Y H:i'), ['class'=>'form-control', 'id'=>'datetimepicker', 'title'=>'Ultimo dia para o ano letivo']) !!}
                             </div>
                         </div>
                         <br>
@@ -86,6 +86,31 @@
 <script src="{{ asset ('../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
+{{-- Moment _ Datetimepicker --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/pt-br.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.45/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+
+<script>
+
+    $('#datetimepicker').datetimepicker({
+        locale: 'pt-br',
+        format: 'DD/MM/YYYY',
+    });
+
+    $('.btn-primary').click(function() {
+
+        if ($('#datetimepicker').val() == '') {
+            var originalDateFinal = $('#datetimepicker').val();
+        } else {
+            var originalDateInicial = $('#datetimepicker').val();
+            var convertedDateInicial = moment(originalDateInicial, 'DD/MM/YYYY HH:mm').format('YYYY-MM-DD HH:mm');
+            $('#datetimepicker').val(convertedDateInicial);
+        }
+    });
+
+
+</script>
 
 
 </body>
