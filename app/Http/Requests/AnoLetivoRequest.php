@@ -29,8 +29,21 @@ class AnoLetivoRequest extends FormRequest
                 'required',
                 Rule::unique('ano_letivos')->ignore($this->id)
             ],
-//            'ativo' => 'required',
             'data' => 'required'
         ];
     }
+
+    /**
+     * Retorna mensagem traduzida.
+     *
+     * @return array
+     */
+    public function messages() {
+        return [
+            'rotulo.required' => 'O campo Rotulo e obrigatorio.',
+            'rotulo.unique' => 'Rotulo ja cadastrado.',
+            'data.required' => 'O campo Data e obrigatorio.',
+        ];
+    }
+
 }

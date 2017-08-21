@@ -20,12 +20,14 @@
                     @if(Auth::user()->permissao == 9)
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" title="Ano Letivo Corrente">
-                            <i class="fa fa-calendar-o"></i> 2017 <span class="caret"></span>
+                            <i class="fa fa-calendar-o"></i> 0000 <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
+                            {{--@foreach($anoletivo as $anoletivo)--}}
                             <li>
-                                <a href="#" class="text-right"><i class="fa fa-minus"></i> 2017</a>
+                                <a href="#" class="text-right"><i class="fa fa-minus"></i> 0000</a>
                             </li>
+                            {{--@endforeach--}}
                         </ul>
                     </li>
                     @endif

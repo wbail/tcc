@@ -11,8 +11,6 @@
 |
 */
 
-
-
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -27,7 +25,7 @@ Route::get('/home', 'HomeController@index');
 
 Route::get('/admin', function() {
 	return view('admin');
-});
+})->middleware('auth');
 
 Route::get('primeiroacesso', function() {
 	return view('primeiroacesso');
@@ -181,14 +179,13 @@ Route::group(['prefix'=>'anoletivo','where'=>['id'=>'[0-9]+']], function() {
     Route::put('update/{id}', ['as'=>'anoletivo.update', 'uses'=>'AnoLetivoController@update', 'middleware' => 'auth']);
     Route::get('destroy/{id}', ['as'=>'anoletivo.destroy', 'uses'=>'AnoLetivoController@destroy', 'middleware' => 'auth']);
     Route::get('show/{id}', ['as'=>'anoletivo.show', 'uses'=>'AnoLetivoController@show', 'middleware' => 'auth']);
+    Route::get('anoletivoativo', ['as'=>'anoletivo.getAnoLetivoAtivo', 'uses'=>'AnoLetivoController@getAnoLetivoAtivo']);
 });
-
-Route::get('/anoletivo/anoletivoativo', 'AnoLetivoController@getAnoLetivoAtivo');
 
 Route::get('/contato/destroy/{id}', function($id) {
 	\App\Contato::find($id)->delete();
 	return back();
-});
+})->middleware('auth');
 
 Route::get('/h/{email}', function($email) {
 

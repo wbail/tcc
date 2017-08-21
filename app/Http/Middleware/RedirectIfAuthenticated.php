@@ -18,12 +18,13 @@ class RedirectIfAuthenticated {
     public function handle($request, Closure $next, $guard = null) {
 
         if (Auth::guard($guard)->check()) {
-            
+
             if (Auth::user()->mudou_senha == 0) {
                 return redirect('/primeiroacesso');
             } else {
                 return redirect('/etapaano');
             }
+
         }
 
         return $next($request);

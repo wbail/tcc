@@ -85,6 +85,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             {{-- {!! Form::submit('Enviar', ['class'=>'btn btn-primary pull-right']) !!} --}}
                             <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Enviar</button>
                             {!! Form::close() !!}
+
                         </div>
                     </div>
                 </div> <!-- ./col-md-6 -->

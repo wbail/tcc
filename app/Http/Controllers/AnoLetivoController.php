@@ -15,8 +15,10 @@ class AnoLetivoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        return $request->session()->all();
+
         return view('anoletivo.index', [
             'anoletivo' => AnoLetivo::all()
         ]);
@@ -120,17 +122,19 @@ class AnoLetivoController extends Controller
         return redirect('/anoletivo');
     }
 
-    public function getAnoLetivoAtivo(Request $request)
+    /**
+     * Retorna uma coleçao de AnoLetivo. Se a requisiçao for ajax retorna um Json, se nao retorna um array
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function getAnoLetivoAtivo()
     {
         $anoletivoativo = AnoLetivo::where('ativo', 1)
                             ->select('rotulo', 'id')
                             ->get();
 
-        if ($request->ajax()) {
-            return response()->json($anoletivoativo);
-        } else {
-            return $anoletivoativo;
-        }
+        return response()->json($anoletivoativo);
 
     }
 }

@@ -31,7 +31,8 @@ class LoginController extends Controller {
 
 
     /**
-     * Redireciona para mudar a senha no primeiro acesso
+     * Redireciona para mudar a senha no primeiro acesso.
+     *
      * @return Response
      */
     public function redirectTo() {
@@ -43,7 +44,7 @@ class LoginController extends Controller {
             if(Auth::user()->permissao >= 1 && Auth::user()->permissao <= 8) {
                 return '/etapaano';
             } elseif(Auth::user()->permissao == 9) {
-              return '/admin';
+                return 'admin';
             }
         }
     }
@@ -60,6 +61,12 @@ class LoginController extends Controller {
                
     }
 
+    /**
+     * Recebe uma string de email para procurar e retornar o(s) departamento(s) que o usuario pertence.
+     *
+     * @param $email
+     * @return mixed
+     */
     public function getCursos($email) {
 
         $user = DB::table('users as u')
@@ -85,5 +92,8 @@ class LoginController extends Controller {
         }
 
     }
+
+
+
 
 }
