@@ -17,7 +17,7 @@ class AnoLetivoController extends Controller
      */
     public function index(Request $request)
     {
-        return $request->session()->all();
+//        return $request->session()->all();
 
         return view('anoletivo.index', [
             'anoletivo' => AnoLetivo::all()

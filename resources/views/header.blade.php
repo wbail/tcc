@@ -20,14 +20,16 @@
                     @if(Auth::user()->permissao == 9)
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" title="Ano Letivo Corrente">
-                            <i class="fa fa-calendar-o"></i> 0000 <span class="caret"></span>
+                            <i class="fa fa-calendar-o"></i> {{ session()->get('anoletivo')->rotulo }} <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            {{--@foreach($anoletivo as $anoletivo)--}}
-                            <li>
-                                <a href="#" class="text-right"><i class="fa fa-minus"></i> 0000</a>
-                            </li>
-                            {{--@endforeach--}}
+
+                            @foreach(session()->get('anoletivoativo') as $a)
+                                <li>
+                                    {{--<a href="{{ url('/anoletivo/edit') . '/' . $a->id }}" class="text-right"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>--}}
+                                    <a href="#" id="anoletivo" class="text-right"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>
+                                </li>
+                            @endforeach
                         </ul>
                     </li>
                     @endif
@@ -53,4 +55,16 @@
             </ul>
         </div>
     </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $('#anoletivo').on("click", function() {
+
+            if(confirm("Voce sera desconectado, deseja continuar?")) {
+                document.getElementById('logout-form').submit();
+            } else {
+                //
+            }
+        })
+    </script>
 </header>

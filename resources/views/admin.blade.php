@@ -122,7 +122,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript">
 
 
-
 $('.phone_with_ddd').mask('(00) 00000-0000');
 
 $(document).ready (function() {
