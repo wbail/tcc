@@ -15,10 +15,8 @@ class AnoLetivoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-//        return $request->session()->all();
-
         return view('anoletivo.index', [
             'anoletivo' => AnoLetivo::all()
         ]);
@@ -92,6 +90,11 @@ class AnoLetivoController extends Controller
      */
     public function update(AnoLetivoRequest $request, $id)
     {
+        if ($id == session()->get('anoletivo')->id) {
+            return back()
+                ->with('message', 'Nao pode atualizar um ano letivo estando logado no mesmo.');
+        }
+
         $ativo = $request->input('ativo');
 
         if ($ativo == null) {
@@ -105,6 +108,17 @@ class AnoLetivoController extends Controller
             'data' => $request->input('data'),
             'ativo' => $ativo
         ]);
+
+        session()->forget('anoletivoativo');
+
+        $anoletivoativo = AnoLetivo::where('ativo', 1)
+            ->select('id', 'rotulo')
+            ->get();
+
+        $request->session()->put([
+            'anoletivoativo' => $anoletivoativo
+        ]);
+
         return redirect('/anoletivo')->with('message', 'Ano Letivo atualizado com sucesso');
     }
 

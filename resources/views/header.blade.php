@@ -27,7 +27,7 @@
                             @foreach(session()->get('anoletivoativo') as $a)
                                 <li>
                                     {{--<a href="{{ url('/anoletivo/edit') . '/' . $a->id }}" class="text-right"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>--}}
-                                    <a href="#" id="anoletivo" class="text-right"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>
+                                    <a href="#" id="{{ $a->id }}" class="text-right anoletivo"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>
                                 </li>
                             @endforeach
                         </ul>
@@ -58,7 +58,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        $('#anoletivo').on("click", function() {
+        $('.anoletivo').on("click", function() {
 
             if(confirm("Voce sera desconectado, deseja continuar?")) {
                 document.getElementById('logout-form').submit();
