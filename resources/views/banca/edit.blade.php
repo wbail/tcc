@@ -63,9 +63,9 @@
                                 <br>
                                 {!! Form::label('aluno', 'Aluno(s) *') !!}
                                 <div class="row">
-                                    @foreach($banca->trabalho->academico as $a)
+                                    @foreach($academico as $a)
                                     <div class="col-md-6">
-                                         <h5 title="Aluno(a)">{{ $a->user->name }}</h5>
+                                         <h5 title="Aluno(a)">{{ \App\Academico::find($a->academico_id)->user->name }}</h5>
                                     </div> <!-- ./col-md-6 -->
                                     @endforeach
                                     

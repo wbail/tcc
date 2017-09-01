@@ -45,7 +45,7 @@
                                     <div class="col-md-9">
                                         <div class="form-group has-feedback">
                                             <div id="anoletivosnovo">
-                                                <select id="anoletivos" name="anoletivo" class="form-control" title="Ano Letivo" ></select>
+                                                <select id="anoletivos" name="anoletivo" class="form-control" title="Ano Letivo" autofocus required></select>
                                             </div>
                                             <span class="fa fa-calendar form-control-feedback"></span>
                                             @if ($errors->has('anoletivo'))
@@ -55,7 +55,7 @@
                                             @endif
                                         </div>
                                         <div class="form-group has-feedback">
-                                            <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus title="Endereço de E-Mail">
+                                            <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required title="Endereço de E-Mail">
                                             <span class="fa fa-envelope form-control-feedback"></span>
                                             @if ($errors->has('email'))
                                             <span class="help-block">
@@ -136,7 +136,7 @@
             .done(function(data) {
 
                 var html = '<select class="form-control" required name="curso" placeholder="Curso"><option value=" "></option>';
-                
+
                 for(var i = 0; i < data.length; i++) {
                     html += '<option value="'+ data[i].id +'">' + data[i].nome + '</option>';
                 }

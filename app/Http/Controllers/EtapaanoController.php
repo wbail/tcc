@@ -44,11 +44,13 @@ class EtapaanoController extends Controller
                 $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
                     $q->where('departamento_id', '=', $departamento_id);
                 })
-                    ->orWhereHas('coorientador', function($q) use ($departamento_id) {
-                        $q->where('departamento_id', '=', $departamento_id);
-                    })
-                    ->with('academico')
-                    ->get();
+                ->orWhereHas('coorientador', function($q) use ($departamento_id) {
+                    $q->where('departamento_id', '=', $departamento_id);
+                })
+                ->whereHas('anoletivo', function ($query) {
+                    $query->where('ativo', 1);
+                })
+                ->get();
 
                 for ($i = 0; $i < count($trabalho); $i++) {
 

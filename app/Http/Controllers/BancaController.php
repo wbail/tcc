@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\AcademicoTrabalho;
+use App\AnoLetivo;
 use Illuminate\Http\Request;
 use App\Http\Requests\BancaRequest;
 
@@ -58,14 +60,27 @@ class BancaController extends Controller
 
         $departamento_id = User::userMembroDepartamento()->departamento_id;
 
+//        $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
+//            $q->where('departamento_id', '=', $departamento_id);
+//        })
+//        ->orWhereHas('coorientador', function($q) use ($departamento_id) {
+//            $q->where('departamento_id', '=', $departamento_id);
+//        })
+//        ->orderBy('titulo')
+//        ->pluck('titulo', 'id');
+
         $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
             $q->where('departamento_id', '=', $departamento_id);
         })
         ->orWhereHas('coorientador', function($q) use ($departamento_id) {
             $q->where('departamento_id', '=', $departamento_id);
         })
+        ->whereHas('anoletivo', function ($query) {
+            $query->where('ativo', 1);
+        })
         ->orderBy('titulo')
         ->pluck('titulo', 'id');
+
 
         $membros = MembroBanca::join('users as u', 'u.id', '=', 'membro_bancas.user_id')
                     ->orderBy('u.name')
@@ -159,6 +174,8 @@ class BancaController extends Controller
         $banca =  Banca::where('trabalho_id', $id)
                 ->get();
 
+        $academico = AcademicoTrabalho::where('trabalho_id', $id)->get();
+
         $data = Etapa::where('banca', 1)
                     ->join('etapa_anos as ea', 'ea.etapa_id', '=', 'etapas.id')
                     ->select('data_inicial', 'data_final')
@@ -172,7 +189,8 @@ class BancaController extends Controller
             'banca' => Banca::find($banca[0]->id),
             'data' => $data,
             'membros' => $membros,
-            'membro' => $banca
+            'membro' => $banca,
+            'academico' => $academico,
         ]);
     }
 

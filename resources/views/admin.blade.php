@@ -22,7 +22,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     -->
     <link href="{{ asset('../bower_components/AdminLTE/dist/css/skins/skin-blue-light.min.css')}}" rel="stylesheet" type="text/css" />
 
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -114,51 +113,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div> <!-- ./col-md-6 -->
             </div> <!-- ./row -->
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="tejxt/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{{--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>--}}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
+    $('.phone_with_ddd').mask('(00) 00000-0000');
 
-$('.phone_with_ddd').mask('(00) 00000-0000');
-
-$(document).ready (function() {
-    $(".alert-success").fadeTo(2000, 500).slideUp(500, function() {
-        $(".alert-success").slideUp(500);
+    $(document).ready (function() {
+        $(".alert-success").fadeTo(2000, 500).slideUp(500, function() {
+            $(".alert-success").slideUp(500);
+        });
     });
-});
 
-var app = angular.module("numeroTelefoneList", []);
-app.controller("myCtrl", function($scope) {
-      $scope.numero = [];
-      $scope.addItem = function () {
-      $scope.errortext = "";
-      if (!$scope.addMe) {
-      return;
-      }
+    var app = angular.module("numeroTelefoneList", []);
+    app.controller("myCtrl", function($scope) {
 
-      if ($scope.numero.indexOf($scope.addMe) == -1) {
-      $scope.numero.push($scope.addMe);
-      $('#adicionTelefone').val('');
+        $scope.numero = [];
 
-      } else {
-      $scope.errortext = "Número já adicionado.";
-      $('#popoverid').popover('show');
+        $scope.addItem = function () {
 
-      }
-      }
-      $scope.removeItem = function (x) {
-      $scope.errortext = "";
-      $scope.numero.splice(x, 1);
-      }
-});
+            $scope.errortext = "";
+
+            if (!$scope.addMe) {
+                return;
+            }
+
+            if ($scope.numero.indexOf($scope.addMe) == -1) {
+                $scope.numero.push($scope.addMe);
+                $('#adicionTelefone').val('');
+            } else {
+                $scope.errortext = "Número já adicionado.";
+                $('#popoverid').popover('show');
+            }
+        }
+
+        $scope.removeItem = function (x) {
+            $scope.errortext = "";
+            $scope.numero.splice(x, 1);
+        }
+    });
 
 </script>
-
-
-
 
             @yield('content')
         </section><!-- /.content -->

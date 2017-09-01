@@ -15,7 +15,9 @@ class AnoLetivo extends Model
         return $this->hasMany(Trabalho::class);
     }
 
-    public function academicotrabalho() {
-        return $this->hasMany(AcademicoTrabalho::class);
+    public function academico() {
+        return $this->belongsToMany(AnoLetivo::class, 'academico_trabalhos', 'academico_id', 'ano_letivo_id', 'trabalho_id')
+            ->withPivot('aprovado')
+            ->withTimestamps();
     }
 }

@@ -29,9 +29,15 @@ class TrabalhoRequest extends FormRequest {
                 'required',
                 Rule::unique('trabalhos')->ignore($this->id),
             ],
-            'academico' => 'required|unique:academico_trabalhos,academico_id',
-            'academico1' => 'different:academico|unique:academico_trabalhos,academico_id',
-            'ano' => 'required|date_format:Y|after_or_equal:' . \Carbon\Carbon::now()->format('Y'),
+            'academico_id' => [
+                'required',
+                Rule::unique('academico_trabalhos')->ignore($this->id),
+            ],
+            'academico_id' => [
+                'different:academico_id',
+                Rule::unique('academico_trabalhos')->ignore($this->id),
+            ],
+            'ano' => 'date_format:Y|after_or_equal:' . \Carbon\Carbon::now()->format('Y'),
             'periodo' => 'required|integer|min:1|max:3',
             'orientador' => 'required',
             'coorientador' => 'different:orientador'

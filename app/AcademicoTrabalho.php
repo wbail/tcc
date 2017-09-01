@@ -12,7 +12,8 @@ class AcademicoTrabalho extends Model
         return $this->hasMany(Banca::class);
     }
 
-    public function anoletivo() {
-        return $this->belongsTo(AnoLetivo::class);
+    public function trabalho() {
+        return $this->belongsTo(Trabalho::class);
     }
+
 }

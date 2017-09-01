@@ -22,8 +22,6 @@
             </ol> --}}
             <a href="{{ url('trabalho') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
-            	           
-
 
         </section>
 
@@ -45,59 +43,54 @@
             	<thead>
             		<tr>
             			<th class="col-md-3">Titulo</th>
-            			<th class="text-center">Ano</th>
+
             			<th class="text-center">Período</th>
             			<th class="col-md-2">Acadêmico(as)</th>
             			<th title="Orientador/Coorientador">Orientador(as)</th>
-                        <th class="text-center">Situação</th>
+
             			<th class="text-center">Ação</th>
             		</tr>
             	</thead>
 
             	<tbody>
-            		@foreach($trabalho as $trabalho)
-            		<tr>
-            			<td>{{ $trabalho->titulo }}</td>
-            			<td class="text-center">{{ \Carbon\Carbon::parse($trabalho->ano)->format('Y') }}</td>
-            			<td class="text-center">
-                            @if($trabalho->periodo == 3)
-                                Anual
-                            @else
-                            {{ $trabalho->periodo }}
-                            @endif
-                        </td>
-            			<td>
-	            			@foreach($trabalho->academico as $academico)
-		            			<li>{{ $academico->user->name }}</li>
-		            		@endforeach
-            			</td>
-            			<td>                            
-                            <li>
-                                {{ $trabalho->membrobanca->user->name }}
-                                @if($trabalho->coorientador)
-                                    <li>
-                                        {{ $trabalho->coorientador->user->name }}
-                                    </li>
+            		@foreach($trabalhos as $trabalho)
+
+                        <tr>
+                            <td>{{ $trabalho->titulo }}</td>
+                            <td class="text-center">
+                                @if($trabalho->periodo == 3)
+                                    Anual
+                                @else
+                                    {{ $trabalho->periodo }}
                                 @endif
-                            </li>                                                  
-                        </td>
-                        <td class="text-center">
-                            @if($trabalho->aprovado == 1)
-                                <span class="label label-success">Aprovado</span>
-                            @else
-                                <span class="label label-default">Não Aprovado</span>
-                            @endif
-                        </td>
-            			<td class="text-center">
-            				<a href="{{ route('trabalho.edit', ['id'=>$trabalho->id]) }}" class="btn btn-link" title="Editar"><i class="fa fa-pencil"></i></a>
-            				<button id="{{ $trabalho->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelTrabalho" title="Excluir"><i class="fa fa-trash"></i></button>
-            			</td>
-            		</tr>
-            		@endforeach
+                            </td>
+                            <td>
+                                <li>
+                                    {{ $trabalho->academico }}
+                                </li>
+                            </td>
+                            <td>
+                                <li>
+                                    {{ $trabalho->orientador }}
+                                </li>
+                                {{--@if($trabalho->coorientador != null)--}}
+                                    {{--<li>--}}
+                                        {{--{{ $trabalho->coorientador }}--}}
+                                    {{--</li>--}}
+                                {{--@endif--}}
+                            </td>
+
+                            <td class="text-center">
+                                <a href="{{ route('trabalho.edit', ['id'=>$trabalho->id]) }}" class="btn btn-link" title="Editar"><i class="fa fa-pencil"></i></a>
+                                <button id="{{ $trabalho->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelTrabalho" title="Excluir"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+
+                    @endforeach
+
             	</tbody>
 
             </table> {{-- ./table --}}
- 
 
             @yield('content')
         </section><!-- /.content -->

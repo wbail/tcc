@@ -71,24 +71,6 @@
                                         {!! Form::select('academico1', $academico, null, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
                                     </div> {{-- ./col-md-6 --}}
                                 </div> {{-- ./row --}}
-                                <br>                                
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! Form::label('ano', 'Ano') !!}
-                                        {!! Form::text('ano', null, ['class'=>'form-control', 'id'=>'datetimepicker', 'title'=>'Ano do trabalho']) !!}
-                                    </div> {{-- ./col-md-2 --}}
-                                    <div class="col-md-4">
-                                        {!! Form::label('periodo', 'Período') !!}
-                                        <br>
-                                        {!! Form::radio('periodo', 3, true, ['title'=>'Disciplina Anual']) !!}
-                                        {!! Form::label('tres', 'Anual') !!}
-                                        {!! Form::radio('periodo', 1, false, ['title'=>'Primeiro Semestre']) !!}
-                                        {!! Form::label('um', '1') !!}
-                                        {!! Form::radio('periodo', 2, false, ['title'=>'Segundo Semestre']) !!}
-                                        {!! Form::label('dois', '2') !!}
-                                    </div> {{-- ./col-md-3 --}}
-                                    
-                                </div> {{-- ./row --}}
                                 <br>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -100,6 +82,21 @@
                                         {!! Form::select('coorientador', $coorientador, null, ['class'=>'form-control', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
                                     </div> {{-- ./col-md-6 --}}
                                 </div> {{-- ./row --}}
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {!! Form::label('periodo', 'Período') !!}
+                                        <br>
+                                        {!! Form::radio('periodo', 3, true, ['title'=>'Disciplina Anual']) !!}
+                                        {!! Form::label('tres', 'Anual') !!}
+                                        {!! Form::radio('periodo', 1, false, ['title'=>'Primeiro Semestre']) !!}
+                                        {!! Form::label('um', '1') !!}
+                                        {!! Form::radio('periodo', 2, false, ['title'=>'Segundo Semestre']) !!}
+                                        {!! Form::label('dois', '2') !!}
+                                    </div> {{-- ./col-md-2 --}}
+                                </div> {{-- ./row --}}
+                                <br>
+
 
 
                         </div> {{-- ./panel-body --}}

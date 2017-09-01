@@ -17,9 +17,7 @@ class Trabalho extends Model
     }
 
     public function academico() {
-    	return $this->belongsToMany(Academico::class, 'academico_trabalhos', 'trabalho_id', 'academico_id')
-    				->withPivot('trabalho_id', 'academico_id')
-                    ->withTimestamps();
+    	return $this->hasMany(Academico::class);
     }
 
     public function etapaano() {
@@ -34,5 +32,9 @@ class Trabalho extends Model
 
     public function anoletivo() {
         return $this->belongsTo(AnoLetivo::class);
+    }
+
+    public function academicotrabalho() {
+        return $this->belongsTo(AcademicoTrabalho::class);
     }
 }

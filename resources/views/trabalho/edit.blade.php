@@ -73,17 +73,17 @@
                                     @if($qntacademicos > 1)
                                         <div class="col-md-6">
                                             {!! Form::label('academico', 'Acadêmico(a) *') !!}
-                                            {!! Form::select('academico', $academico, $trabalho->academico[0]->pivot->academico_id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
+                                            {!! Form::select('academico', $academico, $academicos[0]->academico_id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
                                             
                                         </div> {{-- ./col-md-6 --}}
                                         <div class="col-md-6">
                                             {!! Form::label('academico1', 'Acadêmico(a)') !!}
-                                            {!! Form::select('academico1', $academico, $trabalho->academico[1]->pivot->academico_id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
+                                            {!! Form::select('academico1', $academico, $academicos[1]->academico_id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
                                         </div> {{-- ./col-md-6 --}}
                                     @else
                                         <div class="col-md-6">
                                             {!! Form::label('academico', 'Acadêmico(a) *') !!}
-                                            {!! Form::select('academico', $academico, $trabalho->academico[0]->pivot->academico_id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
+                                            {!! Form::select('academico', $academico, $academicos[0]->academico_id, ['class'=>'form-control s2', 'placeholder'=>'', 'title'=>'Nome do(a) Acadêmico(a)']) !!}
                                             
                                         </div> {{-- ./col-md-6 --}}
                                         <div class="col-md-6">

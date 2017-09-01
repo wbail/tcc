@@ -100,7 +100,7 @@ class AcademicoController extends Controller {
 
         $this->authorize('create', Academico::class);
 
-        return $request->all();
+//        return $request->all();
         
         $telefone = $request->except('_token', 'nome', 'email', 'ra', 'curso', 'tipo');
         
@@ -132,12 +132,7 @@ class AcademicoController extends Controller {
         $academico->curso()->associate($request->input('curso'));
         $academico->user()->associate($lastUser->id);
         $academico->save();
-
-//        DB::table('academico_trabalhos')
-//            ->insert([
-//                'anoletivo_id' => ,
-//                'academico_id' => DB::table('academicos')->latest()->value('id')
-//            ]);
+        $academico->anoletivo()->attach(session()->get('anoletivo')->id);
 
         for ($i = 0; $i < count($telefone); $i++) {
 
