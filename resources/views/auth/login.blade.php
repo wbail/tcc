@@ -43,6 +43,7 @@
                                     {{-- <label for="email" class="col-md-4 control-label">E-Mail</label> --}}
                                     <div class="col-md-2"></div>
                                     <div class="col-md-9">
+                                        <label for="anoletivo">Ano Letivo</label>
                                         <div class="form-group has-feedback">
                                             <div id="anoletivosnovo">
                                                 <select id="anoletivos" name="anoletivo" class="form-control" title="Ano Letivo" autofocus required></select>
@@ -54,6 +55,7 @@
                                                 </span>
                                             @endif
                                         </div>
+                                        <label for="email">E-Mail</label>
                                         <div class="form-group has-feedback">
                                             <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required title="Endereço de E-Mail">
                                             <span class="fa fa-envelope form-control-feedback"></span>
@@ -63,6 +65,7 @@
                                             </span>
                                             @endif
                                         </div>
+                                        <label for="curso">Curso</label>
                                         <div class="form-group has-feedback">
                                             <div id="cursos">
                                                 <select name="curso" class="form-control" title="Curso" required></select>
@@ -79,6 +82,7 @@
                                 <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                                     <div class="col-md-2"></div>
                                     <div class="col-md-9">
+                                        <label for="senha">Senha</label>
                                         <div class="form-group has-feedback">
                                             <input id="password" type="password" class="form-control" name="password" required title="Senha">
                                             <span class="fa fa-lock form-control-feedback"></span>

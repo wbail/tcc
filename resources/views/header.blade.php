@@ -18,19 +18,24 @@
                 <li class="dropdown user user-menu">
 
                     @if(Auth::user()->permissao == 9)
+                    <li>
+                        <a href="#">
+                            {{--<i class="fa fa-user"> Engenharia de Software</i>--}}
+                            <i class="fa fa-graduation-cap"> {{ session()->get('curso')->nome }}</i>
+                        </a>
+                    </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" title="Ano Letivo Corrente">
-                            <i class="fa fa-calendar-o"></i> {{ session()->get('anoletivo')->rotulo }} <span class="caret"></span>
+                            <i class="fa fa-calendar-o"></i> {{ session()->get('anoletivo')->rotulo }}
                         </a>
-                        <ul class="dropdown-menu" role="menu">
-
-                            @foreach(session()->get('anoletivoativo') as $a)
-                                <li>
+                        {{--<ul class="dropdown-menu" role="menu">--}}
+                            {{--@foreach(session()->get('anoletivoativo') as $a)--}}
+                                {{--<li>--}}
                                     {{--<a href="{{ url('/anoletivo/edit') . '/' . $a->id }}" class="text-right"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>--}}
-                                    <a href="#" id="{{ $a->id }}" class="text-right anoletivo"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>
-                                </li>
-                            @endforeach
-                        </ul>
+                                    {{--<a href="#" id="{{ $a->id }}" class="text-right anoletivo"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>--}}
+                                {{--</li>--}}
+                            {{--@endforeach--}}
+                        {{--</ul>--}}
                     </li>
                     @endif
                     <li class="dropdown">

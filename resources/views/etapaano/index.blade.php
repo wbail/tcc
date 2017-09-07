@@ -14,7 +14,7 @@
         <section class="content-header">
             
             <h1>
-                {{ $page_title or "Etapas" }}
+                {{ $page_title or "Etapas e Trabalhos" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
@@ -25,7 +25,6 @@
             <br>
 
         </section>
-
 
         <!-- Main content -->
         <section class="content">

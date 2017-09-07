@@ -42,12 +42,11 @@
 
             	<thead>
             		<tr>
+                        <th class="col-md-1">Ano Letivo</th>
             			<th class="col-md-3">Titulo</th>
-
             			<th class="text-center">Período</th>
             			<th class="col-md-2">Acadêmico(as)</th>
             			<th title="Orientador/Coorientador">Orientador(as)</th>
-
             			<th class="text-center">Ação</th>
             		</tr>
             	</thead>
@@ -56,6 +55,7 @@
             		@foreach($trabalhos as $trabalho)
 
                         <tr>
+                            <td>{{ $trabalho->anoletivo }}</td>
                             <td>{{ $trabalho->titulo }}</td>
                             <td class="text-center">
                                 @if($trabalho->periodo == 3)
@@ -89,6 +89,12 @@
                     @endforeach
 
             	</tbody>
+
+                <tfoot>
+                    <tr>
+                        <th>Ano</th>
+                    </tr>
+                </tfoot>
 
             </table> {{-- ./table --}}
 
@@ -141,6 +147,28 @@
 
     $(document).ready( function () {
         $('table.display').DataTable({
+
+            initComplete: function () {
+                this.api().columns().every( function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
+                } );
+            },
+
             "language": {
             
                 "decimal":        "",
@@ -170,6 +198,12 @@
 
         });
     });
+
+
+
+
+
+
 
 
 

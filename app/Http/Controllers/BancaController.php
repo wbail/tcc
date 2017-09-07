@@ -78,14 +78,19 @@ class BancaController extends Controller
         ->whereHas('anoletivo', function ($query) {
             $query->where('ativo', 1);
         })
-        ->orderBy('titulo')
-        ->pluck('titulo', 'id');
+        ->orderBy('sigla')
+        ->pluck('sigla', 'id');
 
+        $membros = Banca::join('membro_bancas as mb', 'mb.id', '=', 'bancas.membrobanca_id')
+            ->join('users as u', 'u.id', '=', 'mb.user_id')
+            ->join('trabalhos as t', 't.id', '=', 'bancas.trabalho_id')
+            ->join('ano_letivos as al', 'al.id', '=', 't.anoletivo_id')
+            ->where('al.ativo', 1)
+            ->groupBy('mb.id', 'u.name')
+            ->orderBy('u.name')
+            ->select('mb.id', DB::raw('concat(u.name, \' - \', count(u.name), \' banca(s)\') as nome'))
+            ->pluck('nome', 'mb.id');
 
-        $membros = MembroBanca::join('users as u', 'u.id', '=', 'membro_bancas.user_id')
-                    ->orderBy('u.name')
-                    ->pluck('u.name', 'membro_bancas.id');
-        
         return view('banca.create', [
             'trabalho' => $trabalho,
             'membros' => $membros

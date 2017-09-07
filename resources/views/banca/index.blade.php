@@ -52,7 +52,7 @@
 		                <tbody>
 		                    @foreach($banca as $banca)
 		                    <tr>
-                                <td>{{ $banca->titulo }}</td>
+                                <td title="{{ $banca->titulo }}">{{ $banca->sigla }}</td>
                                 <td>
                                     @if($banca->data == null)
                                     Data a definir
@@ -63,7 +63,8 @@
 		                        <td class="text-center">
 		                            <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Definir Data"><i class="fa fa-calendar"></i></a>
 		                            <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
-		                            <button id="{{ $banca->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelbanca" title="Excluir"><i class="fa fa-trash"></i> </button>
+                                    <button id="{{ $banca->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalCertBanca" title="Gerar Certificado"><i class="fa fa-file"></i> </button>
+                                    <button id="{{ $banca->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelbanca" title="Excluir"><i class="fa fa-trash"></i> </button>
 		                        </td>
 		                    </tr>
 		                    @endforeach
@@ -89,6 +90,23 @@
                     <h4 class="modal-title" id="myModalLabel"></h4>
                 </div>
                 <div class="modal-footer del-banca">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Gerar Certificado Banca-->
+    <div id="myModalCertBanca" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    Ao gerar o certificado de presença, o mesmo sera enviado por e-mail a todos que participaram da banca.
+                </div>
+                <div class="modal-footer cert-banca">
                 </div>
             </div>
         </div>
@@ -155,14 +173,23 @@
     });
 
 
-// Deletar banca
-$('#myModalDelbanca').on('show.bs.modal', function(e) {
-    
-    var $modal = $(this);
-    var bancaid = e.relatedTarget.id;
-    $modal.find('.modal-title').html('Deseja realmente excluir?');
-    $modal.find('.del-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="banca/destroy/' + bancaid + '" class="btn btn-danger"> Excluir </a>');           
-});
+    // Deletar banca
+    $('#myModalDelbanca').on('show.bs.modal', function(e) {
+
+        var $modal = $(this);
+        var bancaid = e.relatedTarget.id;
+        $modal.find('.modal-title').html('Deseja realmente excluir?');
+        $modal.find('.del-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="banca/destroy/' + bancaid + '" class="btn btn-danger"> Excluir </a>');
+    });
+
+    // Gerar Certificado Banca
+    $('#myModalCertBanca').on('show.bs.modal', function(e) {
+
+        var $modal = $(this);
+        var bancaid = e.relatedTarget.id;
+        $modal.find('.modal-title').html('Geraçao de Certificado de Presença de Banca');
+        $modal.find('.cert-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="#" class="btn btn-success"> Gerar </a>');
+    });
 
 
 

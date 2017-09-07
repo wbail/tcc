@@ -89,7 +89,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Membros de Banca</h3>
                         </div>
-                        <div class="panel-body">                            
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-6">
                                     {!! Form::label('membro', 'Membro de Banca *') !!}

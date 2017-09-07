@@ -44,7 +44,7 @@
                             
                             <th>Rotulo</th>
                             <th>Situaçao</th>
-                            <th>Data</th>
+                            <th>Data final do Ano Letivo</th>
                             <th class="text-center">Ação</th>
                         </tr>
                     </thead>

@@ -66,8 +66,11 @@ class TrabalhoController extends Controller {
 //            }
 
             $anos = AcademicoTrabalho::all();
+
             $toView = array();
+
             foreach ($anos as $ano) {
+
                 if ($ano->trabalho_id != null) {
 
                     if (MembroBanca::find(Trabalho::find($ano->trabalho_id)->orientador_id)->departamento_id == $departamento_id) {
@@ -77,52 +80,44 @@ class TrabalhoController extends Controller {
                             if (count(AcademicoTrabalho::where($ano->trabalho_id)) > 1) {
 
                                 $toView[] = array(
-
-                                        'id' => Trabalho::find($ano->trabalho_id)->id,
-                                        'periodo' => Trabalho::find($ano->trabalho_id)->periodo,
-                                        'academico' => User::find(Academico::find($ano->academico_id)->user_id)->name,
-                                        'academico1' => User::find(Academico::find($ano->academico_id)->user_id)->name,
-                                        'titulo' => Trabalho::find($ano->trabalho_id)->titulo,
-                                        'orientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->orientador_id)->user_id)->name,
-                                        'coorientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->coorientador_id)->user_id)->name,
-
+                                    'id' => Trabalho::find($ano->trabalho_id)->id,
+                                    'periodo' => Trabalho::find($ano->trabalho_id)->periodo,
+                                    'anoletivo' => AnoLetivo::find(AcademicoTrabalho::where('trabalho_id', $ano->trabalho_id)->value('ano_letivo_id'))->rotulo,
+                                    'academico' => User::find(Academico::find($ano->academico_id)->user_id)->name,
+                                    'academico1' => User::find(Academico::find($ano->academico_id)->user_id)->name,
+                                    'titulo' => Trabalho::find($ano->trabalho_id)->titulo,
+                                    'orientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->orientador_id)->user_id)->name,
+                                    'coorientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->coorientador_id)->user_id)->name,
                                 );
 
                             } else {
 
                                 $toView[] = array(
-
-                                        'id' => Trabalho::find($ano->trabalho_id)->id,
-                                        'periodo' => Trabalho::find($ano->trabalho_id)->periodo,
-                                        'academico' => User::find(Academico::find($ano->academico_id)->user_id)->name,
-                                        'titulo' => Trabalho::find($ano->trabalho_id)->titulo,
-                                        'orientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->orientador_id)->user_id)->name,
-                                        'coorientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->coorientador_id)->user_id)->name,
-
+                                    'id' => Trabalho::find($ano->trabalho_id)->id,
+                                    'periodo' => Trabalho::find($ano->trabalho_id)->periodo,
+                                    'anoletivo' => AnoLetivo::find(AcademicoTrabalho::where('trabalho_id', $ano->trabalho_id)->value('ano_letivo_id'))->rotulo,
+                                    'academico' => User::find(Academico::find($ano->academico_id)->user_id)->name,
+                                    'titulo' => Trabalho::find($ano->trabalho_id)->titulo,
+                                    'orientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->orientador_id)->user_id)->name,
+                                    'coorientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->coorientador_id)->user_id)->name,
                                 );
                             }
 
                         } else {
                             $toView[] = array(
-
-                                    'id' => Trabalho::find($ano->trabalho_id)->id,
-                                    'periodo' => Trabalho::find($ano->trabalho_id)->periodo,
-                                    'academico' => User::find(Academico::find($ano->academico_id)->user_id)->name,
-                                    'titulo' => Trabalho::find($ano->trabalho_id)->titulo,
-                                    'orientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->orientador_id)->user_id)->name,
-
+                                'id' => Trabalho::find($ano->trabalho_id)->id,
+                                'periodo' => Trabalho::find($ano->trabalho_id)->periodo,
+                                'anoletivo' => AnoLetivo::find(AcademicoTrabalho::where('trabalho_id', $ano->trabalho_id)->value('ano_letivo_id'))->rotulo,
+                                'academico' => User::find(Academico::find($ano->academico_id)->user_id)->name,
+                                'titulo' => Trabalho::find($ano->trabalho_id)->titulo,
+                                'orientador' => User::find(MembroBanca::find(Trabalho::find($ano->trabalho_id)->orientador_id)->user_id)->name,
                             );
                         }
                     }
-
-
                 }
-
             }
 
-
             $toView = json_decode(json_encode((object) $toView), FALSE);
-
 
 //            $trabalho = DB::table('academico_trabalhos as at')
 //                ->join('trabalhos as t', 't.id', '=', 'at.trabalho_id')
@@ -196,6 +191,7 @@ class TrabalhoController extends Controller {
         if ($request->has('academico1') && $request->has('coorientador')) {
         
             $trabalho = new Trabalho;
+            $trabalho->sigla = $request->input('sigla');
             $trabalho->titulo = $request->input('titulo');
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
@@ -211,6 +207,7 @@ class TrabalhoController extends Controller {
         } elseif($request->has('academico1')) {
             
             $trabalho = new Trabalho;
+            $trabalho->sigla = $request->input('sigla');
             $trabalho->titulo = $request->input('titulo');
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
@@ -227,6 +224,7 @@ class TrabalhoController extends Controller {
 
             $trabalho = new Trabalho;
             $trabalho->titulo = $request->input('titulo');
+            $trabalho->sigla = $request->input('sigla');
             $trabalho->ano = 2017;
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
@@ -356,6 +354,7 @@ class TrabalhoController extends Controller {
             }
 
             $trabalho->titulo = $request->input('titulo');
+            $trabalho->sigla = $request->input('sigla');
             $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
             $trabalho->aprovado = $aprovado;
@@ -379,6 +378,7 @@ class TrabalhoController extends Controller {
             }
 
             $trabalho->titulo = $request->input('titulo');
+            $trabalho->sigla = $request->input('sigla');
             $trabalho->ano = $request->input('ano');
             $trabalho->periodo = $request->input('periodo');
             $trabalho->aprovado = $aprovado;

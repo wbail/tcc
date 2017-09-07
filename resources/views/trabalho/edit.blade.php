@@ -63,10 +63,15 @@
                         </div>
                         <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-8">
                                         {!! Form::label('titulo', 'Titulo do trabalho *') !!}
                                         {!! Form::text('titulo', $trabalho->titulo, ['class'=>'form-control', 'title'=>'Título do trabalho']) !!}
-                                    </div> {{-- ./col-md-5 --}}
+                                    </div> {{-- ./col-md-9 --}}
+                                    <div class="col-md-4">
+                                        {!! Form::label('sigla', 'Sigla do trabalho *') !!}
+                                        {!! Form::text('sigla', $trabalho->sigla, ['class'=>'form-control', 'title'=>'Sigla do trabalho']) !!}
+                                    </div> {{-- ./col-md-3 --}}
+
                                 </div> {{-- ./row --}}
                                 <br>
                                 <div class="row">

@@ -25,6 +25,11 @@ class TrabalhoRequest extends FormRequest {
     public function rules() {
 
         return [
+            'sigla' => [
+                'required',
+                'max:10',
+                Rule::unique('trabalhos')->ignore($this->id),
+            ],
             'titulo' => [
                 'required',
                 Rule::unique('trabalhos')->ignore($this->id),
@@ -52,7 +57,10 @@ class TrabalhoRequest extends FormRequest {
     public function messages() {
         return [
             'titulo.required' => 'O campo Título é obrigatório.',
+            'sigla.required' => 'O campo Sigla é obrigatório.',
             'titulo.unique' => 'Trabalho já cadastrado.',
+            'sigla.unique' => 'Sigla já cadastrada.',
+            'sigla.max' => 'A Sigla deve conter ate 10 caracteres.',
             'academico.required' => 'O campo Acadêmico(a) é obrigatório.',
             'academico.unique' => 'O Acadêmico já está vinculado a um trabalho',
             'academico1.different' => 'Os(as) acadêmicos(as) devem ser diferentes.',
