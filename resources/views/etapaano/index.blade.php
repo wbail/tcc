@@ -57,12 +57,12 @@
                     <thead>
                         <tr>
                             {{--  <th class="col-md-2">Etapa</th>  --}}
-                            <th class="col-md-3">Trabalho</th>
+                            <th class="col-md-1">Trabalho</th>
                             <th class="col-md-3">Descrição</th>
                             <th class="col-md-2">Data Entrega</th>
                             <th class="text-center col-md-1">Situação</th>
                             <th class="text-center col-md-3">Arquivo</th>
-                            <th class="text-center">Ação</th>
+                            <th class="col-md-1">Ação</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,7 +70,7 @@
                         @foreach($etapaano as $etapaano)
                         <tr>
                             {{--  <td>{{ $etapaano->etapa->desc }}</td>  --}}
-                            <td>{{ $etapaano->titulo }}</td>
+                            <td title="{{ $etapaano->titulo }}">{{ $etapaano->sigla }}</td>
                             <td>{{ $etapaano->descricao }}</td>
                             <td>{{ \Carbon\Carbon::parse($etapaano->data_final)->format('d/m/Y H:m') }}</td>
                             @if($etapaano->ativa == 1)
@@ -81,7 +81,7 @@
                             <td class="text-center">
                                 @if($etapaano->ativa == 1)
                                     <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
-                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-primary btn-sm" title="Enviar Arquivo" data-toggle="modal" data-target="#myModalUploadArquivos"><i class="fa fa-upload"></i> Enviar</button> 
+                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-primary btn-sm" title="Enviar Arquivo" data-toggle="modal" data-target="#myModalUploadArquivos"><i class="fa fa-upload"></i> Enviar</button>
                                 @else
                                     <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
                                 @endif
@@ -207,32 +207,31 @@
         var etapaanoid = e.relatedTarget.id;
         var trabalhoid = e.relatedTarget.value;
 
-    
         $.ajax({
             url: "etapaano/show/" + etapaanoid + '/' + trabalhoid,
             type: 'GET',
             dataType: 'json',
         })
         .done(function(data) {
-            //console.log("success");
-            //console.log("etapaid = " + etapaid);
-            //console.log("trabalho = " + trabalho);
+//            console.log("success");
+            console.log("etapaid = " + etapaanoid);
+            console.log("trabalho = " + trabalhoid);
 
             if (data.length < 1) {
-            
-                $modal.find('.list-arquivos').html('Nenhum Arquivo');    
-            
+
+                $modal.find('.list-arquivos').html('Nenhum Arquivo');
+
             } else {
-       
+
                 var html = '';
                 var meio = '';
-                
+
                 for(var i = 0; i < data.length; i++) {
-                    
-                   meio += '<tr><td>' + data[i].name + '<br>' 
-                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td><td>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') + '</td><td class="text-center"><button id="'+data[i].id+'" class="btn btn-link" title="Excluir Arquivo" data-toggle="modal" data-target="#myModalDeleteArquivos"><i class="fa fa-trash"></i></button></td></tr>';
+
+                   meio += '<tr><td>' + data[i].name + '<br>'
+                    + '</td><td><li><a target="_blank" href="' + '1/7/7/20170910151606_12_Modelo_Curriculo_Ingles.doc' + ' ">' + data[i].descricao + '</a></li></td><td>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') + '</td><td class="text-center"><button id="'+data[i].id+'" class="btn btn-link" title="Excluir Arquivo" data-toggle="modal" data-target="#myModalDeleteArquivos"><i class="fa fa-trash"></i></button></td></tr>';
                 };
-                
+
                 html = '<table class="table table-striped table-bordered table-hover">'+
                     '<thead>'+
                         '<tr>'+
@@ -246,12 +245,10 @@
                         meio+
                     '</tbody>'+
                 '</table>';
-                
-                $modal.find('.list-arquivos').html(html);           
- 
-            }
 
-            
+                $modal.find('.list-arquivos').html(html);
+
+            }
         })
         .fail(function() {
             console.log("error");

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Http\Requests\ArquivoRequest;
 
@@ -59,20 +62,34 @@ class ArquivoController extends Controller
                                 ->first();
 
             if($etapaTrabalho) {
+
+                // Composicao do diretorio = ID no AnoLetivo _ ID do Trabalho _ ID da EtapaAno
+                $directory = Session::get('anoletivo')->id . '/' . $trabalhoid->id . '/' . $etapaanoid->id . '/';
+
+                // Composiçao do nome do arquivo = AnoMesDiaHoraMinutoSegundo _ ID do Usuario logado _ nome do arquivo
+                $nomeArquivo = Carbon::now()->format('YmdHis') . '_' . Auth::user()->id . '_' . $request->descricao->getClientOriginalName();
+
+                Storage::putFileAs($directory, $request->file('descricao'), $nomeArquivo);
+
                 Auth::user()
                     ->etapatrabalho()
                     ->attach($etapaTrabalho->id, [
                         'descricao' => $request->descricao->getClientOriginalName()
                     ]);
-                    
+
             } else {
+
+                $directory = Session::get('anoletivo')->id . '/' . $trabalhoid->id . '/' . $etapaanoid->id . '/';
+                $nomeArquivo = Carbon::now()->format('YmdHis') . '_' . Auth::user()->id . '_' . $request->descricao->getClientOriginalName();
+
+                Storage::putFileAs($directory, $request->file('descricao'), $nomeArquivo);
 
                 $etapaanoid->trabalho()->attach($trabalhoid);
 
                 $etapaTrabalho = DB::table('etapa_trabalhos')
-                                    ->latest()
-                                    ->first();
-                
+                    ->latest()
+                    ->first();
+
                 Auth::user()
                     ->etapatrabalho()
                     ->attach($etapaTrabalho->id, [
@@ -87,14 +104,32 @@ class ArquivoController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Retorna os arquivos de um trabalho e etapa
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $etapaanoid
+     * @param $trabalhoid
+     * @return mixed
      */
-    public function show($id)
+    public function show(Request $request, $etapaanoid, $trabalhoid)
     {
-        //
+        $dir = Session::get('anoletivo')->id . '/' . $trabalhoid . '/' . $etapaanoid . '/';
+//        return $dir;
+//        return Storage::get(Storage::allFiles($dir));
+
+        $url = array();
+
+        for ($i = 0; $i < count(Storage::allFiles($dir)); $i++) {
+            Storage::setVisibility(Storage::allFiles($dir)[$i], 'public');
+//            Storage::copy(Storage::allFiles($dir)[$i], 'public/' . Storage::allFiles($dir)[$i]);
+            $url[] = Storage::url(Storage::allFiles($dir)[$i]);
+        }
+
+        return response()->make(storage_path($url[0]), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'."wfewef.pdf".'"'
+        ]);
+
     }
 
     /**

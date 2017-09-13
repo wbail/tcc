@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use App\Http\Requests\EtapaAnoRequest;
-use Response;
-use DB;
-use Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use App\Etapa;
 use App\Trabalho;
@@ -34,12 +32,13 @@ class EtapaanoController extends Controller
 
         $academico = Academico::where('user_id', '=', Auth::user()->id)
                                     ->first();
-        
+
         if($membrobanca) {
 
             if(Auth::user()->permissao == 9) {
 
                 $objetos = array();
+                $qntArquivos = array();
 
                 $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
                     $q->where('departamento_id', '=', $departamento_id);
@@ -54,14 +53,40 @@ class EtapaanoController extends Controller
 
                 for ($i = 0; $i < count($trabalho); $i++) {
 
-                    $objetos[] = DB::select('select distinct ea.titulo as descricao, t.titulo, ea.ativa, ea.data_final, ea.id, t.id as trabalho_id
-                                            from etapa_anos as ea
-                                            left join etapa_trabalhos as et
-                                                on et.etapaano_id = ea.id
-                                            left join trabalhos as t
-                                                on t.id = ?', [$trabalho[$i]->id]);
-
+                    $objetos[] = DB::select(/** @lang sql */
+                                            'select distinct ea.titulo as descricao
+                                                  , t.sigla
+                                                  , t.titulo
+                                                  , ea.ativa
+                                                  , ea.data_final
+                                                  , ea.id
+                                                  , t.id as trabalho_id
+                                               from etapa_anos as ea
+                                               left join etapa_trabalhos as et
+                                                 on et.etapaano_id = ea.id
+                                               left join trabalhos as t
+                                                 on t.id = ?
+                                              inner join ano_letivos as al
+                                                 on al.id = t.anoletivo_id
+                                              where al.ativo = ?', [$trabalho[$i]->id, 1]);
                 }
+
+//                for ($i = 0; $i < count($objetos) - 1; $i++) {
+//                    for ($j = $i; count($objetos[$i][$j]->id); $j++) {
+//                        if (!is_null($objetos[$i][$j]->id)) {
+//                            $qntArquivos[] = DB::table('arquivos as a')
+//                                ->join('etapa_trabalhos as et', 'et.id', '=', 'a.etapatrabalho_id')
+//                                ->join('etapa_anos as ea', 'ea.id', '=', 'et.etapaano_id')
+//                                ->join('trabalhos as t', 't.id', '=', 'et.trabalho_id')
+//                                ->where('ea.id', '=', $objetos[$i][$j]->id)
+//                                ->where('t.id', '=', $objetos[$i][$j]->trabalho_id)
+//                                ->whereNull('a.deleted_at')
+//                                ->count();
+//                        }
+//                    }
+//                }
+//
+//                return $qntArquivos;
 
                 return view('etapaano.index', [
                     'etapaano' => $objetos
@@ -76,12 +101,22 @@ class EtapaanoController extends Controller
 
                 for ($i = 0; $i < count($trabalho); $i++) { 
                     
-                    $objetos[] = DB::select('select distinct ea.titulo as descricao, t.titulo, ea.ativa, ea.data_final, ea.id, t.id as trabalho_id
-                                            from etapa_anos as ea
-                                            left join etapa_trabalhos as et
-                                                on et.etapaano_id = ea.id
-                                            left join trabalhos as t
-                                                on t.id = ?', [$trabalho[$i]->id]);
+                    $objetos[] = DB::select(/** @lang sql */
+                                            'select distinct ea.titulo as descricao
+                                                  , t.sigla
+                                                  , t.titulo
+                                                  , ea.ativa
+                                                  , ea.data_final
+                                                  , ea.id
+                                                  , t.id as trabalho_id
+                                               from etapa_anos as ea
+                                               left join etapa_trabalhos as et
+                                                 on et.etapaano_id = ea.id
+                                               left join trabalhos as t
+                                                 on t.id = ?
+                                               inner join ano_letivos as al
+                                                 on al.id = t.anoletivo_id
+                                              where al.ativo = ?', [$trabalho[$i]->id, 1]);
 
                 }
                 
@@ -96,23 +131,25 @@ class EtapaanoController extends Controller
             $trabalho = DB::table('academico_trabalhos as at')
                             ->where('at.academico_id', '=', $academico->id)
                             ->get();
-                
-            // $objetos[] = DB::table('etapa_anos as ea')
-            //             ->leftJoin('etapa_trabalhos as et', 'ea.id', '=', 'et.etapaano_id')
-            //             ->join('trabalhos as t', 't.id', '=', 'et.trabalho_id')
-            //             ->where('t.id', '=', $trabalho[0]->trabalho_id)
-            //             ->distinct()
-            //             ->select('ea.titulo as descricao', 't.titulo', 'ea.ativa', 'ea.data_final', 'ea.id', 't.id as trabalho_id')
-            //             ->get();
+
             
-            $objetos[] = DB::select('select distinct ea.titulo as descricao, t.titulo, ea.ativa, ea.data_final, ea.id, t.id as trabalho_id
-                                        from etapa_anos as ea
-                                        left join etapa_trabalhos as et
-                                            on et.etapaano_id = ea.id
-                                        inner join trabalhos as t
-                                            on t.id = ?', [$trabalho[0]->trabalho_id]);
-                        
-            
+            $objetos[] = DB::select(/** @lang sql */
+                                    'select distinct ea.titulo as descricao
+                                          , t.sigla
+                                          , t.titulo
+                                          , ea.ativa
+                                          , ea.data_final
+                                          , ea.id
+                                          , t.id as trabalho_id
+                                       from etapa_anos as ea
+                                       left join etapa_trabalhos as et
+                                         on et.etapaano_id = ea.id
+                                       left join trabalhos as t
+                                         on t.id = ?
+                                      inner join ano_letivos as al
+                                         on al.id = t.anoletivo_id
+                                      where al.ativo = ?', [$trabalho[$i]->id, 1]);
+
             // return $objetos;
 
             return view('etapaano.index', [
@@ -125,8 +162,6 @@ class EtapaanoController extends Controller
                 'etapaano' => EtapaAno::all()
             ]);
         }
-
-
 
     }
 
@@ -192,21 +227,19 @@ class EtapaanoController extends Controller
      */
     public function show($id, $trabalhoid)
     {
-
         $trabalho = DB::table('arquivos as a')
-                    ->join('users as u', 'u.id', '=', 'a.user_id')
-                    ->join('etapa_trabalhos as et', 'et.id', '=', 'a.etapatrabalho_id')
-                    ->join('etapa_anos as ea', 'ea.id', '=', 'et.etapaano_id')
-                    ->join('trabalhos as t', 't.id', '=', 'et.trabalho_id')
-                    ->where('ea.id', '=', $id)
-                    ->where('t.id', '=', $trabalhoid)
-                    ->where('a.deleted_at', '=', null)
-                    ->select('a.id', 'a.descricao', 'a.created_at', 'u.name')
-                    ->orderBy('a.created_at', 'desc')
-                    ->get();
-        
-        return Response::json($trabalho);
-        
+            ->join('users as u', 'u.id', '=', 'a.user_id')
+            ->join('etapa_trabalhos as et', 'et.id', '=', 'a.etapatrabalho_id')
+            ->join('etapa_anos as ea', 'ea.id', '=', 'et.etapaano_id')
+            ->join('trabalhos as t', 't.id', '=', 'et.trabalho_id')
+            ->where('ea.id', '=', $id)
+            ->where('t.id', '=', $trabalhoid)
+            ->whereNull('a.deleted_at')
+            ->select('a.id', 'a.descricao', 'a.created_at', 'u.name')
+            ->orderBy('a.created_at', 'desc')
+            ->get();
+
+        return response()->json($trabalho);
     }
 
     /**

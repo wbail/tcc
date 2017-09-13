@@ -117,9 +117,8 @@ Route::group(['prefix'=>'etapaano','where'=>['id'=>'[0-9]+']], function() {
 	Route::get('edit/{id}', ['as'=>'etapaano.edit', 'uses'=>'EtapaanoController@edit', 'middleware' => 'auth']);
 	Route::put('update/{id}', ['as'=>'etapaano.update', 'uses'=>'EtapaanoController@update', 'middleware' => 'auth']);
 	Route::get('destroy/{id}', ['as'=>'etapaano.destroy', 'uses'=>'EtapaanoController@destroy', 'middleware' => 'auth']);
-	// Route::get('show/{id}', ['as'=>'etapaano.show', 'uses'=>'EtapaanoController@show', 'middleware' => 'auth']);
 	Route::get('show/{id}/{trabalhoid}', ['as'=>'etapaano.show', 'uses'=>'EtapaanoController@show']);
-	
+
 });
 
 Route::group(['prefix'=>'instituicao','where'=>['id'=>'[0-9]+']], function() {
@@ -154,7 +153,7 @@ Route::group(['prefix'=>'arquivo','where'=>['id'=>'[0-9]+']], function() {
 	Route::get('edit/{id}', ['as'=>'arquivo.edit', 'uses'=>'ArquivoController@edit', 'middleware' => 'auth']);
 	Route::put('update/{id}', ['as'=>'arquivo.update', 'uses'=>'ArquivoController@update', 'middleware' => 'auth']);
 	Route::get('destroy/{id}', ['as'=>'arquivo.destroy', 'uses'=>'ArquivoController@destroy', 'middleware' => 'auth']);
-	Route::get('show/{id}', ['as'=>'arquivo.show', 'uses'=>'ArquivoController@show', 'middleware' => 'auth']);
+	Route::get('show/{id}/{trabalhoid}', ['as'=>'arquivo.show', 'uses'=>'ArquivoController@show', 'middleware' => 'auth']);
 
 });
 
