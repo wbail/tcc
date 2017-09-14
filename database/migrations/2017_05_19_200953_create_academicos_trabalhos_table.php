@@ -17,7 +17,7 @@ class CreateAcademicosTrabalhosTable extends Migration
             $table->increments('id');
             $table->integer('academico_id')->unsigned();
             $table->foreign('academico_id')->references('id')->on('academicos');
-            $table->integer('trabalho_id')->unsigned();
+            $table->integer('trabalho_id')->unsigned()->nullable();
             $table->foreign('trabalho_id')->references('id')->on('trabalhos');
             $table->timestamps();
         });

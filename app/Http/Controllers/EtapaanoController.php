@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\EtapaAnoRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 use App\Etapa;
@@ -15,6 +14,7 @@ use App\Arquivo;
 use App\User;
 use App\Academico;
 use App\MembroBanca;
+use DB;
 
 class EtapaanoController extends Controller
 {
@@ -25,6 +25,7 @@ class EtapaanoController extends Controller
      */
     public function index()
     {
+
         $membrobanca = MembroBanca::where('user_id', '=', Auth::user()->id)
                                     ->first();
 
@@ -217,6 +218,9 @@ class EtapaanoController extends Controller
 
             return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');
         }
+
+
+
     }
 
     /**

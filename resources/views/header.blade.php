@@ -21,7 +21,9 @@
                     <li>
                         <a href="#">
                             {{--<i class="fa fa-user"> Engenharia de Software</i>--}}
-                            <i class="fa fa-graduation-cap"> {{ session()->get('curso')->nome }}</i>
+                            @if(session()->get('curso'))
+                                <i class="fa fa-graduation-cap"> {{ session()->get('curso')->nome }}</i>
+                            @endif
                         </a>
                     </li>
                     <li class="dropdown">

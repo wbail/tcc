@@ -17,8 +17,8 @@ class AddAnoletivoIdOnAcademicoTrabalhosTable extends Migration
             $table->boolean('aprovado')->default(0)->after('id');
             $table->integer('anoletivo_id')->unsigned()->after('aprovado')->nullable();
             $table->foreign('anoletivo_id')->references('id')->on('ano_letivos');
-            $table->integer('trabalho_id')->unsigned()->after('anoletivo_id')->nullable();
-            $table->foreign('trabalho_id')->references('id')->on('trabalhos');
+//            $table->integer('trabalho_id')->unsigned()->after('anoletivo_id')->nullable();
+//            $table->foreign('trabalho_id')->references('id')->on('trabalhos');
         });
     }
 

@@ -50,7 +50,7 @@
                         {!! Form::text('desc', null, ['class'=>'form-control', 'title'=>'Descrição da etapa']) !!}
             			<br>
                         {!! Form::label('banca', 'Esta etapa é Banca? *') !!}
-                        {!! Form::checkbox('banca', null, false, ['title'=>'Etapa de bancas de avaliação']) !!}
+                        {!! Form::checkbox('banca', 1, 0, ['title'=>'Etapa de bancas de avaliação']) !!}
                         <br>
             			{!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
             		{!! Form::close() !!}

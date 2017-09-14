@@ -68,7 +68,7 @@
                                         <label for="curso">Curso</label>
                                         <div class="form-group has-feedback">
                                             <div id="cursos">
-                                                <select name="curso" class="form-control" title="Curso" required></select>
+                                                <select name="curso" class="form-control" title="Curso" ></select>
                                             </div>
                                             <span class="fa fa-graduation-cap form-control-feedback"></span>
                                             @if ($errors->has('curso'))

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnSiglaOnTrabalhosTable extends Migration
+class AddColumnAtivoOnUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColumnSiglaOnTrabalhosTable extends Migration
      */
     public function up()
     {
-        Schema::table('trabalhos', function (Blueprint $table) {
-            $table->string('sigla', 10)->after('id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('ativo')->default(1)->after('permissao');
         });
     }
 
@@ -25,7 +25,7 @@ class AddColumnSiglaOnTrabalhosTable extends Migration
      */
     public function down()
     {
-        Schema::table('trabalhos', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

@@ -196,6 +196,7 @@ class TrabalhoController extends Controller {
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
             $trabalho->coorientador_id = $request->input('coorientador');
+            $trabalho->anoletivo_id = session()->get('anoletivo')->id;
             $trabalho->academico()->sync([$request->input('academico'), $request->input('academico1')]);
             $trabalho->save();
 
@@ -211,6 +212,7 @@ class TrabalhoController extends Controller {
             $trabalho->titulo = $request->input('titulo');
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
+            $trabalho->anoletivo_id = session()->get('anoletivo')->id;
             $trabalho->academico()->sync([$request->input('academico'), $request->input('academico1')]);
             $trabalho->save();
             
@@ -228,6 +230,7 @@ class TrabalhoController extends Controller {
             $trabalho->ano = 2017;
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
+            $trabalho->anoletivo_id = session()->get('anoletivo')->id;
             $trabalho->save();
 
             $academico = \App\Academico::find($request->input('academico'));
