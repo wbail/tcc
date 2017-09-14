@@ -24,7 +24,7 @@ class ArquivoRequest extends FormRequest
     public function rules()
     {
         return [
-            'descricao' => 'required|file|min:3|max:1000|mimes:doc,docx,txt,pdf'
+            'descricao' => 'required|file|min:0.1|max:1000|mimes:doc,docx,txt,pdf'
         ];
     }
 

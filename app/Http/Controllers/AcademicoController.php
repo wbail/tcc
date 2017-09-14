@@ -145,6 +145,7 @@ class AcademicoController extends Controller {
 
         return redirect('/academico/novo')->with('message', 'Acadêmico cadastrado com sucesso!');
 
+
     }
 
     /**

@@ -153,7 +153,7 @@ Route::group(['prefix'=>'arquivo','where'=>['id'=>'[0-9]+']], function() {
 	Route::get('edit/{id}', ['as'=>'arquivo.edit', 'uses'=>'ArquivoController@edit', 'middleware' => 'auth']);
 	Route::put('update/{id}', ['as'=>'arquivo.update', 'uses'=>'ArquivoController@update', 'middleware' => 'auth']);
 	Route::get('destroy/{id}', ['as'=>'arquivo.destroy', 'uses'=>'ArquivoController@destroy', 'middleware' => 'auth']);
-	Route::get('show/{id}/{trabalhoid}', ['as'=>'arquivo.show', 'uses'=>'ArquivoController@show', 'middleware' => 'auth']);
+	Route::get('show/{id}/{etapaanoid}/{trabalhoid}', ['as'=>'arquivo.show', 'uses'=>'ArquivoController@show', 'middleware' => 'auth']);
 
 });
 
