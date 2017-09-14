@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\EtapaAno;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\TrabalhoRequest;
@@ -252,6 +253,11 @@ class TrabalhoController extends Controller {
 
         }
 
+        $etapaano = EtapaAno::all();
+
+        for ($i = 0; $i < count($etapaano); $i++) {
+            $etapaano[$i]->trabalho()->attach(DB::table('trabalhos')->latest()->value('id'));
+        }
 
     }
 

@@ -121,7 +121,7 @@
 
     <!-- Modal lista arquivos -->
     <div id="myModalListArquivos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -429,7 +429,7 @@
     
     <!-- Modal lista arquivos -->
     <div id="myModalListArquivos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -521,8 +521,8 @@
         })
         .done(function(data) {
             // console.log("success"); 
-            // console.log('trabalhoid = ' + trabalhoid);
-            // console.log('etapaanoid = ' + etapaanoid); 
+//            console.log('trabalhoid = ' + trabalhoid);
+//            console.log('etapaanoid = ' + etapaanoid);
              
             if (data.length < 1) {
             

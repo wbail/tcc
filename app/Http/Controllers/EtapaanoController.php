@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AcademicoTrabalho;
 use Illuminate\Http\Request;
 use App\Http\Requests\EtapaAnoRequest;
 use Illuminate\Support\Facades\Auth;
@@ -27,12 +28,12 @@ class EtapaanoController extends Controller
     {
 
         $membrobanca = MembroBanca::where('user_id', '=', Auth::user()->id)
-                                    ->first();
+            ->first();
 
-        $departamento_id = $membrobanca->departamento_id;
+        //$departamento_id = $membrobanca->departamento_id;
 
         $academico = Academico::where('user_id', '=', Auth::user()->id)
-                                    ->first();
+            ->first();
 
         if($membrobanca) {
 
@@ -129,10 +130,8 @@ class EtapaanoController extends Controller
 
         } elseif($academico) {
 
-            $trabalho = DB::table('academico_trabalhos as at')
-                            ->where('at.academico_id', '=', $academico->id)
-                            ->get();
-
+            $trabalho = AcademicoTrabalho::where('academico_id', $academico->id)
+                ->first();
             
             $objetos[] = DB::select(/** @lang sql */
                                     'select distinct ea.titulo as descricao
@@ -149,7 +148,7 @@ class EtapaanoController extends Controller
                                          on t.id = ?
                                       inner join ano_letivos as al
                                          on al.id = t.anoletivo_id
-                                      where al.ativo = ?', [$trabalho[$i]->id, 1]);
+                                      where al.ativo = ?', [$trabalho->trabalho_id, 1]);
 
             // return $objetos;
 

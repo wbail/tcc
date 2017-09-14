@@ -69,6 +69,7 @@ class TrabalhoRequest extends FormRequest {
             'ano.date_format' => 'O campo Ano deve ter quatro dígitos.',
             'ano.after_or_equal' => 'O campo Ano deve ser igual ou maior ao ano atual.',
             'orientador.required' => 'O campo Orientador(a) é obrigatório.',
+            'coorientador.different' => 'Os orientadores devem ser diferentes.',
             'periodo.required' => 'O campo Período é obrigatório.',
         ];
     }

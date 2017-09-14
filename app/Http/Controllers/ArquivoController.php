@@ -69,7 +69,7 @@ class ArquivoController extends Controller
                 // Composiçao do nome do arquivo = AnoMesDiaHoraMinutoSegundo _ ID do Usuario logado _ nome do arquivo
                 $nomeArquivo = Carbon::now()->format('YmdHis') . '_' . Auth::user()->id . '_' . $request->descricao->getClientOriginalName();
 
-                Storage::putFileAs($directory, $request->file('descricao'), $nomeArquivo);
+                Storage::putFileAs('public/' . $directory, $request->file('descricao'), $nomeArquivo);
 
                 Auth::user()
                     ->etapatrabalho()
@@ -115,19 +115,19 @@ class ArquivoController extends Controller
     {
         $dir = Session::get('anoletivo')->id . '/' . $trabalhoid . '/' . $etapaanoid . '/';
 //        return $dir;
-//        return Storage::get(Storage::allFiles($dir));
+        $arq = Storage::url('app/' .$dir . '20170914101349_2_MedindoaProdutividadedoDesenvolvimentodeAplicativos.pdf');
 
-        $url = array();
-
+//        $url = array();
+//
         for ($i = 0; $i < count(Storage::allFiles($dir)); $i++) {
-            Storage::setVisibility(Storage::allFiles($dir)[$i], 'public');
+            Storage::setVisibility($arq, 'public');
 //            Storage::copy(Storage::allFiles($dir)[$i], 'public/' . Storage::allFiles($dir)[$i]);
-            $url[] = Storage::url(Storage::allFiles($dir)[$i]);
+//            $url[] = Storage::url(Storage::allFiles($dir)[$i]);
         }
 
-        return response()->make(storage_path($url[0]), 200, [
+        return response()->make($arq, 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'."wfewef.pdf".'"'
+            'Content-Disposition' => 'inline; filename="'."wefwe.docx".'"'
         ]);
 
     }
