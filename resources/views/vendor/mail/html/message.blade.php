@@ -2,7 +2,11 @@
     {{-- Header --}}
     @slot('header')
         @component('mail::header', ['url' => config('app.url')])
-            {{ config('app.name') }}
+            Universidade Estadual de Ponta Grossa
+            <br>
+            Departamento de Informática
+            <br>
+            Trabalho de Conclusão de Curso
         @endcomponent
     @endslot
 
@@ -21,7 +25,7 @@
     {{-- Footer --}}
     @slot('footer')
         @component('mail::footer')
-            &copy; {{ date('Y') }} {{ config('app.name') }}. Todos os direitos reservados.
+            &copy; {{ date('Y') }} TCC. Todos os direitos reservados.
         @endcomponent
     @endslot
 @endcomponent

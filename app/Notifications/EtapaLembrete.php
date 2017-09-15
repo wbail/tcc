@@ -20,7 +20,8 @@ class EtapaLembrete extends Notification {
      */
     public function __construct($etapaano) {
 
-        return $this->etapaano = $etapaano;
+        $this->etapaano = $etapaano;
+
     }
 
     /**

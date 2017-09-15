@@ -17,6 +17,7 @@ use App\User;
 use App\Academico;
 use App\MembroBanca;
 use DB;
+use Illuminate\Support\Facades\Session;
 
 class EtapaanoController extends Controller
 {
@@ -27,7 +28,6 @@ class EtapaanoController extends Controller
      */
     public function index()
     {
-        User::find(1)->notify(new EtapaLembrete(Etapa::find(5)));
 
         $membrobanca = MembroBanca::where('user_id', '=', Auth::user()->id)
             ->first();
@@ -210,6 +210,27 @@ class EtapaanoController extends Controller
                 $etapa->etapa()->associate($request->input('etapa'));
                 $etapa->save();
 
+
+                $etapaano = DB::table('etapa_anos')
+                    ->latest()
+                    ->first()
+                    ->id;
+
+                $academicoTrabalho = AcademicoTrabalho::where('ano_letivo_id', Session::get('anoletivo')->id)
+                    ->get();
+
+                for ($i = 0; $i < count($academicoTrabalho); $i++) {
+                    $academico = User::find(Academico::find($academicoTrabalho[$i]->academico_id)->user_id);
+                    $academico->notify(new EtapaLembrete($etapaano));
+                    $professorOri = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->membrobanca()->value('user_id'));
+                    $professorOri->notify(new EtapaLembrete($etapaano));
+                    if (User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id')) != null) {
+                        $professorCoo = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id'));
+                        $professorCoo->notify(new EtapaLembrete($etapaano));
+                    }
+                    sleep(2);
+                }
+
                 return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');
             }
 
@@ -221,9 +242,28 @@ class EtapaanoController extends Controller
             $etapa->etapa()->associate($request->input('etapa'));
             $etapa->save();
 
+            $etapaano = DB::table('etapa_anos')
+                ->latest()
+                ->first()
+                ->id;
+
+            $academicoTrabalho = AcademicoTrabalho::where('ano_letivo_id', Session::get('anoletivo')->id)
+                ->get();
+
+            for ($i = 0; $i < count($academicoTrabalho); $i++) {
+                $academico = User::find(Academico::find($academicoTrabalho[$i]->academico_id)->user_id);
+                $academico->notify(new EtapaLembrete($etapaano));
+                $professorOri = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->membrobanca()->value('user_id'));
+                $professorOri->notify(new EtapaLembrete($etapaano));
+                if (User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id')) != null) {
+                    $professorCoo = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id'));
+                    $professorCoo->notify(new EtapaLembrete($etapaano));
+                }
+                sleep(2);
+            }
+
             return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');
         }
-
 
 
     }
