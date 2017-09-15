@@ -11,16 +11,16 @@ class EtapaLembrete extends Notification {
 
     use Queueable;
 
-    private $etapa;
+    private $etapaano;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($etapa) {
+    public function __construct($etapaano) {
 
-        return $this->etapa = $etapa;
+        return $this->etapaano = $etapaano;
     }
 
     /**
@@ -43,9 +43,10 @@ class EtapaLembrete extends Notification {
     public function toMail($notifiable) {
 
         return (new MailMessage)
-                    ->line('Nova etapa criada')
-                    ->action('View nova etapa', route('etapa.email', [$this->etapa]))
-                    ->line('Thank you for using our application!');
+                    ->subject('Nova etapa do TCC')
+                    ->greeting('Olá,')
+                    ->line('Uma nova etapa foi adicionada ao TCC')
+                    ->action('Visualizar etapa', route('etapaano', [$this->etapaano]));
     }
 
     /**
@@ -57,7 +58,7 @@ class EtapaLembrete extends Notification {
     public function toArray($notifiable) {
 
         return [
-            'etapa' => $this->etapa->id
+            'etapa' => $this->etapaano->id
         ];
     }
 }

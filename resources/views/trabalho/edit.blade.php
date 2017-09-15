@@ -97,12 +97,19 @@
                                         </div> {{-- ./col-md-6 --}}
                                     @endif
                                 </div> {{-- ./row --}}
-                                <br>                                
+                                <br>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {!! Form::label('ano', 'Ano') !!}
-                                        {!! Form::text('ano', $trabalho->ano, ['class'=>'form-control', 'id'=>'datetimepicker', 'title'=>'Ano do trabalho']) !!}
-                                    </div> {{-- ./col-md-2 --}}
+                                        {!! Form::label('orientador', 'Orientador(a) *') !!}
+                                        {!! Form::select('orientador', $orientador, $trabalho->orientador_id, ['class'=>'form-control', 'placeholder'=>'', 'title'=>'Nome do(a) Orientador(a)']) !!}
+                                    </div> {{-- ./col-md-6 --}}
+                                    <div class="col-md-6">
+                                        {!! Form::label('coorientador', 'Coorientador(a)') !!}
+                                        {!! Form::select('coorientador', $coorientador, $trabalho->coorientador_id, ['class'=>'form-control', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
+                                    </div> {{-- ./col-md-6 --}}
+                                </div> {{-- ./row --}}
+                                <br>
+                                <div class="row">
                                     <div class="col-md-4">
                                         {!! Form::label('periodo', 'Período') !!}
                                         <br>
@@ -132,17 +139,7 @@
                                     </div> {{-- ./col-md-3 --}}
                                     
                                 </div> {{-- ./row --}}
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! Form::label('orientador', 'Orientador(a) *') !!}
-                                        {!! Form::select('orientador', $orientador, $trabalho->orientador_id, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Orientador(a)']) !!}
-                                    </div> {{-- ./col-md-6 --}}
-                                    <div class="col-md-6">
-                                        {!! Form::label('coorientador', 'Coorientador(a)') !!}
-                                        {!! Form::select('coorientador', $orientador, $trabalho->coorientador_id, ['class'=>'form-control s3', 'placeholder'=>'', 'title'=>'Nome do(a) Coorientador(a)']) !!}
-                                    </div> {{-- ./col-md-6 --}}
-                                </div> {{-- ./row --}}
+
                                 <div class="row">
                                     <div class="col-md-3">
                                         <br>

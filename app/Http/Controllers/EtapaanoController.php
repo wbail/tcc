@@ -6,6 +6,7 @@ use App\AcademicoTrabalho;
 use Illuminate\Http\Request;
 use App\Http\Requests\EtapaAnoRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\EtapaLembrete;
 
 use App\Etapa;
 use App\Trabalho;
@@ -26,6 +27,7 @@ class EtapaanoController extends Controller
      */
     public function index()
     {
+        User::find(1)->notify(new EtapaLembrete(Etapa::find(5)));
 
         $membrobanca = MembroBanca::where('user_id', '=', Auth::user()->id)
             ->first();

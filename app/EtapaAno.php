@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class EtapaAno extends Model
 {
+    use Notifiable;
+
     protected $fillable = ['titulo', 'data_inicial', 'data_final', 'ativa'];
 
     public function etapa() {

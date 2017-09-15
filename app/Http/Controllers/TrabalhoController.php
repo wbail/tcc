@@ -228,7 +228,6 @@ class TrabalhoController extends Controller {
             $trabalho = new Trabalho;
             $trabalho->titulo = $request->input('titulo');
             $trabalho->sigla = $request->input('sigla');
-            $trabalho->ano = 2017;
             $trabalho->periodo = $request->input('periodo');
             $trabalho->orientador_id = $request->input('orientador');
             $trabalho->anoletivo_id = session()->get('anoletivo')->id;
@@ -294,7 +293,6 @@ class TrabalhoController extends Controller {
 
         $trabalho = Trabalho::find($id);
 
-
         $this->authorize('update', $trabalho);
 
         $academicos = AcademicoTrabalho::where('trabalho_id', $id)
@@ -303,21 +301,27 @@ class TrabalhoController extends Controller {
         $qntacademicos = AcademicoTrabalho::where('trabalho_id', $id)
                             ->count();
 
-
         $academico = DB::table('academicos as a')
                         ->join('users as u', 'u.id', '=', 'a.user_id')
                         ->orderBy('u.name')
                         ->pluck('u.name', 'a.id');
 
         $orientador = DB::table('membro_bancas as mb')
-                        ->join('users as u', 'u.id', '=', 'mb.user_id')
-                        ->orderBy('u.name')
-                        ->pluck('u.name', 'mb.id');
+            ->join('users as u', 'u.id', '=', 'mb.user_id')
+            ->where('mb.departamento_id', User::userMembroDepartamento()->departamento_id)
+            ->orderBy('u.name')
+            ->pluck('u.name', 'mb.id');
+
+        $coorientador = DB::table('membro_bancas as mb')
+            ->join('users as u', 'u.id', '=', 'mb.user_id')
+            ->orderBy('u.name')
+            ->pluck('u.name', 'mb.id');
 
         return view('trabalho.edit', [
             'trabalho' => $trabalho,
             'academico' => $academico,
             'orientador' => $orientador,
+            'coorientador' => $coorientador,
             'qntacademicos' => $qntacademicos,
             'academicos' => $academicos,
         ]);
@@ -364,7 +368,7 @@ class TrabalhoController extends Controller {
 
             $trabalho->titulo = $request->input('titulo');
             $trabalho->sigla = $request->input('sigla');
-            $trabalho->ano = $request->input('ano');
+
             $trabalho->periodo = $request->input('periodo');
             $trabalho->aprovado = $aprovado;
             $trabalho->orientador_id = $request->input('orientador');
@@ -388,7 +392,7 @@ class TrabalhoController extends Controller {
 
             $trabalho->titulo = $request->input('titulo');
             $trabalho->sigla = $request->input('sigla');
-            $trabalho->ano = $request->input('ano');
+
             $trabalho->periodo = $request->input('periodo');
             $trabalho->aprovado = $aprovado;
             $trabalho->orientador_id = $request->input('orientador');

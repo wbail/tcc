@@ -96,7 +96,7 @@ class DepartamentoController extends Controller {
      */
     public function update(DepartamentoRequest $request, $id) {
 
-        $this->authorize('update', Departamento::class);
+        $this->authorize('update', Departamento::find($id));
 
         $departamento = Departamento::find($id);
         $departamento->nome = $request->input('nome');

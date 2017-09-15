@@ -58,16 +58,17 @@ class BancaController extends Controller
     {
         $this->authorize('create', Banca::class);
 
-        $departamento_id = User::userMembroDepartamento()->departamento_id;
+        $etapaano = Etapa::where('banca', 1)
+            ->first();
 
-//        $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
-//            $q->where('departamento_id', '=', $departamento_id);
-//        })
-//        ->orWhereHas('coorientador', function($q) use ($departamento_id) {
-//            $q->where('departamento_id', '=', $departamento_id);
-//        })
-//        ->orderBy('titulo')
-//        ->pluck('titulo', 'id');
+        $etapaano = EtapaAno::where('etapa_id', $etapaano->id)
+            ->first();
+
+        if ($etapaano == null) {
+            return redirect('admin')->with('message', 'Deve-se criar uma etapa de semana de bancas primeiro.');
+        }
+
+        $departamento_id = User::userMembroDepartamento()->departamento_id;
 
         $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
             $q->where('departamento_id', '=', $departamento_id);
@@ -81,15 +82,24 @@ class BancaController extends Controller
         ->orderBy('sigla')
         ->pluck('sigla', 'id');
 
-        $membros = Banca::join('membro_bancas as mb', 'mb.id', '=', 'bancas.membrobanca_id')
-            ->join('users as u', 'u.id', '=', 'mb.user_id')
-            ->join('trabalhos as t', 't.id', '=', 'bancas.trabalho_id')
-            ->join('ano_letivos as al', 'al.id', '=', 't.anoletivo_id')
-            ->where('al.ativo', 1)
-            ->groupBy('mb.id', 'u.name')
-            ->orderBy('u.name')
-            ->select('mb.id', DB::raw('concat(u.name, \' - \', count(u.name), \' banca(s)\') as nome'))
-            ->pluck('nome', 'mb.id');
+        $membros = '';
+
+        if (Banca::count() > 0) {
+
+            $membros = Banca::rightJoin('membro_bancas as mb', 'mb.id', '=', 'bancas.membrobanca_id')
+                ->rightJoin('users as u', 'u.id', '=', 'mb.user_id')
+                ->rightJoin('trabalhos as t', 't.id', '=', 'bancas.trabalho_id')
+                ->rightJoin('ano_letivos as al', 'al.id', '=', 't.anoletivo_id')
+                ->where('al.ativo', 1)
+                ->groupBy('mb.id', 'u.name')
+                ->orderBy('u.name')
+                ->select('mb.id', DB::raw('concat(u.name, \' - \', count(u.name), \' banca(s)\') as nome'))
+                ->pluck('nome', 'mb.id');
+        } else {
+            $membros = MembroBanca::join('users as u', 'u.id', '=', 'membro_bancas.user_id')
+                ->orderBy('u.name')
+                ->pluck('u.name', 'membro_bancas.id');
+        }
 
         return view('banca.create', [
             'trabalho' => $trabalho,
@@ -107,7 +117,7 @@ class BancaController extends Controller
     {
         $this->authorize('create', Banca::class);
         
-        // return $request->all();
+//        return $request->all();
         
         $trabalho = Trabalho::find($request->input('trabalho'));
 

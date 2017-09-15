@@ -43,7 +43,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                {{ $page_title or "Page Title" }}
+                {{ $page_title or "Principal" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
@@ -66,24 +66,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </ul>
             </div>
             @endif
+
             @if (session('message'))
-            <div class="alert alert-success alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>{{ session('message') }}</strong>
-            </div>
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <ul>
+                        <li>{{ session('message') }}</li>
+                    </ul>
+                </div>
             @endif
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">Upload</div>
                         <div class="panel-body">
-                            {!! Form::open(['url' => '/home/importdoc', 'files' => true]) !!}
-                            {!! Form::label('doc', 'Documento') !!}
-                            {!! Form::file('doc') !!}
-                            <br>
-                            {{-- {!! Form::submit('Enviar', ['class'=>'btn btn-primary pull-right']) !!} --}}
-                            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Enviar</button>
-                            {!! Form::close() !!}
 
                         </div>
                     </div>
@@ -92,22 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="panel panel-default">
                         <div class="panel-heading">Cont</div>
                         <div class="panel-body">
-                            {!! Form::open(['url'=>'/home/telefone', 'method'=>'post']) !!}
-                            <div ng-app="numeroTelefoneList" ng-cloak ng-controller="myCtrl" class="w3-card-2 w3-margin" style="max-width:400px;">
-                                <label for="telefone">Telefone</label>
-                                <div ng-repeat="x in numero">
-                                    <input type="text" name="telefone@{{$index}}" value="@{{x}}" class="form-control"/>
-                                    <span ng-click="removeItem($index)" style="cursor:pointer;" class="w3-right w3-margin-right" title="Remover Telefone"><i class="fa fa-remove"></i> </span>
-                                </div>
-                                <a href="#" id="popoverid" data-toggle="popover" data-content="@{{errortext}}" data-trigger="focus">
-                                    <input id="adicionTelefone" ng-model="addMe" class="form-control phone_with_ddd" type="text">
-                                </a>
-                                <a href="#" ng-click="addItem()"><i class="fa fa-plus"></i></a>
-                                {{-- <p class="w3-padding-left w3-text-red">@{{errortext}}</p> --}}
-                            </div>
-                            <br><br>
-                            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Enviar</button>
-                            {!! Form::close() !!}
+
                         </div>
                     </div>
                 </div> <!-- ./col-md-6 -->
