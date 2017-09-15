@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\ArquivoEnviado;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +12,10 @@ use App\Http\Requests\ArquivoRequest;
 use App\Arquivo;
 use App\Trabalho;
 use App\EtapaAno;
+use App\AcademicoTrabalho;
 use Auth;
+use App\User;
+use App\Academico;
 use DB;
 
 class ArquivoController extends Controller
@@ -74,14 +78,31 @@ class ArquivoController extends Controller
                 // Composicao do diretorio = ID no AnoLetivo _ ID do Trabalho _ ID da EtapaAno
                 $directory = Session::get('anoletivo')->id . '/' . $trabalhoid->id . '/' . $etapaanoid->id . '/';
 
-                $ultimoArq = DB::table('arquivos')
-                    ->latest()
-                    ->first();
-
                 // Composiçao do nome do arquivo = ID do Arquivo _ ID do Usuario logado _ nome do arquivo
                 $nomeArquivo = $request->descricao->getClientOriginalName();
 
                 Storage::putFileAs('public/' . $directory, $request->file('descricao'), $nomeArquivo);
+
+                $ultimoArq = DB::table('arquivos')
+                    ->latest()
+                    ->first()
+                    ->id;
+
+                $academicoTrabalho = AcademicoTrabalho::where('ano_letivo_id', Session::get('anoletivo')->id)
+                    ->where('trabalho_id', $trabalhoid->id)
+                    ->get();
+
+                for ($i = 0; $i < count($academicoTrabalho); $i++) {
+                    $academico = User::find(Academico::find($academicoTrabalho[$i]->academico_id)->user_id);
+                    $academico->notify(new ArquivoEnviado($ultimoArq));
+                    $professorOri = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->membrobanca()->value('user_id'));
+                    $professorOri->notify(new ArquivoEnviado($ultimoArq));
+                    if (User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id')) != null) {
+                        $professorCoo = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id'));
+                        $professorCoo->notify(new ArquivoEnviado($ultimoArq));
+                    }
+                    sleep(1);
+                }
 
             } else {
 
@@ -111,6 +132,27 @@ class ArquivoController extends Controller
 
                 Storage::putFileAs('public/' . $directory, $request->file('descricao'), $nomeArquivo);
 
+                $ultimoArq = DB::table('arquivos')
+                    ->latest()
+                    ->first()
+                    ->id;
+
+                $academicoTrabalho = AcademicoTrabalho::where('ano_letivo_id', Session::get('anoletivo')->id)
+                    ->where('trabalho_id', $trabalhoid->id)
+                    ->get();
+
+                for ($i = 0; $i < count($academicoTrabalho); $i++) {
+                    $academico = User::find(Academico::find($academicoTrabalho[$i]->academico_id)->user_id);
+                    $academico->notify(new ArquivoEnviado($ultimoArq));
+                    $professorOri = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->membrobanca()->value('user_id'));
+                    $professorOri->notify(new ArquivoEnviado($ultimoArq));
+                    if (User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id')) != null) {
+                        $professorCoo = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id'));
+                        $professorCoo->notify(new ArquivoEnviado($ultimoArq));
+                    }
+                    sleep(1);
+                }
+
 
             }
 
@@ -131,6 +173,8 @@ class ArquivoController extends Controller
     public function show($id, $etapaanoid, $trabalhoid)
     {
         return response()->download(storage_path('app/public/' . Session::get('anoletivo')->id . '/' . $trabalhoid . '/' . $etapaanoid . '/' . Arquivo::find($id)->descricao));
+
+
     }
 
     /**
