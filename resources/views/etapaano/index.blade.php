@@ -538,7 +538,7 @@
                 for(var i = 0; i < data.length; i++) {
                     
                     meio += '<tr><td>' + data[i].name + '<br>' 
-                    + '</td><td><li><a target="_blank" href="' + data[i].caminho + ' ">' + data[i].descricao + '</a></li></td><td>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') + '</td><td class="text-center"><button id="'+data[i].id+'" class="btn btn-link" title="Excluir Arquivo" data-toggle="modal" data-target="#myModalDeleteArquivos"><i class="fa fa-trash"></i></button></td></tr>';
+                    + '</td><td><li><a target="_blank" href="arquivo/show/' + data[i].id + '/' + etapaanoid + '/' + trabalhoid + ' ">' + data[i].descricao + '</a></li></td><td>' + moment(data[i].created_at).format('DD/MM/YYYY HH:mm') + '</td><td class="text-center"><button id="'+data[i].id+'" class="btn btn-link" title="Excluir Arquivo" data-toggle="modal" data-target="#myModalDeleteArquivos"><i class="fa fa-trash"></i></button></td></tr>';
                 };
                 
                 html = '<table class="table table-striped table-bordered table-hover">'+

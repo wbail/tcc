@@ -30,7 +30,11 @@ class EtapaanoController extends Controller
         $membrobanca = MembroBanca::where('user_id', '=', Auth::user()->id)
             ->first();
 
-        $departamento_id = $membrobanca->departamento_id;
+        $departamento_id = '';
+
+        if (isset($membrobanca->departamento_id)) {
+            $departamento_id = $membrobanca->departamento_id;
+        }
 
         $academico = Academico::where('user_id', '=', Auth::user()->id)
             ->first();
