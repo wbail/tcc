@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'locale' => 'pt-BR',
+    'locale' => 'pt_BR',
 
     /*
     |--------------------------------------------------------------------------
@@ -177,7 +177,15 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Laravel Collective
+         */
         Collective\Html\HtmlServiceProvider::class,
+
+        /*
+         * DomPDF
+         */
+        Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -229,7 +237,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

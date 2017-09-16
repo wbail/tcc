@@ -222,13 +222,18 @@ class EtapaanoController extends Controller
                 for ($i = 0; $i < count($academicoTrabalho); $i++) {
                     $academico = User::find(Academico::find($academicoTrabalho[$i]->academico_id)->user_id);
                     $academico->notify(new EtapaLembrete($etapaano));
-                    $professorOri = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->membrobanca()->value('user_id'));
-                    $professorOri->notify(new EtapaLembrete($etapaano));
-                    if (User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id')) != null) {
-                        $professorCoo = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id'));
-                        $professorCoo->notify(new EtapaLembrete($etapaano));
+
+                    if (Trabalho::find($academicoTrabalho[$i]->trabalho_id)) {
+                        $professorOri = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->membrobanca()->value('user_id'));
+                        $professorOri->notify(new EtapaLembrete($etapaano));
+
+                        if (User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id')) != null) {
+                            $professorCoo = User::find(Trabalho::find($academicoTrabalho[$i]->trabalho_id)->coorientador()->value('user_id'));
+                            $professorCoo->notify(new EtapaLembrete($etapaano));
+                        }
                     }
-                    sleep(2);
+
+                    sleep(1);
                 }
 
                 return redirect('/etapaano')->with('message', 'Etapa cadastrada com sucesso');

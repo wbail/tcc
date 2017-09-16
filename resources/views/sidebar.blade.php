@@ -106,46 +106,6 @@
                 </ul>
             </li>
 
-            <li class="treeview">
-                <a href="#"><span><i class="fa fa-clock-o"></i> Histórico de Trabalhos</span> <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    
-                    <li class="treeview">
-                        <a href="#"><span>2015</span> <i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li><a href="#">Trabalhos</a></li>
-                            <li><a href="#">Link</a></li>
-                        </ul>
-                    </li>
-
-
-                    <li class="treeview">
-                        <a href="#"><span>2016</span> <i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li><a href="#">Trabalhos</a></li>
-                            <li><a href="#">Link</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="treeview">
-                        <a href="#"><span>2017</span> <i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li><a href="#">Trabalhos</a></li>
-                            <li><a href="#">Link</a></li>
-                        </ul>
-                    </li>
-
-                </ul>
-            </li>
-
-            <li class="treeview">
-                <a href="#"><span>Multilevel</span> <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a href="#">Link in level 2</a></li>
-                    <li><a href="#">Link in level 2</a></li>
-                </ul>
-            </li>
-
         </ul><!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

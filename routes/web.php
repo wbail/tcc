@@ -210,5 +210,4 @@ Route::get('/h/{email}', function($email) {
 			->get();
 	}
 
-
 });

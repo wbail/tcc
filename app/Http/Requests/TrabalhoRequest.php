@@ -62,7 +62,7 @@ class TrabalhoRequest extends FormRequest {
             'sigla.unique' => 'Sigla já cadastrada.',
             'sigla.max' => 'A Sigla deve conter ate 10 caracteres.',
             'academico.required' => 'O campo Acadêmico(a) é obrigatório.',
-            'academico.unique' => 'O Acadêmico já está vinculado a um trabalho',
+            //'academico.unique' => 'O Acadêmico já está vinculado a um trabalho',
             'academico1.different' => 'Os(as) acadêmicos(as) devem ser diferentes.',
             'academico1.unique' => 'O segundo Acadêmico já está vinculado a um trabalho',
             'ano.required' => 'O campo Ano é obrigatório.',

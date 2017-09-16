@@ -45,7 +45,9 @@
 		                <thead>
 		                    <tr>
                                 <th>Trabalho</th>
-                                <th>Orientador(es)</th>
+                                <th>Orientador</th>
+                                <th>Coorientador</th>
+                                <th>Acadêmico(s)</th>
                                 <th>Data</th>
 		                        <th class="text-center">Ação</th>
 		                    </tr>
@@ -53,12 +55,19 @@
 		                <tbody>
 		                    @foreach($banca as $banca)
 		                    <tr>
-                                <td title="{{ $banca->titulo }}">{{ $banca->sigla }}</td>
+                                <td title="{{ $banca->trabalho->titulo }}">{{ $banca->trabalho->sigla }}</td>
+                                <td>{{ $banca->trabalho->membrobanca->user->name }}</td>
                                 <td>
-                                    <li>{{ \App\User::find(\App\MembroBanca::find($banca->orientador_id)->user_id)->name }}</li>
-                                    @if($banca->coorientador_id)
-                                        <li>{{ \App\User::find(\App\MembroBanca::find($banca->coorientador_id)->user_id)->name }}</li>
+                                    @if($banca->trabalho->coorientador->user->name != null)
+                                        {{ $banca->trabalho->coorientador->user->name }}
                                     @endif
+                                </td>
+                                <td>
+                                    @foreach($banca->academicotrabalho as $banca)
+                                        <li>
+                                            {{ \App\Academico::find($banca->academico_id)->user->name }}
+                                        </li>
+                                    @endforeach
                                 </td>
                                 @if((empty($banca->data)))
                                     <td class="text-danger">
@@ -79,6 +88,7 @@
 		                    @endforeach
 		                </tbody>
 		            </table>
+
             	</div> {{-- ./col-md-4 --}}
             	{{--<div class="col-md-4"></div> --}}{{-- ./col-md-4 --}}
             </div> {{-- ./row --}}
