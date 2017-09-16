@@ -22,4 +22,9 @@ class Academico extends Model
             ->withTimestamps();
     }
 
+    public function trabalho() {
+        return $this->belongsToMany(Trabalho::class, 'academico_trabalhos')
+            ->withTimestamps();
+    }
+
 }

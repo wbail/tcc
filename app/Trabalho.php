@@ -17,13 +17,14 @@ class Trabalho extends Model
     }
 
     public function academico() {
-    	return $this->hasMany(Academico::class);
+    	return $this->belongsToMany(Academico::class, 'academico_trabalhos')
+            ->withTimestamps();
     }
 
     public function etapaano() {
     	return $this->belongsToMany(EtapaAno::class, 'etapa_trabalhos', 'etapaano_id', 'trabalho_id')
-    				->withPivot('etapaano_id', 'trabalho_id')
-    				->withTimestamps();
+            ->withPivot('etapaano_id', 'trabalho_id')
+            ->withTimestamps();
     }
 
     public function banca() {

@@ -33,11 +33,17 @@ class BancaController extends Controller
 
         $d = User::userMembroDepartamento()->departamento_id;
 
-        $banca = DB::table('bancas as b')
-            ->join('trabalhos as t', 't.id', '=', 'b.trabalho_id')
-            ->join('membro_bancas as mb', 'mb.id', '=', 't.orientador_id')
-            ->where('mb.departamento_id', $d)
+        $banca = Banca::with(['trabalho.membrobanca' => function($query) use ($d) {
+            $query->where('departamento_id', '=', $d);
+        }], 'trabalho.coorientador')
+            ->with('academicotrabalho')
             ->get();
+
+//        $banca = DB::table('bancas as b')
+//            ->join('trabalhos as t', 't.id', '=', 'b.trabalho_id')
+//            ->join('membro_bancas as mb', 'mb.id', '=', 't.orientador_id')
+//            ->where('mb.departamento_id', $d)
+//            ->get();
 
         $banca = collect($banca)
             ->unique('trabalho_id')
@@ -72,14 +78,13 @@ class BancaController extends Controller
 
         $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
             $q->where('departamento_id', '=', $departamento_id);
-        })
-        ->orWhereHas('coorientador', function($q) use ($departamento_id) {
+        })->orWhereHas('coorientador', function($q) use ($departamento_id) {
             $q->where('departamento_id', '=', $departamento_id);
-        })
-        ->whereHas('anoletivo', function ($query) {
+        })->whereHas('anoletivo', function ($query) {
             $query->where('ativo', 1);
         })
         ->orderBy('sigla')
+        ->select(DB::raw('concat(trabalhos.sigla, \' - \', trabalhos.titulo) as sigla'), 'trabalhos.id')
         ->pluck('sigla', 'id');
 
         $membros = '';

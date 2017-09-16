@@ -43,7 +43,7 @@ class ArquivoEnviado extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Olá,')
+                    ->greeting(' ')
                     ->subject('Novo arquivo enviado ao TCC')
                     ->salutation(' ')
                     ->action('Visualizar Arquivo', route('etapaano', [$this->arquivo]));

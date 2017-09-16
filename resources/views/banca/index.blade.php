@@ -29,8 +29,8 @@
             <!-- Your Page Content Here -->
 
             <div class="row">
-            	<div class="col-md-3"></div> {{-- ./col-md-3 --}}
-                <div class="col-md-6">
+            	{{--<div class="col-md-1"></div> --}}{{-- ./col-md-3 --}}
+                <div class="col-md-12">
                     
                     @if (session('message'))
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -45,6 +45,10 @@
 		                <thead>
 		                    <tr>
                                 <th>Trabalho</th>
+                                <th>Orientador</th>
+                                <th>Coorientador</th>
+                                <th>Acadêmico</th>
+                                <th>Acadêmico</th>
                                 <th>Data</th>
 		                        <th class="text-center">Ação</th>
 		                    </tr>
@@ -52,13 +56,18 @@
 		                <tbody>
 		                    @foreach($banca as $banca)
 		                    <tr>
-                                <td title="{{ $banca->titulo }}">{{ $banca->sigla }}</td>
+                                <td title="{{ $banca->titulo }}">{{ $banca->trabalho->sigla }}</td>
+                                <td>{{ $banca->trabalho->membrobanca->user->name }}</td>
+                                <td>{{ $banca->trabalho->coorientador->user->name }}</td>
+                                @foreach($banca->academicotrabalho as $banca)
+                                    <td>{{ \App\Academico::find($banca->academico_id)->user->name }}</td>
+                                @endforeach
                                 <td>
                                     @if($banca->data == null)
-                                    Data a definir
+                                        TEM QUE MOSTRAR A DATA
                                     @else
-                                    {{ \Carbon\Carbon::parse($banca->data)->format('d/m/Y H:i') }}
-                                    @endif                                
+                                        {{ \Carbon\Carbon::parse($banca->data)->format('d/m/Y H:i') }}
+                                    @endif
                                 </td>
 		                        <td class="text-center">
 		                            <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Definir Data"><i class="fa fa-calendar"></i></a>
@@ -72,7 +81,7 @@
 		            </table>
 
             	</div> {{-- ./col-md-4 --}}
-            	<div class="col-md-4"></div> {{-- ./col-md-4 --}}
+            	{{--<div class="col-md-4"></div> --}}{{-- ./col-md-4 --}}
             </div> {{-- ./row --}}
 
             @yield('content')
@@ -104,7 +113,9 @@
                     <h4 class="modal-title" id="myModalLabel"></h4>
                 </div>
                 <div class="modal-body">
-                    Ao gerar o certificado de presença, o mesmo sera enviado por e-mail a todos que participaram da banca.
+                    <h3>
+                        Atenção! Ao gerar o certificado de presença, será enviado por e-mail a todos os participantes da banca.
+                    </h3>
                 </div>
                 <div class="modal-footer cert-banca">
                 </div>
@@ -187,7 +198,7 @@
 
         var $modal = $(this);
         var bancaid = e.relatedTarget.id;
-        $modal.find('.modal-title').html('Geraçao de Certificado de Presença de Banca');
+        $modal.find('.modal-title').html('Geração de Certificado de Presença de Banca');
         $modal.find('.cert-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="#" class="btn btn-success"> Gerar </a>');
     });
 

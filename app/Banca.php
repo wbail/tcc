@@ -11,4 +11,8 @@ class Banca extends Model
     public function trabalho() {
         return $this->belongsTo(Trabalho::class);
     }
+
+    public function academicotrabalho() {
+        return $this->hasManyThrough(AcademicoTrabalho::class, Trabalho::class, 'id');
+    }
 }

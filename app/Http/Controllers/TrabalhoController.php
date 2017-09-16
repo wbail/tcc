@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EtapaAno;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\TrabalhoRequest;
 use Response;
@@ -350,33 +351,34 @@ class TrabalhoController extends Controller {
             $aprovado = 1;
         }
 
-        if($trabalho->titulo != $request->input('titulo')) {
-            //Storage::move('trabalhos/' . Carbon::parse(Trabalho::find($id)->ano)->format('Y') . '/' . Trabalho::find($id)->titulo, 
-              //  'trabalhos/' . Carbon::parse(Trabalho::find($id)->ano)->format('Y') . '/' . $request->input('titulo'));
-        }
-
         if ($request->input('academico1') != null && $request->input('coorientador') != null) {
             
             $qntacademicos = DB::table('academico_trabalhos as at')
                                     ->where('academico_id', $request->input('academico'))
                                     ->orWhere('academico_id', $request->input('academico1'))
                                     ->count();
-            
+
             if($qntacademicos > 1) {
                 return back()->with('message', 'Acadêmico já vinculado a um trabalho');
             }
 
             $trabalho->titulo = $request->input('titulo');
             $trabalho->sigla = $request->input('sigla');
-
             $trabalho->periodo = $request->input('periodo');
             $trabalho->aprovado = $aprovado;
             $trabalho->orientador_id = $request->input('orientador');
             $trabalho->coorientador_id = $request->input('coorientador');
             $trabalho->save();
 
-            //$trabalho->academico()->sync([$request->input('academico') => $request->input('academico')]);
-            //$trabalho->academico()->sync([$request->input('academico1') => $request->input('academico1')]);
+            $trabalho->academico()->sync([
+                $request->input('academico') => $request->input('academico'),
+                $request->input('academico1') => $request->input('academico1'),
+            ]);
+
+            $at = AcademicoTrabalho::where('academico_id', $request->input('academico1'))
+                ->first();
+            $at->ano_letivo_id = Session::get('anoletivo')->id;
+            $at->save();
 
             return redirect('/trabalho')->with('message', 'Trabalho atualizado com sucesso');
 
@@ -399,7 +401,7 @@ class TrabalhoController extends Controller {
             $trabalho->coorientador_id = $request->input('coorientador');
             $trabalho->save();
 
-            //$trabalho->academico()->updateExistingPivot($request->input('academico'), [$request->input('academico')]);
+            $trabalho->academico()->sync([$request->input('academico'), [$request->input('academico')]]);
 
             return redirect('/trabalho')->with('message', 'Trabalho atualizado com sucesso');
            

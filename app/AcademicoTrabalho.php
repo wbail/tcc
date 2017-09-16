@@ -9,7 +9,7 @@ class AcademicoTrabalho extends Model
     protected $fillable = ['aprovado'];
 
     public function banca() {
-        return $this->hasMany(Banca::class);
+        return $this->belongsTo(Banca::class);
     }
 
     public function trabalho() {
