@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\AnoLetivoRequest;
 
 use App\AnoLetivo;
+use Auth;
+use App\Departamento;
 
 class AnoLetivoController extends Controller
 {
@@ -17,9 +19,27 @@ class AnoLetivoController extends Controller
      */
     public function index()
     {
-        return view('anoletivo.index', [
-            'anoletivo' => AnoLetivo::all()
-        ]);
+        $instituicao = 0;
+
+        $departamento_id = Auth::user()
+            ->membrobanca()
+            ->value('departamento_id');
+
+        if($departamento_id) {
+
+            $instituicao = Departamento::find($departamento_id)
+                ->instituicao()
+                ->first();
+
+            $this->authorize('view', $instituicao);
+
+            return view('anoletivo.index', [
+                'anoletivo' => AnoLetivo::all()
+            ]);
+
+        } else {
+            return abort(403, 'Usuário não Autorizado.');
+        }
     }
 
     /**
@@ -29,7 +49,29 @@ class AnoLetivoController extends Controller
      */
     public function create()
     {
-        return view('anoletivo.create');
+
+        //$this->authorize('view', AnoLetivo::class);
+
+        $instituicao = 0;
+
+        $departamento_id = Auth::user()
+            ->membrobanca()
+            ->value('departamento_id');
+
+        if($departamento_id) {
+
+            $instituicao = Departamento::find($departamento_id)
+                ->instituicao()
+                ->first();
+
+            $this->authorize('view', $instituicao);
+
+            return view('anoletivo.create');
+
+        } else {
+            return abort(403, 'Usuário não Autorizado.');
+        }
+
     }
 
     /**
@@ -40,6 +82,10 @@ class AnoLetivoController extends Controller
      */
     public function store(AnoLetivoRequest $request)
     {
+        if (!Auth::user()->permissao == 9) {
+            abort(403, 'Aceso não autorizado.');
+        }
+
         $ativo = $request->input('ativo');
 
         if ($ativo == null) {
@@ -65,7 +111,7 @@ class AnoLetivoController extends Controller
      */
     public function show($id)
     {
-        //
+        $this->authorize('view', AnoLetivo::class);
     }
 
     /**
@@ -76,9 +122,17 @@ class AnoLetivoController extends Controller
      */
     public function edit($id)
     {
-        return view('anoletivo.edit', [
-            'anoletivo' => AnoLetivo::find($id)
-        ]);
+
+//        $this->authorize('view', Auth::user());
+
+        if (Auth::user()->permissao == 9) {
+
+            return view('anoletivo.edit', [
+                'anoletivo' => AnoLetivo::find($id)
+            ]);
+        } else {
+            abort(403, 'Acesso não autorizado');
+        }
     }
 
     /**
@@ -90,6 +144,11 @@ class AnoLetivoController extends Controller
      */
     public function update(AnoLetivoRequest $request, $id)
     {
+
+        if (!Auth::user()->permissao == 9) {
+            abort(403, 'Aceso não autorizado.');
+        }
+
         if ($id == session()->get('anoletivo')->id) {
             return back()
                 ->with('message', 'Nao pode atualizar um ano letivo estando logado no mesmo.');
@@ -130,6 +189,10 @@ class AnoLetivoController extends Controller
      */
     public function destroy($id)
     {
+        if (!Auth::user()->permissao == 9) {
+            abort(403, 'Aceso não autorizado.');
+        }
+
         AnoLetivo::find($id)
             ->delete();
 

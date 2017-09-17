@@ -31,9 +31,24 @@ class BancaController extends Controller
      */
     public function index()
     {
-        $this->authorize('view', Banca::class);
+        $instituicao = 0;
 
-        $d = User::userMembroDepartamento()->departamento_id;
+        $departamento_id = Auth::user()
+            ->membrobanca()
+            ->value('departamento_id');
+
+        if($departamento_id) {
+
+            $instituicao = Departamento::find($departamento_id)
+                ->instituicao()
+                ->first();
+
+            $this->authorize('view', $instituicao);
+
+
+            $this->authorize('view', Banca::class);
+
+            $d = User::userMembroDepartamento()->departamento_id;
 
 //        $banca = Banca::with(['trabalho.membrobanca' => function($query) use ($d) {
 //            $query->where('departamento_id', '=', $d);
@@ -67,45 +82,52 @@ class BancaController extends Controller
 //                              where at.ano_letivo_id = ?
 //                              ', [Session::get('anoletivo')->id]);
 
-        $banca = DB::table('bancas as b')
-            ->join('trabalhos as t', 't.id', '=', 'b.trabalho_id')
-            ->join('membro_bancas as mb', 'mb.id', '=', 'b.membrobanca_id')
-            ->join('academico_trabalhos as at', 'at.trabalho_id', '=', 'b.trabalho_id')
-            ->join('membro_bancas as mbx', function ($query) use ($d) {
-                $query->where('mbx.departamento_id', $d);
-            })
-            ->where('at.ano_letivo_id', Session::get('anoletivo')->id)
-            ->get();
+            $banca = DB::table('bancas as b')
+                ->join('trabalhos as t', 't.id', '=', 'b.trabalho_id')
+                ->join('membro_bancas as mb', 'mb.id', '=', 'b.membrobanca_id')
+                ->join('academico_trabalhos as at', 'at.trabalho_id', '=', 'b.trabalho_id')
+                ->join('membro_bancas as mbx', function ($query) use ($d) {
+                    $query->where('mbx.departamento_id', $d);
+                })
+                ->where('at.ano_letivo_id', Session::get('anoletivo')->id)
+                ->get();
 
-        $banca = collect($banca)
-            ->unique('trabalho_id')
-            ->values()
-            ->all();
+            $banca = collect($banca)
+                ->unique('trabalho_id')
+                ->values()
+                ->all();
 
 //        return $banca;
 
-        $orientador = array();
+            $orientador = array();
 
-        for ($i = 0; $i < count($banca); $i++) {
-            if (MembroBanca::find($banca[$i]->coorientador_id)) {
+            for ($i = 0; $i < count($banca); $i++) {
+                if (MembroBanca::find($banca[$i]->coorientador_id)) {
 
-                $orientador[] = array(
-                    'orientador' => User::find(MembroBanca::find($banca[$i]->orientador_id)->user_id)->name,
-                    'coorientador' => User::find(MembroBanca::find($banca[$i]->coorientador_id)->user_id)->name,
-                );
-            } else {
-                $orientador[] = array(
-                    'orientador' => User::find(MembroBanca::find($banca[$i]->orientador_id)->user_id)->name,
-                );
+                    $orientador[] = array(
+                        'orientador' => User::find(MembroBanca::find($banca[$i]->orientador_id)->user_id)->name,
+                        'coorientador' => User::find(MembroBanca::find($banca[$i]->coorientador_id)->user_id)->name,
+                    );
+                } else {
+                    $orientador[] = array(
+                        'orientador' => User::find(MembroBanca::find($banca[$i]->orientador_id)->user_id)->name,
+                    );
+                }
             }
+
+//        return $banca;
+
+            return view('banca.index', [
+                'banca' => $banca,
+                'orientador' => $orientador,
+            ]);
+
+
+        } else {
+            return abort(403, 'Usuário não Autorizado.');
         }
 
-//        return $banca;
 
-        return view('banca.index', [
-            'banca' => $banca,
-            'orientador' => $orientador,
-        ]);
     }
 
     /**

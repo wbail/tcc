@@ -28,8 +28,7 @@
                 
                 <div class="text-center">
 
-                    <h1>Perdeu Magrão!</h1>
-                    <h1>Acesso não autorizado. Clique <a href="{{ url('/admin') }}">aqui</a> para retornar.</h1>
+                    <h1>Acesso não autorizado. Clique <a href="{{ url('/etapaano') }}">aqui</a> para retornar.</h1>
 
                 </div> {{-- ./col-md-4 --}}
                 
