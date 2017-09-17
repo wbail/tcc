@@ -22,8 +22,6 @@
             </ol> --}}
             <a href="{{ url('academico') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
-            	           
-
 
         </section>
 
@@ -49,11 +47,19 @@
                 </div>
             @endif
 
+
+            @if (session('message-tel'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>{{ session('message-tel') }}</strong>
+                </div>
+            @endif
+
 			<br>
 
              {!! Form::open(['url'=>"academico/update/$academico->id", 'method'=>'put']) !!}
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Informações Básicas</h3>
@@ -61,31 +67,25 @@
                         <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-4">
+                                        {!! Form::label('curso', 'Curso *') !!}
+                                        {!! Form::select('curso', $curso, $academico->curso_id, ['class'=>'form-control', 'title'=>'Curso do(a) acadêmico(a)']) !!}
+                                    </div> {{-- ./col-md-4 --}}
+                                    <div class="col-md-4">
                                         {!! Form::label('nome', 'Nome *') !!}
-                                        {!! Form::text('nome', $academico->user->name, ['class'=>'form-control', 'title'=>'Nome do acadêmico(a)']) !!}
-                                    </div> {{-- ./col-md-5 --}}
+                                        {!! Form::text('nome', $academico->user->name, ['class'=>'form-control', 'title'=>'Nome do(a) acadêmico(a)']) !!}
+                                    </div> {{-- ./col-md-4 --}}
                                     <div class="col-md-4">
                                         {!! Form::label('ra', 'RA *') !!}
                                         {!! Form::number('ra', $academico->ra, ['class'=>'form-control', 'min'=>'0', 'title'=>'Registro Acadêmico']) !!}
                                         <br>
-                                    </div> {{-- ./col-md-5 --}}
-                                    <div class="col-md-4">
-                                        {!! Form::label('curso', 'Curso *') !!}
-                                        <br>    
-                                        {!! Form::select('curso', $curso, $academico->curso_id, ['class'=>'form-control', 'title'=>'Curso do acadêmico']) !!}
-
-                                    </div> {{-- ./col-md-7 --}}
-
+                                    </div> {{-- ./col-md-4 --}}
 
                                 </div> {{-- ./row --}}
-                            
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
+                </div> {{-- ./col-md-7 --}}
 
-
-                </div> {{-- ./col-md-6 --}}
-
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Contato</h3>
@@ -94,41 +94,27 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     {!! Form::label('email', 'E-mail *') !!}
-                                    {!! Form::text('email', $academico->user->email, ['class'=>'form-control', 'title'=>'E-mail do acadêmico(a)']) !!}
+                                    {!! Form::text('email', $academico->user->email, ['class'=>'form-control', 'title'=>'E-mail do(a) acadêmico(a)']) !!}
                                 </div> {{-- ./col-md-6 --}}
-                                
-                                <!-- Add telefone angular -->
 
-                                @foreach($academico->user->telefone as $telefone)
-                                <div ng-app="numeroTelefoneList" ng-cloak ng-controller="myCtrl">
-                                    <div ng-repeat="x in numero">
-                                        <div class="row">
-                                            <div class="col-md-9">
-                                                <input type="text" name="telefone$index" value="{{ $telefone->numero }}" class="form-control"/>
+                                <div class="col-md-5 add-telefone">
+                                    {!! Form::label('telefone', 'Telefone *') !!}<br>
+                                    @foreach($academico->user->telefone as $contato)
+                                        @if($loop->index == 0)
+                                            {!! Form::text('telefone0', $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
+                                            <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
+                                        @else
+                                            <div class='telefone{{$loop->index}}'>
+                                                {!! Form::text("telefone$loop->index", $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
+                                                <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
+                                                <span id="{{$contato->id}}" onclick="rm(id)" class="btn btn-link btn-sm" title="Remover telefone" data-toggle="modal" data-target="#myModalDelTelefone"><i class="fa fa-minus"></i></span>
                                             </div>
-                                            <div class="col-md-1">
-                                                <span ng-click="removeItem($index)" title="Remover telefone"><i class="fa fa-remove"></i> </span>
-                                                <br>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <a href="#" id="popoverid" data-toggle="popover" data-content="@{{errortext}}" data-trigger="focus">
-                                                <input id="adicionTelefone" ng-model="addMe" class="form-control phone_with_ddd" type="text" title="Ex: (42) 99999-9999">
-                                            </a>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <a href="#" ng-click="addItem()" title="Adicionar telefone"><i class="fa fa-plus"></i></a>
-                                        </div>
-                                    </div>
-                                    {{-- <p class="w3-padding-left w3-text-red">@{{errortext}}</p> --}}
-                                </div>
-                                @endforeach
+                                        @endif
+                                    @endforeach
+                                </div> {{-- ./col-md-5 --}}
 
                             </div> {{-- ./row --}}
                             <br>
-
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
                 </div> {{-- ./col-md-6 --}}
@@ -137,6 +123,19 @@
                                 
                             {!! Form::close() !!}
 
+        <!-- Modal del telefone-->
+            <div id="myModalDelTelefone" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel"></h4>
+                        </div>
+                        <div class="modal-footer del-telefone">
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             @yield('content')
         </section><!-- /.content -->
@@ -173,56 +172,31 @@
 
     $('.btn-primary').click(function() {
         $('.phone_with_ddd').unmask();
-        
+
     });
 
 
     var count = 1;
     function add() {
 
-        $('.add-telefone').append('<input name="telefone' + count + '" class="form-control phone_with_ddd" title="Número do telefone com DDD" /><span id="addTelefone" onclick="add()" class="btn btn-link" title="Adicionar telefone"><i class="fa fa-plus"></i></span><br><br>');
+        $('.add-telefone').append('<div class="telefone' + count + '"><input id="telefone' + count + '" name="telefone' + count + '" class="form-control phone_with_ddd" title="Número do telefone com DDD" /><span id="addTelefone" onclick="add()" class="btn btn-link" title="Adicionar telefone"><i class="fa fa-plus"></i></span><span id="telefone' + count +'" onclick="rm(id)" class="btn btn-link btn-sm" title="Remover telefone"><i class="fa fa-minus"></i></span><br><br></div>');
 
         count += 1;
 
     }
 
+    function rm(telefoneid) {
+        $('.' + telefoneid).html('');
+    }
 
-    var app = angular.module("numeroTelefoneList", []);
-    app.controller("myCtrl", function($scope) {
-        $scope.numero = [];
-        $scope.addItem = function () {
-            $scope.errortext = "";
-            
-            if (!$scope.addMe) {
-                return;
-            }
+    // Deletar telefone
+    $('#myModalDelTelefone').on('show.bs.modal', function(e) {
 
-            if ($scope.numero.indexOf($scope.addMe) == -1) {
-                $scope.numero.push($scope.addMe);
-                $('#adicionTelefone').val('');
-
-            } else {
-                $scope.errortext = "Número já adicionado.";
-                $('#popoverid').popover('show');
-
-            }
-        }
-
-        $scope.removeItem = function (x) {
-        
-            $scope.errortext = "";
-            
-            $scope.numero.splice(x, 1);
-        }
-    
+        var $modal = $(this);
+        var telefoneid = e.relatedTarget.id;
+        $modal.find('.modal-title').html('Deseja realmente excluir?');
+        $modal.find('.del-telefone').html('<a href="/tcc/public/telefone/destroy/'+telefoneid+'" class="btn btn-danger"> Excluir </a><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
     });
-
-
-
-
-
-
-
 
 
 </script>

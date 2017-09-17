@@ -112,7 +112,7 @@
                     <h4 class="modal-title" id="myModalLabel"></h4>
                 </div>
                 <div class="modal-body">
-                    Atenção! Ao gerar o certificado de presença, será enviado por e-mail a todos os participantes da banca.
+
                 </div>
                 <div class="modal-footer cert-banca">
                 </div>

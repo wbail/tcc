@@ -35,11 +35,19 @@
                 </div>
             @endif
 
+            @if (session('message-del'))
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>{{ session('message-del') }}</strong>
+                </div>
+            @endif
+
             <br>
 
             <table data-order='[[1, "asc"]]' class="table table-hover table-striped table-bordered display">
                 <thead>
                     <tr>
+                        <th>Status</th>
                         <th>RA</th>
                         <th>Nome</th>
                         <th>E-mail</th>
@@ -50,6 +58,13 @@
                 <tbody>
                     @foreach($academico as $academico)
                     <tr>
+                        <td>
+                            @if($academico->ativo == 1)
+                                <label for="ativo" class="label label-success">Ativo</label>
+                            @else
+                                <label for="ativo" class="label label-default">Desativado</label>
+                            @endif
+                        </td>
                         <td>{{ $academico->ra }}</td>
                         <td>{{ $academico->name }}</td>
                         <td>{{ $academico->email }}</td>
@@ -146,14 +161,14 @@
     });
 
 
-// Deletar academico
-$('#myModalDelAcademico').on('show.bs.modal', function(e) {
-    
-    var $modal = $(this);
-    var academicoid = e.relatedTarget.id;
-    $modal.find('.modal-title').html('Deseja realmente excluir?');
-    $modal.find('.del-academico').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="academico/destroy/' + academicoid + '" class="btn btn-danger"> Excluir </a>');           
-});
+    // Deletar academico
+    $('#myModalDelAcademico').on('show.bs.modal', function(e) {
+
+        var $modal = $(this);
+        var academicoid = e.relatedTarget.id;
+        $modal.find('.modal-title').html('Deseja realmente excluir?');
+        $modal.find('.del-academico').html('<a href="academico/destroy/' + academicoid + '" class="btn btn-danger"> Excluir </a><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
+    });
 
 
 

@@ -443,5 +443,7 @@ class TrabalhoController extends Controller {
     public function destroy($id) {
 
         $this->authorize('delete', Trabalho::class);
+
+
     }
 }

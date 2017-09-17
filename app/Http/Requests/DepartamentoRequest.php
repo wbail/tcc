@@ -31,7 +31,7 @@ class DepartamentoRequest extends FormRequest {
                 'required',
                 'min:3',
                 'max:40',
-                'regex:/([A-Z])\w.+[^0-9]/',
+                //'regex:/([A-Z])\w.+[^0-9]/',
                 Rule::unique('departamentos')->ignore($this->id),
             ],
             'sigla' => [
@@ -58,6 +58,7 @@ class DepartamentoRequest extends FormRequest {
             'nome.min' => 'O campo Nome deve ter no mínimo 3 caracteres.',
             'nome.max' => 'O campo Nome permite até 40 caracteres.',
             'nome.unique' => 'Nome já cadastrado.',
+            'nome.regex' => 'O formato ....',
             'sigla.required' => 'O campo Sigla é obrigatório.',
             'sigla.alpha' => 'O campo Sigla deve ter apenas letras.',
             'sigla.min' => 'O campo Sigla deve ter no mínimo 3 caracteres.',

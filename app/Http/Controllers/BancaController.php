@@ -17,6 +17,7 @@ use App\Banca;
 use App\Etapa;
 use App\EtapaAno;
 use App\User;
+use App\Departamento;
 use App\Academico;
 use App\Trabalho;
 use App\MembroBanca;
@@ -44,9 +45,6 @@ class BancaController extends Controller
                 ->first();
 
             $this->authorize('view', $instituicao);
-
-
-            $this->authorize('view', Banca::class);
 
             $d = User::userMembroDepartamento()->departamento_id;
 
@@ -401,7 +399,7 @@ class BancaController extends Controller
         if($request->input('data') > $data->data_final || $request->input('data') < $data->data_inicial) {
             return back()
                 ->with('message', 'A data deve estar no período de Semana de Bancas')
-                ->withInput();
+                ->withInput(['data']);
         }
 
         DB::update('update bancas as b set b.data = ? where b.trabalho_id = ?', [$request->input('data'), $id]);

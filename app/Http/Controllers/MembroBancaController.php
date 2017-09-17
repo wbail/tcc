@@ -7,8 +7,10 @@ use App\Http\Requests\MembroBancaRequest;
 use Response;
 
 use App\Telefone;
+use App\Trabalho;
 use App\MembroBanca;
 use App\User;
+use App\Banca;
 use App\Departamento;
 use DB;
 use Auth;
@@ -159,10 +161,64 @@ class MembroBancaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MembroBancaRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $this->authorize('update', MembroBanca::class);
-        return $request->all();
+        if (!Auth::user()->permissao == 9) {
+            abort(403, 'Acesso não autorizado.');
+        }
+
+//        return $request->all();
+
+        // Atualiza os campos relacionado a user
+        $user = User::find($id);
+        $user->update([
+            'name' => $request->input('nome'),
+            'email' => $request->input('email'),
+            'ativo' => $request->input('ativo'),
+        ]);
+
+        // Altera o departamento
+        MembroBanca::where('user_id', $user->id)
+            ->first()
+            ->departamento()
+            ->associate($request->input('departamento'))
+            ->save();
+
+        // Salva apenas os números de telefone, todos
+        $telefone = $request->except('_token', '_method', 'nome', 'email', 'departamento', 'permissao', 'orientador', 'coorientador', 'banca', 'ativo');
+
+        //return $telefone;
+
+        // Pega apenas os valores do request
+        $telefone = array_values($telefone);
+
+        // Retorna todos os números de telefone que está relacionado com a user que é o academico em questão
+        $numeros_salvos = DB::select('select c.numero 
+                                        from telefones as c 
+                                       where c.user_id = ' . $id);
+
+        // For para salvar apenas os novos números
+        for($i = 0; $i < count($telefone); $i++) {
+
+            if (count($numeros_salvos) > $i) {
+                if($numeros_salvos[$i]->numero != $telefone[$i]) {
+                    $contato = new Telefone;
+                    $contato->numero = $telefone[$i];
+                    $contato->user_id = $id;
+                    $contato->save();
+                }
+
+            } else {
+                $contato = new Telefone;
+                $contato->numero = $telefone[$i];
+                $contato->user_id = $id;
+                $contato->save();
+            }
+
+        }
+
+        return redirect('/membrobanca')->with('message', 'Professor(a) atualizado com sucesso.');
+
     }
 
     /**
@@ -173,6 +229,25 @@ class MembroBancaController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('delete', MembroBanca::class);
+        if(!Auth::user()->permissao == 9) {
+            abort(403, 'Acesso não autorizado.');
+        }
+
+        $trabalho = Trabalho::where('orientador_id', $id)
+            ->orWhere('coorientador_id', $id)
+            ->get();
+
+        $banca = Banca::where('membrobanca_id', $id)
+            ->get();
+
+        if (count($trabalho) > 0 || count($banca) > 0) {
+            return back()->with('message-del', 'Não é possível excluir o(a) professor(a).');
+        } else {
+            User::find(MembroBanca::find($id)->user_id)
+                ->update(['ativo' => 0]);
+
+            return back()->with('message', 'Professor(a) excluído(a) com sucesso.');
+        }
+
     }
 }

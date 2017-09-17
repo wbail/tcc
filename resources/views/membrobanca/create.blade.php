@@ -22,9 +22,6 @@
             </ol> --}}
             <a href="{{ url('membrobanca') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
-            	           
-
-
         </section>
 
         <!-- Main content -->
@@ -59,37 +56,37 @@
                             <h3 class="panel-title">Informações Básicas</h3>
                         </div>
                         <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        {!! Form::label('departamento', 'Departamento *') !!}
-                                        {!! Form::select('departamento', $departamento, null, ['class'=>'form-control', 'placeholder' => '', 'title'=>'Departamento que o(a) avaliador(a) pertence']) !!}
-                                        <br>
-                                    </div> {{-- ./col-md-5 --}}
-                                    <div class="col-md-5">
-                                        {!! Form::label('nome', 'Nome *') !!}
-                                        {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do(a) avaliador(a)']) !!}
-                                    </div> {{-- ./col-md-5 --}}
-                                    
-                                </div> {{-- ./row --}}
-                                <div class="row">
-                                    <div class="col-md-9">
-                                        {!! Form::label('permissao', 'Permissão *') !!}
-                                        {!! Form::checkbox('orientador', 4, false) !!}
-                                        {!! Form::label('orientador', 'Orientador') !!}
-                                        {!! Form::checkbox('coorientador', 2, false) !!}
-                                        {!! Form::label('coorientador', 'Coorientador') !!}
-                                        {!! Form::checkbox('banca', 1, false) !!}
-                                        {!! Form::label('banca', 'Banca') !!}
-                                        
-                                    </div> {{-- ./col-md-9 --}}
+                            <div class="row">
+                                <div class="col-md-5">
+                                    {!! Form::label('departamento', 'Departamento *') !!}
+                                    {!! Form::select('departamento', $departamento, null, ['class'=>'form-control', 'placeholder' => '', 'title'=>'Departamento que o(a) avaliador(a) pertence']) !!}
+                                    <br>
+                                </div> {{-- ./col-md-5 --}}
+                                <div class="col-md-5">
+                                    {!! Form::label('nome', 'Nome *') !!}
+                                    {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do(a) avaliador(a)']) !!}
+                                </div> {{-- ./col-md-5 --}}
+                            </div> {{-- ./row --}}
+                            <div class="row">
+                                <div class="col-md-9">
+                                    {!! Form::label('permissao', 'Permissão *') !!}
+                                    {!! Form::checkbox('orientador', 4, false) !!}
+                                    {!! Form::label('orientador', 'Orientador') !!}
+                                    {!! Form::checkbox('coorientador', 2, false) !!}
+                                    {!! Form::label('coorientador', 'Coorientador') !!}
+                                    {!! Form::checkbox('banca', 1, false) !!}
+                                    {!! Form::label('banca', 'Banca') !!}
 
-                                </div> {{-- ./row --}}
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! Form::label('ativo', 'Ativo *') !!}
-                                        {!! Form::checkbox('ativo', 1, true, ['title'=>'Situação no sistema: Ativo']) !!}
-                                    </div> {{-- ./col-md-6 --}}
-                                </div> {{-- ./row --}}
+                                </div> {{-- ./col-md-9 --}}
+
+                            </div> {{-- ./row --}}
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {!! Form::label('ativo', 'Ativo *') !!}
+                                    {!! Form::checkbox('ativo', 1, true, ['title'=>'Situação no sistema: Ativo']) !!}
+                                </div> {{-- ./col-md-6 --}}
+                            </div> {{-- ./row --}}
 
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
@@ -104,7 +101,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-md-6">
                                     {!! Form::label('email', 'E-mail *') !!}
                                     {!! Form::text('email', null, ['class'=>'form-control', 'title'=>'E-mail do avaliador(a)']) !!}
                                 </div> {{-- ./col-md-6 --}}
@@ -158,7 +155,6 @@
                                 {!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
                                 
                             {!! Form::close() !!}
-
 
             @yield('content')
         </section><!-- /.content -->

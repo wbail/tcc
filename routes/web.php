@@ -181,9 +181,9 @@ Route::group(['prefix'=>'anoletivo','where'=>['id'=>'[0-9]+']], function() {
     Route::get('anoletivoativo', ['as'=>'anoletivo.getAnoLetivoAtivo', 'uses'=>'AnoLetivoController@getAnoLetivoAtivo']);
 });
 
-Route::get('/contato/destroy/{id}', function($id) {
-	\App\Contato::find($id)->delete();
-	return back();
+Route::get('/telefone/destroy/{id}', function($id) {
+	\App\Telefone::find($id)->delete();
+	return back()->with('message-tel', 'Telefone excluído com sucesso.');
 })->middleware('auth');
 
 Route::get('/h/{email}', function($email) {

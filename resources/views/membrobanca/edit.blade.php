@@ -39,7 +39,14 @@
                 </div>
             @endif
 
-            <br><br>
+            @if (session('message-tel'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>{{ session('message-tel') }}</strong>
+                </div>
+            @endif
+
+            <br>
 
              {!! Form::open(['url'=>'/membrobanca/update/'. $membrobanca->user->id, 'method'=>'put']) !!}
             <div class="row">
@@ -51,18 +58,18 @@
                         <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-5">
-                                        {!! Form::label('nome', 'Nome *') !!}
-                                        {!! Form::text('nome', $membrobanca->user->name, ['class'=>'form-control', 'title'=>'Nome do(a) professor(a)']) !!}
-                                    </div> {{-- ./col-md-5 --}}
-                                    <div class="col-md-6">
                                         {!! Form::label('departamento', 'Departamento *') !!}
                                         {!! Form::select('departamento', $departamento, $membrobanca->departamento_id, ['class'=>'form-control', 'placeholder' => 'Escolha um departamento', 'title'=>'Departamento que o professor pertence']) !!}
                                         <br>
                                     </div> {{-- ./col-md-5 --}}
+                                    <div class="col-md-6">
+                                        {!! Form::label('nome', 'Nome *') !!}
+                                        {!! Form::text('nome', $membrobanca->user->name, ['class'=>'form-control', 'title'=>'Nome do(a) professor(a)']) !!}
+                                    </div> {{-- ./col-md-6 --}}
                                     
                                 </div> {{-- ./row --}}
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    <div class="col-md-9">
                                         @if($membrobanca->user->permissao == 1)                                           
                                             {!! Form::label('permissao', 'Permissão *') !!}
                                             {!! Form::checkbox('orientador', 4, false) !!}
@@ -124,16 +131,18 @@
                                             {!! Form::label('banca', 'Banca') !!}
                                         @endif
                                     </div> {{-- ./col-md-9 --}}
-                                    <div class="col-md-2">
+
+                                </div> {{-- ./row --}}
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
                                         {!! Form::label('ativo', 'Ativo *') !!}
                                         @if($membrobanca->user->ativo <> 1)
-                                        {!! Form::checkbox('ativo', 1, $membrobanca->user->ativo, ['title'=>'Situação no sistema: Inativo']) !!}
+                                            {!! Form::checkbox('ativo', 1, $membrobanca->user->ativo, ['title'=>'Situação no sistema: Inativo']) !!}
                                         @else
-                                        {!! Form::checkbox('ativo', 1, $membrobanca->user->ativo, ['title'=>'Situação no sistema: Ativo']) !!}
+                                            {!! Form::checkbox('ativo', 1, $membrobanca->user->ativo, ['title'=>'Situação no sistema: Ativo']) !!}
                                         @endif
                                     </div> {{-- ./col-md-2 --}}
-                                </div> {{-- ./row --}}
-                                <div class="row">
                                 </div> {{-- ./row --}}
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
@@ -148,7 +157,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-md-6">
                                     {!! Form::label('email', 'E-mail *') !!}
                                     {!! Form::text('email', $membrobanca->user->email, ['class'=>'form-control', 'title'=>'E-mail do(a) professor(a)']) !!}
                                 </div> {{-- ./col-md-6 --}}
@@ -166,21 +175,15 @@
                                             </div>
                                         @endif
                                     @endforeach
-
-                                </div> {{-- ./col-md-6 --}}
+                                </div> {{-- ./col-md-5 --}}
                             </div> {{-- ./row --}}
                             <br>
-
-
-
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
                 </div> {{-- ./col-md-6 --}}
             </div> {{-- ./row --}}
                                 {!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
-                                
                             {!! Form::close() !!}
-
 
             <!-- Modal del telefone-->
             <div id="myModalDelTelefone" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -252,7 +255,7 @@
         var $modal = $(this);
         var telefoneid = e.relatedTarget.id;
         $modal.find('.modal-title').html('Deseja realmente excluir?');
-        $modal.find('.del-telefone').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="/tccontrole/public/contato/destroy/'+telefoneid+'" class="btn btn-danger"> Excluir </a>');           
+        $modal.find('.del-telefone').html('<a href="/tcc/public/telefone/destroy/'+telefoneid+'" class="btn btn-danger"> Excluir </a><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
     });
 
 

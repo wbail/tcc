@@ -35,6 +35,13 @@
                 </div>
             @endif
 
+            @if (session('message-del'))
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>{{ session('message-del') }}</strong>
+                </div>
+            @endif
+
             <br>
 
             <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
@@ -79,7 +86,6 @@
                 </tbody>
             </table>
 
-
             @yield('content')
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
@@ -112,13 +118,11 @@
 <!-- AdminLTE App -->
 <script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
 {{-- jQuery Mask Plugin --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.9/jquery.mask.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/dataTables.bootstrap.js"></script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the
       user experience -->
-
 </body>
 
 <script type="text/javascript">
@@ -161,14 +165,14 @@
     });
 
 
-// Deletar membrobanca
-$('#myModalDelmembrobanca').on('show.bs.modal', function(e) {
-    
-    var $modal = $(this);
-    var membrobancaid = e.relatedTarget.id;
-    $modal.find('.modal-title').html('Deseja realmente excluir?');
-    $modal.find('.del-membrobanca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="membrobanca/destroy/' + avaliadorid + '" class="btn btn-danger"> Excluir </a>');           
-});
+    // Deletar membrobanca
+    $('#myModalDelmembrobanca').on('show.bs.modal', function(e) {
+
+        var $modal = $(this);
+        var membrobancaid = e.relatedTarget.id;
+        $modal.find('.modal-title').html('Deseja realmente excluir?');
+        $modal.find('.del-membrobanca').html('<a href="membrobanca/destroy/' + membrobancaid + '" class="btn btn-danger"> Excluir </a><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
+    });
 
 
 

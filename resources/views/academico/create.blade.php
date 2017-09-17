@@ -22,9 +22,6 @@
             </ol> --}}
             <a href="{{ url('academico') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
-            	           
-
-
         </section>
 
         <!-- Main content -->
@@ -63,27 +60,23 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         {!! Form::label('curso', 'Curso *') !!}
-                                        {!! Form::select('curso', $curso, null, ['class'=>'form-control', 'title'=>'Curso do acadêmico', 'placeholder'=>'']) !!}
+                                        {!! Form::select('curso', $curso, null, ['class'=>'form-control', 'title'=>'Curso do(a) acadêmico(a)', 'placeholder'=>'']) !!}
                                         <br>
                                     </div>                                  
                                     <div class="col-md-4">
                                         {!! Form::label('nome', 'Nome *') !!}
-                                        {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do acadêmico(a)']) !!}
+                                        {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do(a) acadêmico(a)']) !!}
                                         <br>
-                                    </div> {{-- ./col-md-5 --}}
+                                    </div> {{-- ./col-md-4 --}}
                                     <div class="col-md-4">
                                         {!! Form::label('ra', 'RA *') !!}
                                         {!! Form::text('ra', null, ['class'=>'form-control', 'min'=>'0', 'maxlength'=>'8', 'title'=>'Registro Acadêmico']) !!}
                                         <br>
-                                    </div> {{-- ./col-md-5 --}}
- 
+                                    </div> {{-- ./col-md-4 --}}
                                 </div> {{-- ./row --}}
-                            
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
-
-
-                </div> {{-- ./col-md-6 --}}
+                </div> {{-- ./col-md-7 --}}
 
                 <div class="col-md-5">
                     <div class="panel panel-default">
@@ -94,15 +87,15 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     {!! Form::label('email', 'E-mail *') !!}
-                                    {!! Form::text('email', null, ['class'=>'form-control', 'title'=>'E-mail do acadêmico(a)']) !!}
+                                    {!! Form::text('email', null, ['class'=>'form-control', 'title'=>'E-mail do(a) acadêmico(a)']) !!}
                                 </div> {{-- ./col-md-6 --}}
                             </div> {{-- ./row --}}
                             <br>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                 
-                                    {!! Form::label('tipo', 'Tipo de Telefone *') !!}<br>
-                                    {!! Form::select('tipo', $tipo, 1, ['class'=>'form-control', 'title'=>'Tipo de Telefone', 'placeholder'=>'']) !!}
+                                    {{--{!! Form::label('tipo', 'Tipo de Telefone *') !!}<br>--}}
+                                    {{--{!! Form::select('tipo', $tipo, 1, ['class'=>'form-control', 'title'=>'Tipo de Telefone', 'placeholder'=>'']) !!}--}}
 
                                     {{-- 
                                     {!! Form::text('telefone', null, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
@@ -110,13 +103,12 @@
                                     <div class="add-telefone">
                                         <br>                                
                                     </div>
-
                                     --}}
-                                </div> {{-- ./col-md-3 --}}
-                                <div class="col-md-6">
+
                                     <!-- Add telefone angular -->
                                     {!! Form::label('telefone', 'Telefone *') !!}<br>
                                     <div ng-app="numeroTelefoneList" ng-cloak ng-controller="myCtrl">
+
                                         <div ng-repeat="x in numero">
                                             <div class="row">
                                                 <div class="col-md-9">
@@ -143,9 +135,13 @@
                                             </div>
                                         </div>
                                         {{-- <p class="w3-padding-left w3-text-red">@{{errortext}}</p> --}}
-                                    </div> 
+                                    </div>
+
+                                </div> {{-- ./col-md-4 --}}
+                                <div class="col-md-6">
+
                                 
-                                </div> {{-- ./col-md-5 --}}
+                                </div> {{-- ./col-md-6 --}}
                             </div> {{-- ./row --}}
 
                         </div> {{-- ./panel-body --}}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AcademicoTrabalho;
 use Illuminate\Http\Request;
 use App\Http\Requests\AcademicoRequest;
 use Response;
@@ -53,7 +54,7 @@ class AcademicoController extends Controller {
                         ->join('academicos as a', 'a.curso_id', '=', 'c.id')
                         ->join('users as ua', 'ua.id', '=', 'a.user_id')
                         ->where('u.id', '=', Auth::user()->id)
-                        ->select('a.*', 'a.id as academicoid', 'ua.*', 'c.nome as cursonome')
+                        ->select('a.*', 'a.id as academicoid', 'ua.*', 'c.nome as cursonome', 'ua.ativo')
                         ->get();
 
         // return $academicos;
@@ -143,7 +144,9 @@ class AcademicoController extends Controller {
             
         }
 
-        return redirect('/academico/novo')->with('message', 'Acadêmico cadastrado com sucesso!');
+        return redirect('/academico/novo')
+            ->with('message', 'Acadêmico(a) cadastrado(a) com sucesso!')
+            ->withInput(['curso' => $request->input('curso')]);
 
 
     }
@@ -166,7 +169,9 @@ class AcademicoController extends Controller {
      */
     public function edit($id) {
 
-        $this->authorize('create', Academico::class);
+        if (!Auth::user()->permissao == 9) {
+            abort(403, 'Acesso não autorizado.');
+        }
 
          // apenas os cursos do departamento do coordenador
         $curso = DB::table('cursos as c')
@@ -192,12 +197,21 @@ class AcademicoController extends Controller {
      */
     public function update(AcademicoRequest $request, $id) {
 
-        $this->authorize('update', Academico::class);
+        if (!Auth::user()->permissao == 9) {
+            abort(403, 'Acesso não autorizado.');
+        }
         
         // return $request->all();
 
         // Atualiza os campos relacionado a user
-        Academico::find($id)->user()->update($request->all());
+        $academico = Academico::find($id);
+
+        $academico->user()->update([
+            'name' => $request->input('nome'),
+            'email' => $request->input('email'),
+        ]);
+
+        $academico->curso()->associate($request->input('curso'))->save();
 
         // Salva apenas os números de telefone, todos
         $telefone = $request->except('_token', '_method', 'nome', 'email', 'ra', 'curso');
@@ -212,7 +226,7 @@ class AcademicoController extends Controller {
 
         // Retorna todos os números de telefone que está relacionado com a user que é o academico em questão
         $numeros_salvos = DB::select('select c.numero 
-                                        from contatos as c 
+                                        from telefones as c 
                                        where c.user_id = ' . $userid->user_id);
 
         // For para salvar apenas os novos números
@@ -246,12 +260,24 @@ class AcademicoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        
-        $this->authorize('delete', Academico::class);
 
-        Academico::find($id)->delete();
-        
-        return redirect('/academico');
+        if(!Auth::user()->permissao == 9) {
+            abort(403, 'Acesso não autorizado.');
+        }
+
+        $trabalho = AcademicoTrabalho::where('academico_id', $id)
+            ->whereNull('trabalho_id')
+            ->get();
+
+
+        if (count($trabalho) > 0) {
+            User::find(Academico::find($id)->user_id)
+                ->update(['ativo' => 0]);
+
+            return back()->with('message', 'Aluno(a) excluído(a) com sucesso.');
+        } else {
+            return back()->with('message-del', 'Não é possível excluir o(a) aluno(a).');
+        }
 
     }
 }
