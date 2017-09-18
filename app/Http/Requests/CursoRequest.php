@@ -30,7 +30,9 @@ class CursoRequest extends FormRequest
             'fimvigencia' => 'date_format:d/m/Y|after:iniciovigencia',
             'nome' => [
                 'required',
-                //'regex:/([A-Z])\w.+[^0-9]/',
+                'min:3',
+                'max:50',
+                'regex:/([A-Z])\w.+[^0-9]/',
                 Rule::unique('cursos')->ignore($this->id)
             ],
             'departamento' => [
@@ -50,6 +52,8 @@ class CursoRequest extends FormRequest
             'nome.required' => 'O campo Nome do Curso é obrigatório.',
             'nome.regex' => 'O campo Nome do Curso aceita apenas letras.',
             'nome.unique' => 'Já existe um Curso cadastrado com este nome.',
+            'nome.min' => 'O campo Nome requer ao menos 3 caracteres.',
+            'nome.max' => 'O campo Nome permite até 50 caracteres.',
             'departamento.required' => 'O campo Departamento é obrigatório.',
         ];
     }
