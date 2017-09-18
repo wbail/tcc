@@ -42,7 +42,14 @@
             @if (session('message-tel'))
                 <div class="alert alert-success alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <strong>{{ session('message-tel') }}</strong>
+                    <li>{{ session('message-tel') }}</li>
+                </div>
+            @endif
+
+            @if (session('message-tel-rep'))
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <li>{{ session('message-tel-rep') }}</li>
                 </div>
             @endif
 

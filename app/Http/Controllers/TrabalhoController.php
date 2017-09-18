@@ -395,14 +395,15 @@ class TrabalhoController extends Controller {
             $trabalho->coorientador_id = $request->input('coorientador');
             $trabalho->save();
 
-            $trabalho->academico()->updateExistingPivot([
-                $request->input('academico') => $request->input('academico'),
-                $request->input('academico1') => $request->input('academico1'),
-            ]);
+            $trabalho->academico()->toggle([$request->input('academico1') => ['ano_letivo_id' => Session::get('anoletivo')->id]]);
 
             $at = AcademicoTrabalho::where('academico_id', $request->input('academico1'))
                 ->first();
-            $at->ano_letivo_id = Session::get('anoletivo')->id;
+
+            if ($at->ano_letivo_id == null) {
+                $at->ano_letivo_id = Session::get('anoletivo')->id;
+            }
+
             $at->save();
 
             return redirect('/trabalho')->with('message', 'Trabalho atualizado com sucesso');
@@ -420,14 +421,15 @@ class TrabalhoController extends Controller {
 
             $trabalho->titulo = $request->input('titulo');
             $trabalho->sigla = $request->input('sigla');
-
             $trabalho->periodo = $request->input('periodo');
             $trabalho->aprovado = $aprovado;
             $trabalho->orientador_id = $request->input('orientador');
             $trabalho->coorientador_id = $request->input('coorientador');
             $trabalho->save();
 
-            $trabalho->academico()->sync([$request->input('academico'), [$request->input('academico')]]);
+            return $trabalho->academico()->get();
+
+            $trabalho->academico()->sync([$request->input('academico') => ['ano_letivo_id' => Session::get('anoletivo')->id]]);
 
             return redirect('/trabalho')->with('message', 'Trabalho atualizado com sucesso');
            

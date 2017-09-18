@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\MembroBancaRequest;
 use Response;
-
+use Validator;
+use Illuminate\Validation\Rule;
 use App\Telefone;
 use App\Trabalho;
 use App\MembroBanca;
@@ -93,7 +94,8 @@ class MembroBancaController extends Controller
             
             if(DB::table('telefones')->where('numero', '=', $justNumber[$i])->exists()) {
 
-                return back()->with('message', 'O número ' . $justNumber[$i] . ' já foi cadastrado.');
+                return back()->with('message', 'O número ' . $justNumber[$i] . ' já foi cadastrado.')
+                    ->withInput(['telefone', 'ativo']);
 
             }            
         }
@@ -166,8 +168,56 @@ class MembroBancaController extends Controller
         if (!Auth::user()->permissao == 9) {
             abort(403, 'Acesso não autorizado.');
         }
+        $messages = [
+            'nome.required' => 'O campo Nome é obrigatório.',
+            'nome.regex' => 'O campo Nome é permitido somente letras.',
+            'nome.max' => 'O campo Nome permite até 80 caracteres.',
+            'nome.min' => 'O campo Nome exige no mínimo 3 caracteres.',
+            'departamento.required' => 'O campo Departamento é obrigatório.',
+            'email.required' => 'O campo E-mail é obrigatório.',
+            'email.email' => 'O campo E-mail deve ter o formato \'exemplo@exemplo.com \'.',
+            'telefone0.required' => 'O campo Telefone é obrigatório.',
+            'telefone0.digits' => 'O campo Telefone deve ter 11 dígitos.',
+            'telefone0.unique' => 'Telefone já cadastrado.',
+            'telefone1.digits' => 'O campo Telefone deve ter 11 dígitos.',
+            'telefone1.unique' => 'Telefone já cadastrado.',
+            'telefone2.digits' => 'O campo Telefone deve ter 11 dígitos.',
+            'telefone2.unique' => 'Telefone já cadastrado.',
+            'banca.required_without_all' => 'O campo Permissão é obrigatório.',
+            'orientador.required_without_all' => 'O campo Permissão é obrigatório.',
+            'coorientador.required_without_all' => 'O campo Permissão é obrigatório.',
+        ];
+        $x = \App\Telefone::where('user_id', $id)->value('id');
+        $validator = Validator::make($request->all(), [
+            'nome' => 'required|regex:/^[\pL\s\-]+$/u|min:3,max:80',
+            'departamento' => 'required',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($id),
+            ],
+            'telefone' => [
+                'required',
+                'digits:11',
+                Rule::unique('telefones', 'numero')->ignore($x),
+            ],
+//            'telefone1' => [
+//                'digits:11',
+//                Rule::unique('telefones', 'numero')->ignore($x),
+//            ],
+//            'telefone2' => [
+//                'digits:11',
+//                Rule::unique('telefones', 'numero')->ignore($x),
+//            ],
+            'banca' => 'required_without_all:orientador,coorientador',
+        ], $messages);
 
-//        return $request->all();
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
 
         // Atualiza os campos relacionado a user
         $user = User::find($id);
@@ -187,35 +237,27 @@ class MembroBancaController extends Controller
         // Salva apenas os números de telefone, todos
         $telefone = $request->except('_token', '_method', 'nome', 'email', 'departamento', 'permissao', 'orientador', 'coorientador', 'banca', 'ativo');
 
-        //return $telefone;
 
-        // Pega apenas os valores do request
-        $telefone = array_values($telefone);
+        for ($i = 0; $i < count($telefone); $i++) {
 
-        // Retorna todos os números de telefone que está relacionado com a user que é o academico em questão
-        $numeros_salvos = DB::select('select c.numero 
-                                        from telefones as c 
-                                       where c.user_id = ' . $id);
+            $justNumber = str_replace(['(', ')', '-', ' '], '', array_values($telefone));
+            $telefoneDono = Telefone::where('user_id', $id)->get();
 
-        // For para salvar apenas os novos números
-        for($i = 0; $i < count($telefone); $i++) {
+            if(DB::table('telefones')->where('numero', '=', $justNumber[$i])->exists() && $telefoneDono[$i]->user_id != $id) {
 
-            if (count($numeros_salvos) > $i) {
-                if($numeros_salvos[$i]->numero != $telefone[$i]) {
-                    $contato = new Telefone;
-                    $contato->numero = $telefone[$i];
-                    $contato->user_id = $id;
-                    $contato->save();
-                }
+                return back()->with('message-tel-rep', 'Telefone já cadastrado.')
+                    ->withInput(['telefone', 'ativo']);
 
+            } else if(DB::table('telefones')->where('numero', '=', $justNumber[$i])->exists() && $telefoneDono[$i]->user_id == $id){
+                //
             } else {
                 $contato = new Telefone;
-                $contato->numero = $telefone[$i];
+                $contato->numero = $justNumber[$i];
                 $contato->user_id = $id;
                 $contato->save();
             }
-
         }
+
 
         return redirect('/membrobanca')->with('message', 'Professor(a) atualizado com sucesso.');
 

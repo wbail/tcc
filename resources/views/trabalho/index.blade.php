@@ -10,7 +10,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            
+
             <h1>
                 {{ $page_title or "Trabalhos" }}
                 <small>{{ $page_description or null }}</small>
@@ -37,17 +37,29 @@
             @endif
 
             <br>
+            <table id="example" cellspacing="5" cellpadding="5" border="0">
+                <tbody><tr>
+                    <td>Ano Letivo (min):</td>
+                    <td><input id="min" name="min" type="text" value="{{ Session::get('anoletivo')->rotulo }}"></td>
+                </tr>
+                <tr>
+                    <td>Ano Letivo (max):</td>
+                    <td><input id="max" name="max" type="text" value=""></td>
+                </tr>
+                </tbody>
 
+            </table>
+            <br>
             <table data-order='[["1", "asc"]]' class="table table-striped table-hover table-bordered display">
 
             	<thead>
             		<tr>
                         <th class="col-md-1">Ano Letivo</th>
-            			<th class="col-md-3">Titulo</th>
-            			<th class="text-center">Período</th>
-            			<th class="col-md-2">Acadêmico(as)</th>
-            			<th title="Orientador/Coorientador">Orientador(as)</th>
-            			<th class="text-center">Ação</th>
+                        <th class="col-md-3">Titulo</th>
+                        <th class="text-center">Período</th>
+                        <th class="col-md-2">Acadêmico(as)</th>
+                        <th title="Orientador/Coorientador">Orientador(as)</th>
+                        <th class="text-center">Ação</th>
             		</tr>
             	</thead>
 
@@ -89,12 +101,6 @@
                     @endforeach
 
             	</tbody>
-
-                <tfoot>
-                    <tr>
-                        <th>Ano</th>
-                    </tr>
-                </tfoot>
 
             </table> {{-- ./table --}}
 
@@ -145,32 +151,15 @@
         });
     });
 
+
     $(document).ready( function () {
-        $('table.display').DataTable({
 
-            initComplete: function () {
-                this.api().columns().every( function () {
-                    var column = this;
-                    var select = $('<select><option value=""></option></select>')
-                        .appendTo( $(column.footer()).empty() )
-                        .on( 'change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
+        var table = $('.display').DataTable({
 
-                            column
-                                .search( val ? '^'+val+'$' : '', true, false )
-                                .draw();
-                        } );
-
-                    column.data().unique().sort().each( function ( d, j ) {
-                        select.append( '<option value="'+d+'">'+d+'</option>' )
-                    } );
-                } );
-            },
+            // Filtro de range de ano letivo
 
             "language": {
-            
+
                 "decimal":        "",
                 "emptyTable":     "Nenhum registro",
                 "info":           "Mostrando _START_ de _END_ de um total de _TOTAL_ registros",
@@ -189,34 +178,46 @@
                     "next":       "Próximo",
                     "previous":   "Anterior"
                 },
-                
+
                 "aria": {
                     "sortAscending":  ": activate to sort column ascending",
                     "sortDescending": ": activate to sort column descending"
                 },
             }, // fim language
-
         });
+
+        // Evento do range de anos, filtrando os inputs
+        $('#min, #max').keyup( function() {
+            table.draw();
+        });
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+                var min = parseInt( $('#min').val(), 10 );
+                var max = parseInt( $('#max').val(), 10 );
+                var age = parseFloat( data[0] ) || 0; // Muda o ano
+
+                if ( ( isNaN( min ) && isNaN( max ) ) ||
+                    ( isNaN( min ) && age <= max ) ||
+                    ( min <= age   && isNaN( max ) ) ||
+                    ( min <= age   && age <= max ) )
+                {
+                    return true;
+                }
+                return false;
+            }
+        );
+
     });
 
+    // Deletar trabalho
+    $('#myModalDelTrabalho').on('show.bs.modal', function(e) {
 
-
-
-
-
-
-
-
-
-
-// Deletar trabalho
-$('#myModalDelTrabalho').on('show.bs.modal', function(e) {
-    
-    var $modal = $(this);
-    var trabalhoid = e.relatedTarget.id;
-    $modal.find('.modal-title').html('Deseja realmente excluir?');
-    $modal.find('.del-trabalho').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="trabalho/destroy/' + trabalhoid + '" class="btn btn-danger"> Excluir </a>');           
-});
+        var $modal = $(this);
+        var trabalhoid = e.relatedTarget.id;
+        $modal.find('.modal-title').html('Deseja realmente excluir?');
+        $modal.find('.del-trabalho').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="trabalho/destroy/' + trabalhoid + '" class="btn btn-danger"> Excluir </a>');
+    });
 
 
 </script>
