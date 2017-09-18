@@ -7,6 +7,7 @@ use App\AnoLetivo;
 use App\CoordenadorCurso;
 use Illuminate\Http\Request;
 use App\Http\Requests\BancaRequest;
+use Illuminate\Support\Facades\Validator;
 use Session;
 
 use App\Policies\BancaPolicy;
@@ -391,6 +392,89 @@ class BancaController extends Controller
     {
         $this->authorize('create', Banca::class);
 
+
+        $alunosAprovados = $request->except([
+            '_method',
+            '_token',
+            'data',
+            'membro',
+            'membro2',
+            'suplente',
+            'suplente2'
+        ]);
+
+
+        if ($alunosAprovados != null) {
+
+            $soNumeros = array_keys($alunosAprovados);
+            for ($i = 0; $i < count($soNumeros); $i++) {
+                $soNumeros = preg_replace("/[^0-9,.]/", "", $soNumeros[$i]);
+                $at = AcademicoTrabalho::where('academico_id', $soNumeros)->first();
+                $at->aprovado = 1;
+                $at->save();
+            }
+
+            return redirect('/banca')->with('message', 'Alunos aprovados com sucesso.');
+
+        }
+
+        $trabalho = Trabalho::find($id);
+
+        $messages = [
+            'data.required' => 'O campo Data é obrigatório.',
+            'membro.required' => 'O campo Membro de Banca é obrigatório.',
+            'membro2.required' => 'O campo Membro de Banca é obrigatório.',
+            'suplente.required' => 'O campo Membro Suplente é obrigatório.',
+            'suplente2.required' => 'O campo Membro Suplente é obrigatório.',
+            'membro.different' => 'Os membros de banca devem ser distintos.',
+            'membro2.different' => 'Os membros de banca devem ser distintos.',
+            'suplente.different' => 'Os membros de banca devem ser distintos.',
+            'suplente2.different' => 'Os membros de banca devem ser distintos.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'data' => 'required',
+            'membro' => 'required',
+            'membro2' => 'required',
+            'suplente' => 'required',
+            'suplente2' => 'required',
+        ], $messages);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $valores_membros = array(
+            $request->input('membro'),
+            $request->input('membro2'),
+            $request->input('suplente'),
+            $request->input('suplente2')
+        );
+
+        if(in_array(2,array_count_values($valores_membros))) {
+            return back()
+                ->with('message', 'Os Membros de Banca devem ser distintos.')
+                ->withInput();
+        }
+
+        if ($trabalho->orientador_id != null) {
+
+            if(in_array($trabalho->orientador_id, $valores_membros)) {
+                return back()
+                    ->with('message', 'O Orientador já faz parte da banca.')
+                    ->withInput();
+            } else if(!in_array($trabalho->coorientador_id, $valores_membros)) {
+                //
+            } else {
+                return back()
+                    ->with('message', 'O Coorientador não participa da banca.')
+                    ->withInput();
+            }
+        }
+
+
         $data = Etapa::where('banca', 1)
                     ->join('etapa_anos as ea', 'ea.etapa_id', '=', 'etapas.id')
                     ->select('data_inicial', 'data_final')
@@ -403,6 +487,8 @@ class BancaController extends Controller
         }
 
         DB::update('update bancas as b set b.data = ? where b.trabalho_id = ?', [$request->input('data'), $id]);
+
+
 
         return redirect('/banca')
             ->with('message', 'Data adicionada com sucesso');

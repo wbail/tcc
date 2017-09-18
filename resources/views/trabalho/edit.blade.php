@@ -140,14 +140,7 @@
                                     
                                 </div> {{-- ./row --}}
 
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <br>
-                                        {!! Form::label('aprovado', 'Aprovado') !!}
-                                        <br>
-                                        {!! Form::checkbox('aprovado', 1, $trabalho->aprovado, ['title'=>'Situação do trabalho. Aprovado/Não Aprovado']) !!}
-                                    </div>
-                                </div>
+
 
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}

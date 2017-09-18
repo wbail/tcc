@@ -65,7 +65,11 @@
                                 <div class="row">
                                     @foreach($academico as $a)
                                     <div class="col-md-6">
-                                         <h5 title="Aluno(a)">{{ \App\Academico::find($a->academico_id)->user->name }}</h5>
+                                        <h5 title="Aluno(a)">{{ \App\Academico::find($a->academico_id)->user->name }}</h5>
+                                        @if($membro[0]->data != null)
+                                            {!! Form::label('aprovado', 'Aprovado', ['title'=>'Acadêmico(a) aprovado(a)']) !!}
+                                            {!! Form::checkbox("aprovado$a->academico_id", $a->academico_id, $a->aprovado) !!}
+                                        @endif
                                     </div> <!-- ./col-md-6 -->
                                     @endforeach
                                     
