@@ -30,7 +30,7 @@ class AcademicoRequest extends FormRequest {
             return [
                 'nome' => 'required|regex:/^[\pL\s\-]+$/u|min:3,max:80',
                 'curso' => 'required',
-                'telefone' => [
+                'telefone0' => [
                     'required',
                     'digits:11',
                     Rule::unique('telefones', 'numero')
@@ -65,7 +65,7 @@ class AcademicoRequest extends FormRequest {
             return [
                 'nome' => 'required|regex:/^[\pL\s\-]+$/u|min:3,max:80',
                 'curso' => 'required',
-                'telefone0' => [
+                'telefone' => [
                     'required',
                     'digits:11',
                     Rule::unique('telefones', 'numero'),

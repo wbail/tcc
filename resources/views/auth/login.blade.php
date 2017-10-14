@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>ControleTCC</title>
+    <title>TCC</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -30,12 +30,11 @@
                 <div class="panel-body">
                     <div class="login-box">
                         <div class="login-logo">
-                            {{-- <a href="../bower_components/AdminLTE/index2.html"><b>Controle</b>TCC</a> --}}
-                            <a href="{{ url('/admin') }}"><b>TCC</b></a>
+                            {{--<a href="{{ url('/admin') }}"><b>TCC</b></a>--}}
+
+                            {{ Html::image('../resources/assets/images/uepg_ret.png', 'alt', array('width' => '200' , 'height' => '70')) }}
                         </div>
-                        <!-- /.login-logo -->
                         <div class="login-box-body">
-                            <p class="login-box-msg">Login</p>
                             <form class="form-horizontal" role="form" method="post" action="{{ route('login') }}">  
                                 {{ csrf_field() }} 
                                 
@@ -115,12 +114,13 @@
                         </div>
                         <!-- /.login-box-body -->
                     </div>
-                    <!-- /.login-box -->
+                    <!-- /  .login-box -->
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <!-- jQuery 2.2.3 -->
 <script src="../bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
@@ -139,7 +139,8 @@
             })
             .done(function(data) {
 
-                var html = '<select class="form-control" required name="curso" placeholder="Curso"><option value=" "></option>';
+                //var html = '<select class="form-control" required name="curso" placeholder="Curso"><option value=" "></option>';
+                var html = '<select class="form-control" required name="curso" placeholder="Curso">';
 
                 for(var i = 0; i < data.length; i++) {
                     html += '<option value="'+ data[i].id +'">' + data[i].nome + '</option>';

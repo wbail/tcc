@@ -116,5 +116,7 @@ class DepartamentoController extends Controller {
     public function destroy($id) {
 
         $this->authorize('delete', Departamento::class);
+
+        return back();
     }
 }

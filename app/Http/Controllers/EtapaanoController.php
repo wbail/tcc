@@ -76,7 +76,7 @@ class EtapaanoController extends Controller
                                                  on t.id = ?
                                               inner join ano_letivos as al
                                                  on al.id = t.anoletivo_id
-                                              where al.ativo = ?', [$trabalho[$i]->id, 1]);
+                                              where al.id = ?', [$trabalho[$i]->id, Session::get('anoletivo')->id]);
                 }
 
 //                for ($i = 0; $i < count($objetos) - 1; $i++) {

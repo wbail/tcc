@@ -127,7 +127,9 @@ class InstituicaoController extends Controller {
      */
     public function destroy($id) {
 
-        $this->authorize('delete', \App\Instituicao::class);
-        //
+        //$this->authorize('delete', \App\Instituicao::class);
+
+        return back();
+
     }
 }

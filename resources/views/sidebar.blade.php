@@ -31,14 +31,6 @@
         <ul class="sidebar-menu">
             <li class="header">Menu</li>
             <!-- Optionally, you can add icons to the links -->
-
-            <li class="treeview">
-                <a href="#"><span><i class="fa fa-calendar-o"></i> Ano Letivo</span> <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a href="{{ url('/anoletivo/novo') }}"><i class="fa fa-plus"></i> Novo</a></li>
-                    <li><a href="{{ url('/anoletivo') }}"><i class="fa fa-list"></i> Listar</a></li>
-                </ul>
-            </li>
             
             <li class="treeview">
                 <a href="#"><span><i class="fa fa-user"></i> Aluno</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -103,6 +95,14 @@
                 <ul class="treeview-menu">
                     <li><a href="{{ url('/trabalho/novo') }}"><i class="fa fa-plus"></i> Novo</a></li>
                     <li><a href="{{ url('/trabalho') }}"><i class="fa fa-list"></i> Listar</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#"><span><i class="fa fa-calendar-o"></i> Ano Letivo</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ url('/anoletivo/novo') }}"><i class="fa fa-plus"></i> Novo</a></li>
+                    <li><a href="{{ url('/anoletivo') }}"><i class="fa fa-list"></i> Listar</a></li>
                 </ul>
             </li>
 

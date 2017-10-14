@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class IncreaseMimeColumnLengthOnArquivosTable extends Migration
+class AddColumnStatusOnBancasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class IncreaseMimeColumnLengthOnArquivosTable extends Migration
      */
     public function up()
     {
-        Schema::table('arquivos', function (Blueprint $table) {
-            $table->string('mime', 255)->nullable()->change();
+        Schema::table('bancas', function (Blueprint $table) {
+            $table->boolean('status')->after('id')->default(0);
         });
     }
 
@@ -25,7 +25,7 @@ class IncreaseMimeColumnLengthOnArquivosTable extends Migration
      */
     public function down()
     {
-        Schema::table('arquivos', function (Blueprint $table) {
+        Schema::table('bancas', function (Blueprint $table) {
             //
         });
     }

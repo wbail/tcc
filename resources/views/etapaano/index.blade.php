@@ -53,7 +53,7 @@
 
                 <br>
 
-                <table data-order='[[0, "desc"]]' class="table table-hover table-striped table-bordered display">
+                <table data-order='[[2, "desc"]]' class="table table-hover table-striped table-bordered display">
                     <thead>
                         <tr>
                             {{--  <th class="col-md-2">Etapa</th>  --}}

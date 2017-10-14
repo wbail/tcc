@@ -101,7 +101,7 @@
                                     {!! Form::label('telefone', 'Telefone *') !!}<br>
                                     @foreach($academico->user->telefone as $contato)
                                         @if($loop->index == 0)
-                                            {!! Form::text('telefone0', $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
+                                            {!! Form::text('telefone', $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
                                             <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
                                         @else
                                             <div class='telefone{{$loop->index}}'>

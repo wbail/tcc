@@ -46,8 +46,9 @@
 		                    <tr>
                                 <th>Trabalho</th>
                                 <th>Orientador(es)</th>
-                                <th>Data</th>
-		                        <th class="text-center">Ação</th>
+                                <th>Data da Banca</th>
+                                <th class="text-center">Status da Banca</th>
+                                <th class="text-center">Ação</th>
 		                    </tr>
 		                </thead>
 		                <tbody>
@@ -69,12 +70,21 @@
                                         {{ \Carbon\Carbon::parse($banca->data)->format('d/m/Y H:i') }}
                                     </td>
                                 @endif
-		                        <td class="text-center">
-		                            <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Definir Data"><i class="fa fa-calendar"></i></a>
-		                            <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
+                                <td class="text-center">
+                                    @if($banca->status == 1)
+                                        <label for="statusbanc" class="label label-success">Banca Realizada</label>
+                                    @elseif($banca->data <= \Carbon\Carbon::now())
+                                        <button id="{{ $banca->trabalho_id }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalStatusBanca" title="Finalizar Banca">Concluir Banca</button>
+                                    @else
+                                        <label for="statusbanc" class="label label-default">Banca Não Realizada</label>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Definir Data"><i class="fa fa-calendar"></i></a>
+                                    <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
                                     <button id="{{ $banca->trabalho_id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalCertBanca" title="Gerar Certificado"><i class="fa fa-file"></i> </button>
                                     <button id="{{ $banca->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelbanca" title="Excluir"><i class="fa fa-trash"></i> </button>
-		                        </td>
+                                </td>
 		                    </tr>
 		                    @endforeach
 		                </tbody>
@@ -89,7 +99,7 @@
 
     <!-- Footer -->
     
-    <!-- Modal del banca-->
+    <!-- Modal del banca -->
     <div id="myModalDelbanca" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -103,7 +113,7 @@
         </div>
     </div>
 
-    <!-- Modal Gerar Certificado Banca-->
+    <!-- Modal Gerar Certificado Banca -->
     <div id="myModalCertBanca" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -115,6 +125,23 @@
 
                 </div>
                 <div class="modal-footer cert-banca">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirma que a banca já aconteceu -->
+    <div id="myModalStatusBanca" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer status-banca">
                 </div>
             </div>
         </div>
@@ -185,8 +212,8 @@
 
         var $modal = $(this);
         var bancaid = e.relatedTarget.id;
+        $modal.find('.del-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="banca/destroy/' + bancaid + '" class="btn btn-danger"> Excluir</a>');
         $modal.find('.modal-title').html('Deseja realmente excluir?');
-        $modal.find('.del-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="banca/destroy/' + bancaid + '" class="btn btn-danger"> Excluir </a>');
     });
 
     // Gerar Certificado Banca
@@ -195,10 +222,17 @@
         var $modal = $(this);
         var bancaid = e.relatedTarget.id;
         $modal.find('.modal-title').html('Geração de Certificado de Presença de Banca');
-        $modal.find('.cert-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a target="_blank" href="banca/show/'+ bancaid +'" class="btn btn-success"> Gerar </a>');
+        $modal.find('.cert-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a target="_blank" href="banca/show/'+ bancaid +'" class="btn btn-success"> Gerar</a>');
     });
 
+    // Confirmação que a banca já aconteceu
+    $('#myModalStatusBanca').on('show.bs.modal', function(e) {
 
+        var $modal = $(this);
+        var bancaid = e.relatedTarget.id;
+        $modal.find('.modal-title').html('Confirma a realização da banca?');
+        $modal.find('.status-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="banca/finaliza/'+ bancaid +'" class="btn btn-success"> Confirmar</a>');
+    });
 
 </script>
 

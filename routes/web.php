@@ -166,6 +166,7 @@ Route::group(['prefix'=>'banca','where'=>['id'=>'[0-9]+']], function() {
 	Route::put('update/{id}', ['as'=>'banca.update', 'uses'=>'BancaController@update', 'middleware' => 'auth']);
 	Route::get('destroy/{id}', ['as'=>'banca.destroy', 'uses'=>'BancaController@destroy', 'middleware' => 'auth']);
 	Route::get('show/{id}', ['as'=>'banca.show', 'uses'=>'BancaController@show', 'middleware' => 'auth']);
+	Route::get('finaliza/{id}', ['as'=>'banca.finaliza', 'uses'=>'BancaController@finaliza', 'middleware' => 'auth']);
 
 });
 

@@ -44,7 +44,7 @@
                 </tr>
                 <tr>
                     <td>Ano Letivo (max):</td>
-                    <td><input id="max" name="max" type="text" value=""></td>
+                    <td><input id="max" name="max" type="text" value="{{ Session::get('anoletivo')->rotulo }}"></td>
                 </tr>
                 </tbody>
 

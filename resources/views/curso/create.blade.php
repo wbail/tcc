@@ -59,32 +59,28 @@
             <div class="row">
                 <div class="col-md-4"></div> {{-- ./col-md-4 --}}
                 <div class="col-md-4">
-                    {!! Form::open(['url' => '/curso/store', 'method'=>'post']) !!}
+                    {!! Form::open(['url' => "/curso/store/", 'method'=>'post']) !!}
+                    {!! Form::label('coordenador', 'Coordenador do Curso *') !!}
+                    {!! Form::select('coordenador', $coordenador, null, ['class'=>'form-control', 'title'=>'Nome do Coordenador do Curso', 'placeholder'=>'']) !!}
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {!! Form::label('iniciovigencia', 'Data de Início *') !!}
+                            {!! Form::text('iniciovigencia', null, ['class'=>'form-control', 'title'=>'Data de Início da vigência como coordenador', 'id'=>'datetimepicker']) !!}
 
-
-                        {!! Form::label('nome', 'Nome do Curso *') !!}
-                        {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do curso']) !!}
-                        
-                        <br>
-                        {!! Form::label('departamento', 'Departamento *') !!}
-                        {!! Form::select('departamento', $departamento, null, ['class'=>'form-control', 'title'=>'Nome do departamento da instituição de ensino', 'placeholder'=>'']) !!}
-                        <br>
-                        
-                        {!! Form::label('coordenador', 'Coordenador de TCC *') !!}
-                        {!! Form::select('coordenador', $coordenador, null, ['class'=>'form-control', 'title'=>'Nome do coordenador da disciplina de TCC', 'placeholder'=>'']) !!}
-
-                        <br>
-                        <div class="row">
-                            <div class="col-md-6">
-                                {!! Form::label('iniciovigencia', 'Data de Início *') !!}
-                                {!! Form::text('iniciovigencia', null, ['class'=>'form-control', 'title'=>'Data de Início da vigência como coordenador', 'id'=>'datetimepicker']) !!}
-                            </div> <!-- ./col-md-6 -->
-                            <div class="col-md-6">
-                                {!! Form::label('fimvigencia', 'Data de Término') !!}
-                                {!! Form::text('fimvigencia', null, ['class'=>'form-control', 'title'=>'Data de término da vigência como coordenador', 'id'=>'datetimepicker1']) !!}
-                            </div> <!-- ./col-md-6 -->
-                        </div> <!-- ./row -->                        
-                        <br>
+                        </div> <!-- ./col-md-6 -->
+                        <div class="col-md-6">
+                            {!! Form::label('fimvigencia', 'Data de Término') !!}
+                            {!! Form::text('fimvigencia', null, ['class'=>'form-control', 'title'=>'Data de término da vigência como coordenador', 'id'=>'datetimepicker1']) !!}
+                        </div> <!-- ./col-md-6 -->
+                    </div> <!-- ./row -->
+                    <br>
+                    {!! Form::label('departamento', 'Departamento *') !!}
+                    {!! Form::select('departamento', $departamento, null, ['class'=>'form-control', 'title'=>'Nome do departamento da instituição de ensino', 'placeholder'=>'']) !!}
+                    <br>
+                    {!! Form::label('nome', 'Nome *') !!}
+                    {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do curso da instituição de ensino', 'placeholder'=>'']) !!}
+                    <br>
             			
             			{!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
             		{!! Form::close() !!}

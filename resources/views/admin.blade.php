@@ -76,24 +76,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
             @endif
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Upload</div>
-                        <div class="panel-body">
+            {{--<div class="row">--}}
+                {{--<div class="col-md-6">--}}
+                    {{--<div class="panel panel-default">--}}
+                        {{--<div class="panel-heading">Upload</div>--}}
+                        {{--<div class="panel-body">--}}
 
-                        </div>
-                    </div>
-                </div> <!-- ./col-md-6 -->
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Cont</div>
-                        <div class="panel-body">
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div> <!-- ./col-md-6 -->--}}
+                {{--<div class="col-md-6">--}}
+                    {{--<div class="panel panel-default">--}}
+                        {{--<div class="panel-heading">Cont</div>--}}
+                        {{--<div class="panel-body">--}}
 
-                        </div>
-                    </div>
-                </div> <!-- ./col-md-6 -->
-            </div> <!-- ./row -->
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div> <!-- ./col-md-6 -->--}}
+            {{--</div> <!-- ./row -->--}}
 
 <script type="tejxt/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 {{--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>--}}

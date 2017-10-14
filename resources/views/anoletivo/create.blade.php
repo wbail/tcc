@@ -46,17 +46,17 @@
             	<div class="col-md-4">
             		{!! Form::open(['url' => '/anoletivo/store', 'method'=>'post']) !!}
                         
-                        {!! Form::label('rotulo', 'Rotulo *') !!}
-                        {!! Form::text('rotulo', null, ['class'=>'form-control', 'title'=>'Rotulo para o ano']) !!}
+                        {!! Form::label('rotulo', 'Rótulo *') !!}
+                        {!! Form::text('rotulo', null, ['class'=>'form-control', 'title'=>'Rótulo para o ano']) !!}
             			<br>
                         <div class="row">
                             <div class="col-md-6">
                                 {!! Form::label('ativo', 'Ativo *') !!}
-                                {!! Form::checkbox('ativo', true, false, ['title'=>'Situaçao do Ano Letivo']) !!}
+                                {!! Form::checkbox('ativo', true, false, ['title'=>'Situação do Ano Letivo']) !!}
                             </div>
                             <div class="col-md-6">
-                                {!! Form::label('data', 'Ano valido ate *') !!}
-                                {!! Form::text('data', null, ['class'=>'form-control', 'title'=>'Ultimo dia para o ano letivo', 'id'=>'datetimepicker']) !!}
+                                {!! Form::label('data', 'Ano válido até *') !!}
+                                {!! Form::text('data', null, ['class'=>'form-control', 'title'=>'Último dia para o ano letivo', 'id'=>'datetimepicker']) !!}
                             </div>
                         </div>
                         <br>

@@ -47,8 +47,6 @@ class BancaController extends Controller
 
             $this->authorize('view', $instituicao);
 
-            $d = User::userMembroDepartamento()->departamento_id;
-
 //        $banca = Banca::with(['trabalho.membrobanca' => function($query) use ($d) {
 //            $query->where('departamento_id', '=', $d);
 //        }], 'trabalho.coorientador')
@@ -85,8 +83,8 @@ class BancaController extends Controller
                 ->join('trabalhos as t', 't.id', '=', 'b.trabalho_id')
                 ->join('membro_bancas as mb', 'mb.id', '=', 'b.membrobanca_id')
                 ->join('academico_trabalhos as at', 'at.trabalho_id', '=', 'b.trabalho_id')
-                ->join('membro_bancas as mbx', function ($query) use ($d) {
-                    $query->where('mbx.departamento_id', $d);
+                ->join('membro_bancas as mbx', function ($query) use ($departamento_id) {
+                    $query->where('mbx.departamento_id', $departamento_id);
                 })
                 ->where('at.ano_letivo_id', Session::get('anoletivo')->id)
                 ->get();
@@ -95,8 +93,6 @@ class BancaController extends Controller
                 ->unique('trabalho_id')
                 ->values()
                 ->all();
-
-//        return $banca;
 
             $orientador = array();
 
@@ -136,6 +132,7 @@ class BancaController extends Controller
      */
     public function create()
     {
+
         $this->authorize('create', Banca::class);
 
         $etapaano = Etapa::where('banca', 1)
@@ -152,13 +149,16 @@ class BancaController extends Controller
 
         $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
             $q->where('departamento_id', '=', $departamento_id);
-        })->orWhereHas('coorientador', function($q) use ($departamento_id) {
-            $q->where('departamento_id', '=', $departamento_id);
-        })->whereHas('anoletivo', function ($query) {
-            $query->where('ativo', 1);
         })
+        ->orWhereHas('coorientador', function($q) use ($departamento_id) {
+            $q->where('departamento_id', '=', $departamento_id);
+        })
+//        ->whereHas('anoletivo', function ($query) {
+//            $query->where('anoletivo_id', Session::get('anoletivo')->id);
+//        })
         ->orderBy('sigla')
         ->select(DB::raw('concat(trabalhos.sigla, \' - \', trabalhos.titulo) as sigla'), 'trabalhos.id')
+        ->where('trabalhos.anoletivo_id', Session::get('anoletivo')->id)
         ->pluck('sigla', 'id');
 
         $membros = MembroBanca::join('users as u', 'u.id', '=', 'membro_bancas.user_id')
@@ -505,4 +505,23 @@ class BancaController extends Controller
     {
         $this->authorize('create', Banca::class);
     }
+
+    /**
+     * Muda para o status 1 a banca, indicando que a banca aconteceu.
+     * Sendo $id do trabalho.
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function finaliza($id)
+    {
+        Banca::where('trabalho_id', $id)->update([
+            'status' => 1
+        ]);
+
+        return redirect('/banca')
+            ->with('message', 'Banca realizada');
+    }
+
+
 }
