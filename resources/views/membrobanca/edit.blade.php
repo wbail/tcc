@@ -19,8 +19,6 @@
 
             <a href="{{ url('membrobanca') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
-                           
-
 
         </section>
 
@@ -75,71 +73,89 @@
                                     </div> {{-- ./col-md-6 --}}
                                     
                                 </div> {{-- ./row --}}
-                                <div class="row">
+                            <div class="row">
+                                @if($membrobanca->user->permissao == 9)
                                     <div class="col-md-9">
-                                        @if($membrobanca->user->permissao == 1)                                           
-                                            {!! Form::label('permissao', 'Permissão *') !!}
-                                            {!! Form::checkbox('orientador', 4, false) !!}
-                                            {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coorientador', 2, false) !!}
-                                            {!! Form::label('coorientador', 'Coorientador') !!}
-                                            {!! Form::checkbox('banca', 1, true) !!}
-                                            {!! Form::label('banca', 'Banca') !!}
-                                        @elseif($membrobanca->user->permissao == 2)
-                                            {!! Form::label('permissao', 'Permissão *') !!}
-                                            <br>
-                                            {!! Form::checkbox('banca', 1, false) !!}
-                                            {!! Form::label('banca', 'Banca') !!}
-                                            <br>
-                                            {!! Form::checkbox('coorientador', 2, true) !!}
-                                            {!! Form::label('coorientador', 'Coorientador') !!}
-                                            <br>
-                                            {!! Form::checkbox('orientador', 4, false) !!}
-                                            {!! Form::label('orientador', 'Orientador') !!}
-                                        @elseif($membrobanca->user->permissao == 4)
-                                            {!! Form::label('permissao', 'Permissão *') !!}
-                                            {!! Form::checkbox('orientador', 4, true) !!}
-                                            {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coorientador', 2, false) !!}
-                                            {!! Form::label('coorientador', 'Coorientador') !!}
-                                            {!! Form::checkbox('banca', 1, false) !!}
-                                            {!! Form::label('banca', 'Banca') !!}
-                                        @elseif($membrobanca->user->permissao == 3)
-                                            {!! Form::label('permissao', 'Permissão *') !!}
-                                            {!! Form::checkbox('orientador', 4, false) !!}
-                                            {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coorientador', 2, true) !!}
-                                            {!! Form::label('coorientador', 'Coorientador') !!}
-                                            {!! Form::checkbox('banca', 1, true) !!}
-                                            {!! Form::label('banca', 'Banca') !!}
-                                        @elseif($membrobanca->user->permissao == 5)
-                                            {!! Form::label('permissao', 'Permissão *') !!}
-                                            {!! Form::checkbox('orientador', 4, true) !!}
-                                            {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coorientador', 2, false) !!}
-                                            {!! Form::label('coorientador', 'Coorientador') !!}
-                                            {!! Form::checkbox('banca', 1, true) !!}
-                                            {!! Form::label('banca', 'Banca') !!}
-                                        @elseif($membrobanca->user->permissao == 6)
-                                            {!! Form::label('permissao', 'Permissão *') !!}
-                                            {!! Form::checkbox('orientador', 4, true) !!}
-                                            {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coorientador', 2, true) !!}
-                                            {!! Form::label('coorientador', 'Coorientador') !!}
-                                            {!! Form::checkbox('banca', 1, false) !!}
-                                            {!! Form::label('banca', 'Banca') !!}
-                                        @elseif($membrobanca->user->permissao == 7)
-                                            {!! Form::label('permissao', 'Permissão *') !!}
-                                            {!! Form::checkbox('orientador', 4, true) !!}
-                                            {!! Form::label('orientador', 'Orientador') !!}
-                                            {!! Form::checkbox('coorientador', 2, true) !!}
-                                            {!! Form::label('coorientador', 'Coorientador') !!}
-                                            {!! Form::checkbox('banca', 1, true) !!}
-                                            {!! Form::label('banca', 'Banca') !!}
-                                        @endif
+                                        {!! Form::label('permissao', 'Permissão *') !!}
+                                        {!! Form::checkbox('orientador', 4, true) !!}
+                                        {!! Form::label('orientador', 'Orientador') !!}
+                                        {!! Form::checkbox('coorientador', 2, true) !!}
+                                        {!! Form::label('coorientador', 'Coorientador') !!}
+                                        {!! Form::checkbox('banca', 1, true) !!}
+                                        {!! Form::label('banca', 'Banca') !!}
                                     </div> {{-- ./col-md-9 --}}
-
-                                </div> {{-- ./row --}}
+                                @elseif($membrobanca->user->permissao == 4)
+                                    <div class="col-md-9">
+                                        {!! Form::label('permissao', 'Permissão *') !!}
+                                        {!! Form::checkbox('orientador', 4, true) !!}
+                                        {!! Form::label('orientador', 'Orientador') !!}
+                                        {!! Form::checkbox('coorientador', 2, false) !!}
+                                        {!! Form::label('coorientador', 'Coorientador') !!}
+                                        {!! Form::checkbox('banca', 1, false) !!}
+                                        {!! Form::label('banca', 'Banca') !!}
+                                    </div> {{-- ./col-md-9 --}}
+                                @elseif($membrobanca->user->permissao == 2)
+                                    <div class="col-md-9">
+                                        {!! Form::label('permissao', 'Permissão *') !!}
+                                        {!! Form::checkbox('orientador', 4, false) !!}
+                                        {!! Form::label('orientador', 'Orientador') !!}
+                                        {!! Form::checkbox('coorientador', 2, true) !!}
+                                        {!! Form::label('coorientador', 'Coorientador') !!}
+                                        {!! Form::checkbox('banca', 1, false) !!}
+                                        {!! Form::label('banca', 'Banca') !!}
+                                    </div> {{-- ./col-md-9 --}}
+                                @elseif($membrobanca->user->permissao == 1)
+                                    <div class="col-md-9">
+                                        {!! Form::label('permissao', 'Permissão *') !!}
+                                        {!! Form::checkbox('orientador', 4, false) !!}
+                                        {!! Form::label('orientador', 'Orientador') !!}
+                                        {!! Form::checkbox('coorientador', 2, false) !!}
+                                        {!! Form::label('coorientador', 'Coorientador') !!}
+                                        {!! Form::checkbox('banca', 1, true) !!}
+                                        {!! Form::label('banca', 'Banca') !!}
+                                    </div> {{-- ./col-md-9 --}}
+                                @elseif($membrobanca->user->permissao == 6)
+                                    <div class="col-md-9">
+                                        {!! Form::label('permissao', 'Permissão *') !!}
+                                        {!! Form::checkbox('orientador', 4, true) !!}
+                                        {!! Form::label('orientador', 'Orientador') !!}
+                                        {!! Form::checkbox('coorientador', 2, true) !!}
+                                        {!! Form::label('coorientador', 'Coorientador') !!}
+                                        {!! Form::checkbox('banca', 1, false) !!}
+                                        {!! Form::label('banca', 'Banca') !!}
+                                    </div> {{-- ./col-md-9 --}}
+                                @elseif($membrobanca->user->permissao == 3)
+                                    <div class="col-md-9">
+                                        {!! Form::label('permissao', 'Permissão *') !!}
+                                        {!! Form::checkbox('orientador', 4, false) !!}
+                                        {!! Form::label('orientador', 'Orientador') !!}
+                                        {!! Form::checkbox('coorientador', 2, true) !!}
+                                        {!! Form::label('coorientador', 'Coorientador') !!}
+                                        {!! Form::checkbox('banca', 1, true) !!}
+                                        {!! Form::label('banca', 'Banca') !!}
+                                    </div> {{-- ./col-md-9 --}}
+                                @elseif($membrobanca->user->permissao == 7)
+                                    <div class="col-md-9">
+                                        {!! Form::label('permissao', 'Permissão *') !!}
+                                        {!! Form::checkbox('orientador', 4, true) !!}
+                                        {!! Form::label('orientador', 'Orientador') !!}
+                                        {!! Form::checkbox('coorientador', 2, true) !!}
+                                        {!! Form::label('coorientador', 'Coorientador') !!}
+                                        {!! Form::checkbox('banca', 1, false) !!}
+                                        {!! Form::label('banca', 'Banca') !!}
+                                    </div> {{-- ./col-md-9 --}}
+                                @elseif($membrobanca->user->permissao == 5)
+                                    <div class="col-md-9">
+                                        {!! Form::label('permissao', 'Permissão *') !!}
+                                        {!! Form::checkbox('orientador', 4, true) !!}
+                                        {!! Form::label('orientador', 'Orientador') !!}
+                                        {!! Form::checkbox('coorientador', 2, false) !!}
+                                        {!! Form::label('coorientador', 'Coorientador') !!}
+                                        {!! Form::checkbox('banca', 1, true) !!}
+                                        {!! Form::label('banca', 'Banca') !!}
+                                    </div> {{-- ./col-md-9 --}}
+                                @endif
+                            </div> {{-- ./row --}}
                                 <br>
                                 <div class="row">
                                     <div class="col-md-6">

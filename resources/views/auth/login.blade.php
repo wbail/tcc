@@ -32,7 +32,7 @@
                         <div class="login-logo">
                             {{--<a href="{{ url('/admin') }}"><b>TCC</b></a>--}}
 
-                            {{ Html::image('../resources/assets/images/uepg_ret.png', 'alt', array('width' => '200' , 'height' => '70')) }}
+                            {{ Html::image('../resources/assets/images/uepg_ret.png', 'alt', array('width' => '200' , 'height' => '70', 'class'=>'text-center')) }}
                         </div>
                         <div class="login-box-body">
                             <form class="form-horizontal" role="form" method="post" action="{{ route('login') }}">  

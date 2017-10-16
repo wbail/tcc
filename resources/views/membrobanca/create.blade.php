@@ -76,9 +76,7 @@
                                     {!! Form::label('coorientador', 'Coorientador') !!}
                                     {!! Form::checkbox('banca', 1, false) !!}
                                     {!! Form::label('banca', 'Banca') !!}
-
                                 </div> {{-- ./col-md-9 --}}
-
                             </div> {{-- ./row --}}
                             <br>
                             <div class="row">

@@ -57,14 +57,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <section class="content">
 
             @if (count($errors) > 0)
-            <div class="alert alert-warning alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
 
             @if (session('message'))
@@ -95,11 +95,83 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 {{--</div> <!-- ./col-md-6 -->--}}
             {{--</div> <!-- ./row -->--}}
 
-<script type="tejxt/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-{{--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>--}}
+            {{--<ul class="timeline">--}}
+
+                {{--<!-- timeline time label -->--}}
+                {{--<li class="time-label">--}}
+                    {{--<span class="bg-red">--}}
+                        {{--15 Out. 2017--}}
+                    {{--</span>--}}
+                {{--</li>--}}
+                {{--<!-- /.timeline-label -->--}}
+
+                {{--<!-- timeline item -->--}}
+                {{--<li>--}}
+                    {{--<!-- timeline icon -->--}}
+                    {{--<i class="fa fa-envelope bg-blue"></i>--}}
+                    {{--<div class="timeline-item">--}}
+                        {{--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>--}}
+
+                        {{--<h3 class="timeline-header"><a href="#">Item</a> ...</h3>--}}
+
+                        {{--<div class="timeline-body">--}}
+                            {{--Lorem ipsum dolor--}}
+                        {{--</div>--}}
+
+                        {{--<div class="timeline-footer">--}}
+                            {{--<a class="btn btn-primary btn-xs">...</a>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</li>--}}
+                {{--<!-- END timeline item -->--}}
+
+                {{--<!-- timeline time label -->--}}
+                {{--<li class="time-label">--}}
+                    {{--<span class="bg-red">--}}
+                        {{--16 Out. 2017--}}
+                    {{--</span>--}}
+                {{--</li>--}}
+                {{--<!-- timeline item -->--}}
+                {{--<li>--}}
+                    {{--<!-- timeline icon -->--}}
+                    {{--<i class="fa fa-envelope bg-blue"></i>--}}
+                    {{--<div class="timeline-item">--}}
+                        {{--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>--}}
+
+                        {{--<h3 class="timeline-header"><a href="#">Outro Item</a> ...</h3>--}}
+
+                        {{--<div class="timeline-body">--}}
+                            {{--Lorem ipsum dolor--}}
+                        {{--</div>--}}
+
+                        {{--<div class="timeline-footer">--}}
+                            {{--<a class="btn btn-primary btn-xs">...</a>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</li>--}}
+                {{--<!-- END timeline item -->--}}
+            {{--</ul>--}}
+
+            @yield('content')
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+
+    <!-- Footer -->
+    
+
+</div><!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<!-- jQuery 2.2.3 -->
+<script src="{{ asset ("../bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js") }}"></script>
+<!-- Bootstrap 3.3.2 JS -->
+<script src="{{ asset ("../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}" type="text/javascript"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset ("../bower_components/AdminLTE/dist/js/app.min.js") }}" type="text/javascript"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <script type="text/javascript">
 
     $('.phone_with_ddd').mask('(00) 00000-0000');
@@ -139,24 +211,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 
 </script>
-
-            @yield('content')
-        </section><!-- /.content -->
-    </div><!-- /.content-wrapper -->
-
-    <!-- Footer -->
-    
-
-</div><!-- ./wrapper -->
-
-<!-- REQUIRED JS SCRIPTS -->
-
-<!-- jQuery 2.2.3 -->
-<script src="{{ asset ("../bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js") }}"></script>
-<!-- Bootstrap 3.3.2 JS -->
-<script src="{{ asset ("../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}" type="text/javascript"></script>
-<!-- AdminLTE App -->
-<script src="{{ asset ("../bower_components/AdminLTE/dist/js/app.min.js") }}" type="text/javascript"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the
