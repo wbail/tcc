@@ -79,8 +79,13 @@
                                         {!! Form::number('ra', $academico->ra, ['class'=>'form-control', 'min'=>'0', 'title'=>'Registro Acadêmico']) !!}
                                         <br>
                                     </div> {{-- ./col-md-4 --}}
-
                                 </div> {{-- ./row --}}
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        {!! Form::label('ativo', 'Ativo *') !!}
+                                        {!! Form::checkbox('ativo', 1, $academico->user->ativo, ['title'=>'Status do(a) Aluno(a)']) !!}
+                                    </div>
+                                </div>
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}
                 </div> {{-- ./col-md-7 --}}
@@ -101,7 +106,7 @@
                                     {!! Form::label('telefone', 'Telefone *') !!}<br>
                                     @foreach($academico->user->telefone as $contato)
                                         @if($loop->index == 0)
-                                            {!! Form::text('telefone', $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
+                                            {!! Form::text('telefone0', $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
                                             <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
                                         @else
                                             <div class='telefone{{$loop->index}}'>

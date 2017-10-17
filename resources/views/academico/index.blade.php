@@ -44,7 +44,7 @@
 
             <br>
 
-            <table data-order='[[1, "asc"]]' class="table table-hover table-striped table-bordered display">
+            <table data-order='[[2, "asc"]]' class="table table-hover table-striped table-bordered display">
                 <thead>
                     <tr>
                         <th>Status</th>

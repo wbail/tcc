@@ -197,11 +197,15 @@ class AcademicoController extends Controller {
      */
     public function update(AcademicoRequest $request, $id) {
 
+
         if (!Auth::user()->permissao == 9) {
             abort(403, 'Acesso não autorizado.');
         }
-        
-        // return $request->all();
+
+        $ativo = 0;
+        if ($request->input('ativo') == null) {
+            $ativo = 0;
+        }
 
         // Atualiza os campos relacionado a user
         $academico = Academico::find($id);
@@ -209,6 +213,7 @@ class AcademicoController extends Controller {
         $academico->user()->update([
             'name' => $request->input('nome'),
             'email' => $request->input('email'),
+            'ativo' => $ativo,
         ]);
 
         $academico->curso()->associate($request->input('curso'))->save();

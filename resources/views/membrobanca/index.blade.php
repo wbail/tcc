@@ -44,9 +44,10 @@
 
             <br>
 
-            <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
+            <table data-order='[[1, "asc"]]' class="table table-hover table-striped table-bordered display">
                 <thead>
                     <tr>
+                        <th class="col-sm-1">Status</th>
                         <th class="col-sm-2">Nome</th>
                         <th class="col-sm-1">E-mail</th>
                         <th class="col-sm-1">Dept</th>
@@ -57,6 +58,13 @@
                 <tbody>
                     @foreach($membrobanca as $membrobanca)
                     <tr>
+                        <td>
+                            @if($membrobanca->user->ativo == 1)
+                                <label for="status" class="label label-success">Ativo</label>
+                            @else
+                                <label for="status" class="label label-default">Não Ativo</label>
+                            @endif
+                        </td>
                         <td>{{ $membrobanca->user->name }}</td>
                         <td>{{ $membrobanca->user->email }}</td>
                         <td>{{ $membrobanca->departamento->nome }}</td>

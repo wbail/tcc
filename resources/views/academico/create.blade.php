@@ -97,50 +97,16 @@
                                     {{--{!! Form::label('tipo', 'Tipo de Telefone *') !!}<br>--}}
                                     {{--{!! Form::select('tipo', $tipo, 1, ['class'=>'form-control', 'title'=>'Tipo de Telefone', 'placeholder'=>'']) !!}--}}
 
-                                    {{-- 
+                                    {!! Form::label('telefone', 'Telefone *') !!}<br>
                                     {!! Form::text('telefone', null, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
                                     <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
                                     <div class="add-telefone">
-                                        <br>                                
-                                    </div>
-                                    --}}
-
-                                    <!-- Add telefone angular -->
-                                    {!! Form::label('telefone', 'Telefone *') !!}<br>
-                                    <div ng-app="numeroTelefoneList" ng-cloak ng-controller="myCtrl">
-
-                                        <div ng-repeat="x in numero">
-                                            <div class="row">
-                                                <div class="col-md-9">
-
-                                                    <input type="text" name="telefone@{{$index}}" value="@{{x}}" class="form-control"/>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <span ng-click="removeItem($index)" style="cursor:pointer;" class="w3-right w3-margin-right" title="Remover telefone"><i class="fa fa-remove"></i> </span>
-                                                    <br>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-9">
-
-                                                <a href="#" id="popoverid" data-toggle="popover" data-content="@{{errortext}}" data-trigger="focus">
-                                                    <input id="adicionTelefone" ng-model="addMe" class="form-control phone_with_ddd" type="text" title="Ex: (42) 99999-9999">
-                                                </a>
-                                            </div>
-                                            <div class="col-md-1">
-
-                                                <a href="#" ng-click="addItem()" title="Adicionar telefone"><i class="fa fa-plus"></i></a>
-                                            </div>
-                                        </div>
-                                        {{-- <p class="w3-padding-left w3-text-red">@{{errortext}}</p> --}}
+                                        <br>
                                     </div>
 
                                 </div> {{-- ./col-md-4 --}}
                                 <div class="col-md-6">
 
-                                
                                 </div> {{-- ./col-md-6 --}}
                             </div> {{-- ./row --}}
 
