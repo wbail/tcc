@@ -56,44 +56,59 @@
                 <table data-order='[[2, "desc"]]' class="table table-hover table-striped table-bordered display">
                     <thead>
                         <tr>
-                            {{--  <th class="col-md-2">Etapa</th>  --}}
+
                             <th class="col-md-1">Trabalho</th>
-                            <th class="col-md-3">Descrição</th>
-                            <th class="col-md-2">Data Entrega</th>
-                            <th class="text-center col-md-1">Situação</th>
-                            <th class="text-center col-md-3">Arquivo</th>
-                            <th class="col-md-1">Ação</th>
+                            <th class="col-md-1">Descrição</th>
+                            <th class="col-sm-1">Data Entrega</th>
+                            <th class="text-center col-sm-1">Situação</th>
+                            <th class="text-center col-md-1">Arquivo</th>
+                            <th class="text-center col-lg-1">Ação</th>
                         </tr>
                     </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th class="col-sm-1">Trabalho</th>
+                            <th class="col-sm-1">Descrição</th>
+                            <th class="col-sm-2">Data Entrega</th>
+                            <th class="text-center col-sm-1">Situação</th>
+                        </tr>
+                    </tfoot>
+
                     <tbody>
                         @foreach($etapaano as $etapaano)
-                        @foreach($etapaano as $etapaano)
-                        <tr>
-                            {{--  <td>{{ $etapaano->etapa->desc }}</td>  --}}
-                            <td title="{{ $etapaano->titulo }}">{{ $etapaano->sigla }}</td>
-                            <td>{{ $etapaano->descricao }}</td>
-                            <td>{{ \Carbon\Carbon::parse($etapaano->data_final)->format('d/m/Y H:m') }}</td>
-                            @if($etapaano->ativa == 1)
-                                <td class="text-center"><span class="label label-success">Ativa</span></td>
-                            @else
-                                <td class="text-center"><span class="label label-default">Não Ativa</span></td>
-                            @endif
-                            <td class="text-center">
-                                @if($etapaano->ativa == 1)
-                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
-                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-primary btn-sm" title="Enviar Arquivo" data-toggle="modal" data-target="#myModalUploadArquivos"><i class="fa fa-upload"></i> Enviar</button>
-                                @else
-                                    <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                <a id="{{ $etapaano->id }}" class="btn btn-link" href="{{ route('etapaano.edit', ['id'=>$etapaano->id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
-                                <button id="{{ $etapaano->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelEtapa" title="Excluir"><i class="fa fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        @endforeach
+                            @foreach($etapaano as $etapaano)
+                                <tr>
+                                    <td title="{{ $etapaano->titulo }}">{{ $etapaano->sigla }}</td>
+                                    <td>{{ $etapaano->descricao }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($etapaano->data_final)->format('d/m/Y H:m') }}</td>
+
+                                    @if($etapaano->ativa == 1)
+                                        <td class="text-center">
+                                            Ativa
+                                        </td>
+                                    @else
+                                        <td class="text-center">
+                                            Não Ativa
+                                        </td>
+                                    @endif
+                                    <td class="text-center">
+                                        @if($etapaano->ativa == 1)
+                                            <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>
+                                            <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-primary btn-sm" title="Enviar Arquivo" data-toggle="modal" data-target="#myModalUploadArquivos"><i class="fa fa-upload"></i> Enviar</button>
+
+                                        @else
+                                            <button value="{{ $etapaano->trabalho_id }}" id="{{ $etapaano->id }}" class="btn btn-default btn-sm" title="Lista de Arquivos" data-toggle="modal" data-target="#myModalListArquivos"><i class="fa fa-list"></i> Listar</button>                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <a id="{{ $etapaano->id }}" class="btn btn-link" href="{{ route('etapaano.edit', ['id'=>$etapaano->id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
+                                        <button id="{{ $etapaano->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelEtapa" title="Excluir"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endforeach
                     </tbody>
+
                 </table> {{-- ./table --}}
 
             </div> <!-- ./col-md-4 -->
@@ -281,6 +296,28 @@
 
     $(document).ready( function () {
         $('table.display').DataTable({
+
+            initComplete: function () {
+                this.api().columns().every( function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
+                } );
+            },
+
             "language": {
             
                 "decimal":        "",

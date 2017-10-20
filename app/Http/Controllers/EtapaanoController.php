@@ -325,6 +325,12 @@ class EtapaanoController extends Controller
 
         
         $this->authorize('update', $etapa);
+
+        $ativa = 0;
+
+        if ($request->input('ativa') != null) {
+            $ativa = 1;
+        }
         
         if ($request->has('data_inicial')) {
 
@@ -336,7 +342,7 @@ class EtapaanoController extends Controller
                     'titulo' => $request->input('titulo'),
                     'data_inicial' => $request->input('data_inicial'),
                     'data_final' => $request->input('data_final'),
-                    'ativa' => $request->input('ativa')
+                    'ativa' => $ativa
                 ]);
 
                 $etapa->etapa()->dissociate($etapa->etapa_id);
@@ -352,7 +358,7 @@ class EtapaanoController extends Controller
                 'titulo' => $request->input('titulo'),
                 'data_inicial' => $request->input('data_inicial'),
                 'data_final' => $request->input('data_final'),
-                'ativa' => $request->input('ativa')
+                'ativa' => $ativa
             ]);
 
             $etapa->etapa()->dissociate($etapa->etapa_id);

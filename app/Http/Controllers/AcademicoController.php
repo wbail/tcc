@@ -31,17 +31,19 @@ class AcademicoController extends Controller {
         if($request->ajax()) {
 
             $term = $request->term;
-            
+
             $academico = DB::table('membro_bancas as mb')
-                    ->join('users as u', 'u.id', '=', 'mb.user_id')
-                    ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
-                    ->join('cursos as c', 'c.departamento_id', '=', 'd.id')
-                    ->join('academicos as a', 'a.curso_id', '=', 'c.id')
-                    ->join('users as ua', 'ua.id', '=', 'a.user_id')
-                    ->where('ua.name', 'LIKE', '%'. $term . '%')
-                    ->where('u.id', '=', Auth::user()->id)
-                    ->orderBy('ua.name')
-                    ->pluck('a.id', 'ua.name as text');
+                ->join('users as u', 'u.id', '=', 'mb.user_id')
+                ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
+                ->join('cursos as c', 'c.departamento_id', '=', 'd.id')
+                ->join('academicos as a', 'a.curso_id', '=', 'c.id')
+                ->join('users as ua', 'ua.id', '=', 'a.user_id')
+                ->join('academico_trabalhos as at', 'at.academico_id', '=', 'a.id')
+                ->where('ua.name', 'LIKE', '%'. $term . '%')
+                ->where('u.id', '=', Auth::user()->id)
+                ->whereNull('at.trabalho_id')
+                ->orderBy('ua.name')
+                ->pluck('a.id', 'ua.name as text');
         
             return Response::json(['itens' => $academico]);
                         

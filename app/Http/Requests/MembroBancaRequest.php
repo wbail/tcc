@@ -62,7 +62,7 @@ class MembroBancaRequest extends FormRequest
                     'email',
                     Rule::unique('users')->ignore($this->id)
                 ],
-                'telefone0' => [
+                'telefone' => [
                     'required',
                     'unique:telefones,numero',
                     'digits:11',

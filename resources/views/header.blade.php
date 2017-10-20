@@ -30,14 +30,6 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" title="Ano Letivo Corrente">
                             <i class="fa fa-calendar-o"></i> {{ session()->get('anoletivo')->rotulo }}
                         </a>
-                        {{--<ul class="dropdown-menu" role="menu">--}}
-                            {{--@foreach(session()->get('anoletivoativo') as $a)--}}
-                                {{--<li>--}}
-                                    {{--<a href="{{ url('/anoletivo/edit') . '/' . $a->id }}" class="text-right"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>--}}
-                                    {{--<a href="#" id="{{ $a->id }}" class="text-right anoletivo"><i class="fa fa-minus"></i> {{ $a->rotulo }}</a>--}}
-                                {{--</li>--}}
-                            {{--@endforeach--}}
-                        {{--</ul>--}}
                     </li>
                     @endif
                     <li class="dropdown">
