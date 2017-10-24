@@ -132,7 +132,7 @@
 <!-- Bootstrap 3.3.2 JS -->
 <script src="{{ asset ('../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset ("app.min.js") }}" type="text/javascript"></script>
 {{-- Select2 --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
 {{-- Select2 - pt-BR --}}

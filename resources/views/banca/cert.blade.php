@@ -68,7 +68,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         Por ser verdade, firmo a presente declaração.
         <br>
         <br>
-        Ponta Grossa, {{ \Carbon\Carbon::now()->format('d \d\e F \d\e Y') }}
+
+        Ponta Grossa, {{ \Carbon\Carbon::now()->formatLocalized('%d de %B de %Y') }}
         <br><br><br>
         <div class="text-center">
             <strong>
@@ -84,7 +85,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </div>
 
 <script type="tejxt/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-{{--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>--}}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -96,7 +96,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Bootstrap 3.3.2 JS -->
 <script src="{{ asset ("../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ("../bower_components/AdminLTE/dist/js/app.min.js") }}" type="text/javascript"></script>
+<script src="{{ asset ('app.min.js') }}" type="text/javascript"></script>
 
 </body>
 </html>

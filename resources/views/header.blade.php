@@ -18,38 +18,38 @@
                 <li class="dropdown user user-menu">
 
                     @if(Auth::user()->permissao == 9)
-                    <li>
-                        <a href="#">
-                            {{--<i class="fa fa-user"> Engenharia de Software</i>--}}
-                            @if(session()->get('curso'))
-                                <i class="fa fa-graduation-cap"> {{ session()->get('curso')->nome }}</i>
-                            @endif
-                        </a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" title="Ano Letivo Corrente">
-                            <i class="fa fa-calendar-o"></i> {{ session()->get('anoletivo')->rotulo }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="#">
+                                {{--<i class="fa fa-user"> Engenharia de Software</i>--}}
+                                @if(session()->get('curso'))
+                                    <i class="fa fa-graduation-cap"> {{ session()->get('curso')->nome }}</i>
+                                @endif
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" title="Ano Letivo Corrente">
+                                <i class="fa fa-calendar-o"></i> {{ session()->get('anoletivo')->rotulo }}
+                            </a>
+                        </li>
                     @endif
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <i class="fa fa-user"></i> {{ Auth::user()->name }} <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
-                                    <i class="fa fa-sign-out"></i> Sair
-                                </a>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <i class="fa fa-user"></i> {{ Auth::user()->name }} <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();">
+                                        <i class="fa fa-sign-out"></i> Sair
+                                    </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
                 </li>
             </ul>
         </div>

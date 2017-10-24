@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'locale' => 'pt_BR',
+    'locale' => \Carbon\Carbon::setLocale(LC_TIME, 'pt_BR.utf8'),
 
     /*
     |--------------------------------------------------------------------------

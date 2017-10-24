@@ -193,7 +193,7 @@
 <!-- Bootstrap 3.3.2 JS -->
 <script src="{{ asset ('../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset ('app.min.js') }}" type="text/javascript"></script>
 {{-- jQuery Mask Plugin --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.9/jquery.mask.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
@@ -252,7 +252,7 @@
                 html = '<table class="table table-striped table-bordered table-hover">'+
                     '<thead>'+
                         '<tr>'+
-                            '<th class"col-md-1">Usuário</th>'+
+                            '<th class"col-md-1">Nome</th>'+
                             '<th class"col-md-1">Arquivo(s)</th>'+
                             '<th text-center">Data</th>'+
                             '<th text-center">Ação</th>'+
@@ -581,7 +581,7 @@
                 html = '<table class="table table-striped table-bordered table-hover">'+
                     '<thead>'+
                         '<tr>'+
-                            '<th class"col-md-1">Usuário</th>'+
+                            '<th class"col-md-1">Nome</th>'+
                             '<th class"col-md-1">Arquivo</th>'+
                             '<th class"col-md-1">Enviado em</th>'+
                             '<th class"col-md-1">Ação</th>'+
