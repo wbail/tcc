@@ -66,7 +66,7 @@
                         </div>
                         <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         {!! Form::label('curso', 'Curso *') !!}
                                         {!! Form::select('curso', $curso, $academico->curso_id, ['class'=>'form-control', 'title'=>'Curso do(a) acadêmico(a)']) !!}
                                     </div> {{-- ./col-md-4 --}}
@@ -74,7 +74,7 @@
                                         {!! Form::label('nome', 'Nome *') !!}
                                         {!! Form::text('nome', $academico->user->name, ['class'=>'form-control', 'title'=>'Nome do(a) acadêmico(a)']) !!}
                                     </div> {{-- ./col-md-4 --}}
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         {!! Form::label('ra', 'RA *') !!}
                                         {!! Form::number('ra', $academico->ra, ['class'=>'form-control', 'min'=>'0', 'title'=>'Registro Acadêmico']) !!}
                                         <br>
@@ -106,7 +106,7 @@
                                     {!! Form::label('telefone', 'Telefone *') !!}<br>
                                     @foreach($academico->user->telefone as $contato)
                                         @if($loop->index == 0)
-                                            {!! Form::text('telefone0', $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
+                                            {!! Form::text('telefone', $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
                                             <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
                                         @else
                                             <div class='telefone{{$loop->index}}'>

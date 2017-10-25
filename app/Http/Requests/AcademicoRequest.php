@@ -30,24 +30,15 @@ class AcademicoRequest extends FormRequest {
             return [
                 'nome' => 'required|regex:/^[\pL\s\-]+$/u|min:3,max:80',
                 'curso' => 'required',
-                'telefone0' => [
+                'telefone' => [
                     'required',
                     'digits:11',
-                    Rule::unique('telefones', 'numero')
-                        ->ignore(\App\Telefone::where('user_id', \App\Academico::find($this->id)->user_id)
-                            ->value('id'))
                 ],
                 'telefone1' => [
                     'digits:11',
-                    Rule::unique('telefones', 'numero')
-                        ->ignore(\App\Telefone::where('user_id', \App\Academico::find($this->id)->user_id)
-                            ->value('id'))
                 ],
                 'telefone2' => [
                     'digits:11',
-                    Rule::unique('telefones', 'numero')
-                        ->ignore(\App\Telefone::where('user_id', \App\Academico::find($this->id)->user_id)
-                            ->value('id'))
                 ],
                 'ra' => [
                     'required',
@@ -114,14 +105,13 @@ class AcademicoRequest extends FormRequest {
             'email.required' => 'O campo E-mail é obrigatório.',
             'email.email' => 'O campo E-mail deve ter o formato \'exemplo@exemplo.com\'.',
             'email.unique' => 'E-mail já cadastrado.',
-            'telefone0.required' => 'O campo Telefone é obrigatório.',
-            'telefone0.unique' => 'Telefone já cadastrado.',
-            'telefone0.digits' => 'O campo telefone deve ter 11 dígitos',
+            'telefone.required' => 'O campo Telefone é obrigatório.',
+            'telefone.unique' => 'Telefone já cadastrado.',
+            'telefone.digits' => 'O campo telefone deve ter 11 dígitos',
             'telefone1.unique' => 'Telefone já cadastrado.',
             'telefone2.unique' => 'Telefone já cadastrado.',
             'telefone1.digits' => 'O campo telefone deve ter 11 dígitos',
             'telefone2.digits' => 'O campo telefone deve ter 11 dígitos',
-
 
         ];
     }

@@ -15,6 +15,8 @@ use App\Curso;
 use DB;
 use Auth;
 use View;
+use Validator;
+use Illuminate\Validation\Rule;
 
 
 class AcademicoController extends Controller {
@@ -199,7 +201,6 @@ class AcademicoController extends Controller {
      */
     public function update(AcademicoRequest $request, $id) {
 
-
         if (!Auth::user()->permissao == 9) {
             abort(403, 'Acesso não autorizado.');
         }
@@ -209,7 +210,6 @@ class AcademicoController extends Controller {
             $ativo = 0;
         }
 
-        // Atualiza os campos relacionado a user
         $academico = Academico::find($id);
 
         $academico->user()->update([
@@ -218,46 +218,37 @@ class AcademicoController extends Controller {
             'ativo' => $ativo,
         ]);
 
-        $academico->curso()->associate($request->input('curso'))->save();
+        $academico
+            ->curso()
+            ->associate($request->input('curso'))
+            ->save();
 
         // Salva apenas os números de telefone, todos
-        $telefone = $request->except('_token', '_method', 'nome', 'email', 'ra', 'curso');
-        
+        $telefone = $request->except('_token', '_method', 'nome', 'email', 'ra', 'curso', 'ativo');
+
         // Pega apenas os valores do request
         $telefone = array_values($telefone);
-        
-        // Pega o objeto da tabela user em que o academicos está relacionado, para pegar o id da user
-        $userid = DB::table('academicos as a')
-            ->where('a.id', '=', $id)
-            ->first();
 
-        // Retorna todos os números de telefone que está relacionado com a user que é o academico em questão
-        $numeros_salvos = DB::select('select c.numero 
-                                        from telefones as c 
-                                       where c.user_id = ' . $userid->user_id);
+        for ($i = 0; $i < count($telefone); $i++) {
 
-        // For para salvar apenas os novos números
-        for($i = 0; $i < count($telefone); $i++) {
-       
-            if (count($numeros_salvos) > $i) {
-                if($numeros_salvos[$i]->numero != $telefone[$i]) {
-                    $contato = new Telefone;
-                    $contato->numero = $telefone[$i];
-                    $contato->user_id = $userid->user_id;
-                    $contato->save();
-                }
+            $telefoneDono = Telefone::where('user_id', $id)
+                ->get();
 
+            if((DB::table('telefones')->where('numero', '=', $telefone[$i])->exists()) && ($telefoneDono[$i]->user_id == $academico->user_id)) {
+
+                continue;
+
+            } else if(DB::table('telefones')->where('numero', '=', $telefone[$i])->exists() && $telefoneDono[$i]->user_id != $academico->user_id) {
+                continue;
             } else {
                 $contato = new Telefone;
                 $contato->numero = $telefone[$i];
-                $contato->user_id = $userid->user_id;
+                $contato->user_id = $academico->user_id;
                 $contato->save();
             }
-
         }
 
         return redirect('/academico')->with('message', 'Acadêmico atualizado com sucesso!');
-
     }
 
     /**

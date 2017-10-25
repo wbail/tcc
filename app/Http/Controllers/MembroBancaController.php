@@ -237,7 +237,6 @@ class MembroBancaController extends Controller
         // Salva apenas os números de telefone, todos
         $telefone = $request->except('_token', '_method', 'nome', 'email', 'departamento', 'permissao', 'orientador', 'coorientador', 'banca', 'ativo');
 
-
         for ($i = 0; $i < count($telefone); $i++) {
 
             $justNumber = str_replace(['(', ')', '-', ' '], '', array_values($telefone));
@@ -249,7 +248,7 @@ class MembroBancaController extends Controller
                     ->withInput(['telefone', 'ativo']);
 
             } else if(DB::table('telefones')->where('numero', '=', $justNumber[$i])->exists() && $telefoneDono[$i]->user_id == $id){
-                //
+                continue;
             } else {
                 $contato = new Telefone;
                 $contato->numero = $justNumber[$i];
@@ -257,7 +256,6 @@ class MembroBancaController extends Controller
                 $contato->save();
             }
         }
-
 
         return redirect('/membrobanca')->with('message', 'Professor(a) atualizado com sucesso.');
 

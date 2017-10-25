@@ -184,7 +184,7 @@
                                     {!! Form::label('email', 'E-mail *') !!}
                                     {!! Form::text('email', $membrobanca->user->email, ['class'=>'form-control', 'title'=>'E-mail do(a) professor(a)']) !!}
                                 </div> {{-- ./col-md-6 --}}
-                                <div class="col-md-5 add-telefone">
+                                <uthendiv class="col-md-5 add-telefone">
                                     {!! Form::label('telefone', 'Telefone *') !!}<br>
                                     @foreach($membrobanca->user->telefone as $contato)
                                         @if($loop->index == 0)
@@ -198,7 +198,7 @@
                                             </div>
                                         @endif
                                     @endforeach
-                                </div> {{-- ./col-md-5 --}}
+                                </uthendiv> {{-- ./col-md-5 --}}
                             </div> {{-- ./row --}}
                             <br>
                         </div> {{-- ./panel-body --}}

@@ -30,8 +30,6 @@
                 <div class="panel-body">
                     <div class="login-box">
                         <div class="login-logo">
-                            {{--<a href="{{ url('/admin') }}"><b>TCC</b></a>--}}
-
                             {{ Html::image('../resources/assets/images/uepg_ret.png', 'alt', array('width' => '200' , 'height' => '70', 'class'=>'text-center')) }}
                         </div>
                         <div class="login-box-body">
@@ -39,7 +37,7 @@
                                 {{ csrf_field() }} 
                                 
                                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                    {{-- <label for="email" class="col-md-4 control-label">E-Mail</label> --}}
+
                                     <div class="col-md-2"></div>
                                     <div class="col-md-9">
                                         <label for="anoletivo">Ano Letivo</label>

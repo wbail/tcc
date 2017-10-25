@@ -58,7 +58,7 @@
                         </div>
                         <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         {!! Form::label('curso', 'Curso *') !!}
                                         {!! Form::select('curso', $curso, null, ['class'=>'form-control', 'title'=>'Curso do(a) acadêmico(a)', 'placeholder'=>'']) !!}
                                         <br>
@@ -68,7 +68,7 @@
                                         {!! Form::text('nome', null, ['class'=>'form-control', 'title'=>'Nome do(a) acadêmico(a)']) !!}
                                         <br>
                                     </div> {{-- ./col-md-4 --}}
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         {!! Form::label('ra', 'RA *') !!}
                                         {!! Form::text('ra', null, ['class'=>'form-control', 'min'=>'0', 'maxlength'=>'8', 'title'=>'Registro Acadêmico']) !!}
                                         <br>
