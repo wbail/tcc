@@ -15,11 +15,7 @@
                 {{ $page_title or "Ano Letivo" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                <li class="active">Here</li>
-            </ol> --}}
+
             <br>
 
         </section>
@@ -42,8 +38,8 @@
                     <thead>
                         <tr>
                             
-                            <th>Rotulo</th>
-                            <th>Situaçao</th>
+                            <th>Rótulo</th>
+                            <th>Situação</th>
                             <th>Data final do Ano Letivo</th>
                             <th class="text-center">Ação</th>
                         </tr>

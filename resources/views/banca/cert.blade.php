@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{{ $page_title or "TCC" }}</title>
+    <title>{{ $page_title or "TCC - Participantes Banca" }}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
     <link href="{{ asset("../bower_components/AdminLTE/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
@@ -56,7 +56,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <p class="text-justify">
         Declaro para os devidos fins que o(a) <strong>Professor(a) {{ $orientador }}</strong>
         participou da Banca Examinadora do Trabalho de Conclusão de Curso, como <strong>orientador(a)</strong> do(s) acadêmico(s) @if($aluno > 1) {{ $aluno[0] }} e {{ $aluno[1] }},
-        @else {{ $aluno }}, @endif intitulado <strong>{{ $banca[0]->titulo }}</strong>, no dia {{ \Carbon\Carbon::parse($banca[0]->data)->format('d/m/Y à\s H:i') }}. A banca foi
+        @else <strong>{{ $aluno }}</strong>, @endif intitulado <strong>{{ $banca[0]->titulo }}</strong>, no dia {{ \Carbon\Carbon::parse($banca[0]->data)->format('d/m/Y à\s H:i') }}. A banca foi
         constituída também pelos(as) Professores(as) {{ $prof[0] }} e {{ $prof[1] }}.
         <br>
         <br>
@@ -77,7 +77,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <br>
                 Coordenador(a) dos Trabalhos de Conclusão de Curso
                 <br>
-                Curso de Engenharia de Software
+                Curso de {{ session()->get('curso')->nome }}
             </strong>
         </div>
     </p>
@@ -96,7 +96,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Bootstrap 3.3.2 JS -->
 <script src="{{ asset ("../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ('app.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
 
 </body>
 </html>

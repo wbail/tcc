@@ -8,7 +8,7 @@ use App\CoordenadorCurso;
 use Illuminate\Http\Request;
 use App\Http\Requests\BancaRequest;
 use Illuminate\Support\Facades\Validator;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 use App\Policies\BancaPolicy;
 use PDF;
@@ -47,76 +47,40 @@ class BancaController extends Controller
 
             $this->authorize('view', $instituicao);
 
-//        $banca = Banca::with(['trabalho.membrobanca' => function($query) use ($d) {
-//            $query->where('departamento_id', '=', $d);
-//        }], 'trabalho.coorientador')
-//            ->with('academicotrabalho')
-//            ->get();
+            $anoLetivo = Session::get('anoletivo');
 
-//        $banca = collect($banca)
-//            ->unique('trabalho_id')
-//            ->values()
-//            ->all();
+            $banca = Banca::with(['trabalho' => function($q) use ($anoLetivo) {
+               $q->where('anoletivo_id', $anoLetivo->id);
+            }])
+            ->get();
 
-
-//        $banca = DB::select('select t.sigla
-//                                  , t.titulo
-//                                  , t.id as trabalho_id
-//                                  , u.name
-//                                  , b.data
-//                                  , b.id
-//                               from bancas b
-//                              inner join trabalhos t
-//                                 on b.trabalho_id = t.id
-//                              inner join membro_bancas mb
-//                                 on b.membrobanca_id = mb.id
-//                              inner join academico_trabalhos at
-//                                 on t.id = at.trabalho_id
-//                              inner join academicos a
-//                                 on at.academico_id = a.id
-//                              inner join users u
-//                                 on a.user_id = u.id
-//                              where at.ano_letivo_id = ?
-//                              ', [Session::get('anoletivo')->id]);
-
-            $banca = DB::table('bancas as b')
-                ->join('trabalhos as t', 't.id', '=', 'b.trabalho_id')
-                ->join('membro_bancas as mb', 'mb.id', '=', 'b.membrobanca_id')
-                ->join('academico_trabalhos as at', 'at.trabalho_id', '=', 'b.trabalho_id')
-                ->join('membro_bancas as mbx', function ($query) use ($departamento_id) {
-                    $query->where('mbx.departamento_id', $departamento_id);
-                })
-                ->where('at.ano_letivo_id', Session::get('anoletivo')->id)
-                ->get();
-
-            $banca = collect($banca)
-                ->unique('trabalho_id')
-                ->values()
-                ->all();
-
-            $orientador = array();
+            $count = 0;
 
             for ($i = 0; $i < count($banca); $i++) {
-                if (MembroBanca::find($banca[$i]->coorientador_id)) {
-
-                    $orientador[] = array(
-                        'orientador' => User::find(MembroBanca::find($banca[$i]->orientador_id)->user_id)->name,
-                        'coorientador' => User::find(MembroBanca::find($banca[$i]->coorientador_id)->user_id)->name,
-                    );
-                } else {
-                    $orientador[] = array(
-                        'orientador' => User::find(MembroBanca::find($banca[$i]->orientador_id)->user_id)->name,
-                    );
+                if (empty($banca->trabalho)) {
+                    $count++;
                 }
             }
 
-//        return $banca;
+            if ($count == 0) {
+                return view('banca.index', [
+                    'countBancaData' => 0
+                ]);
+            } else {
 
-            return view('banca.index', [
-                'banca' => $banca,
-                'orientador' => $orientador,
-            ]);
+                $countBancaData = 0;
 
+                for ($i = 0; $i < count($banca); $i++) {
+                    if ($banca[$i]->data != null) {
+                        $countBancaData++;
+                    }
+                }
+
+                return view('banca.index', [
+                    'banca' => $banca,
+                    'countBancaData' => $countBancaData
+                ]);
+            }
 
         } else {
             return abort(403, 'Usuário não Autorizado.');
@@ -147,17 +111,15 @@ class BancaController extends Controller
 
         $departamento_id = User::userMembroDepartamento()->departamento_id;
 
-        $trabalho = Trabalho::whereHas('membrobanca', function($q) use ($departamento_id) {
+        $trabalho = Trabalho::where('anoletivo_id', Session::get('anoletivo')->id)
+        ->whereHas('membrobanca', function($q) use ($departamento_id) {
             $q->where('departamento_id', '=', $departamento_id);
         })
         ->orWhereHas('coorientador', function($q) use ($departamento_id) {
             $q->where('departamento_id', '=', $departamento_id);
         })
-//        ->whereHas('anoletivo', function ($query) {
-//            $query->where('anoletivo_id', Session::get('anoletivo')->id);
-//        })
         ->orderBy('sigla')
-        ->select(DB::raw('concat(trabalhos.sigla, \' - \', trabalhos.titulo) as sigla'), 'trabalhos.id')
+        ->select(DB::raw('concat(trabalhos.sigla, \' - \', trabalhos.titulo) as sigla'), 'trabalhos.id', 'trabalhos.anoletivo_id')
         ->where('trabalhos.anoletivo_id', Session::get('anoletivo')->id)
         ->pluck('sigla', 'id');
 
@@ -216,16 +178,22 @@ class BancaController extends Controller
                         
         $etapaano = EtapaAno::where('etapa_id', $etapaano->id)
                 ->first();
-        
-        for ($i = 0; $i < count($valores_membros); $i++) { 
-            DB::insert('insert into bancas (papel, membrobanca_id, etapaano_id, trabalho_id, created_at, updated_at) values (?, ?, ?, ?, ?, ?)', [
-                ($i+1),
-                $valores_membros[$i],
-                $etapaano->id,
-                $trabalho->id,
-                Carbon::now(),
-                Carbon::now()
-            ]);
+
+
+        $banca = new Banca;
+        $banca->etapaano_id = $etapaano->id;
+        $banca->trabalho_id = $trabalho->id;
+        $banca->save();
+
+        $academico = AcademicoTrabalho::where('trabalho_id', $trabalho->id)
+            ->get();
+
+        for($i = 0; $i < count($academico); $i++) {
+            $banca->academico()->attach($academico[$i]->academico_id);
+        }
+
+        for ($i = 0; $i < count($valores_membros); $i++) {
+            $banca->membrobanca()->attach($valores_membros[$i], ['papel'=>$i+1]);
         }
 
         return redirect('/banca')->with('message', 'Banca cadastrada com sucesso');
@@ -244,14 +212,8 @@ class BancaController extends Controller
 
         $d = User::userMembroDepartamento()->departamento_id;
 
-//        $banca = Banca::where('trabalho_id', $id)->with(['trabalho.membrobanca' => function($query) use ($d) {
-//            $query->where('departamento_id', '=', $d);
-//        }], 'trabalho.coorientador')
-//            ->with('academicotrabalho')
-//            ->get();
-//
-
-        $banca = DB::select('select t.sigla
+        $banca = DB::select(/** @lang sql */
+                    'select t.sigla
                           , t.titulo
                           , t.id as trabalho_id
                           , u.name as nome_aluno
@@ -262,10 +224,12 @@ class BancaController extends Controller
                        from bancas b
                       inner join trabalhos t
                          on b.trabalho_id = t.id
-                      inner join membro_bancas mb
-                         on b.membrobanca_id = mb.id
+                      inner join membro_bancas_bancas mb
+                         on b.id = mb.banca_id
+                      inner join membro_bancas mb2
+                         on mb.membro_banca_id = mb2.id
                       inner join users as ux
-                         on ux.id = mb.user_id
+                         on ux.id = mb2.user_id
                       inner join academico_trabalhos at
                          on t.id = at.trabalho_id
                       inner join academicos a
@@ -274,14 +238,13 @@ class BancaController extends Controller
                          on a.user_id = u.id
                       where at.ano_letivo_id = ?
                         and t.id = ?
+                        
                       ', [Session::get('anoletivo')->id, $id]);
 
         $banca = collect($banca)
 //            ->unique('trabalho_id')
             ->values()
             ->all();
-
-//        return $banca;
 
         $aluno = array();
         $prof = array();
@@ -303,7 +266,7 @@ class BancaController extends Controller
                 'aluno' => $alunos[0],
                 'prof' => $profs,
                 'orientador' => $orientador,
-            ])->stream();
+            ])->stream(\Carbon\Carbon::now()->format('Y-m-d') . '-banca-participantes');
         } else {
 
             return PDF::loadView('banca.cert', [
@@ -312,39 +275,9 @@ class BancaController extends Controller
                 'aluno' => $alunos,
                 'prof' => $profs,
                 'orientador' => $orientador,
-            ])->stream();
+            ])->stream(\Carbon\Carbon::now()->format('Y-m-d') . '-banca-participantes');
         }
 
-
-
-        ///////////////////////////////////
-
-        $membrosBanca = array();
-
-        // Pegando apenas as pessoas que teoricamente tem presença confirmada
-        // mas e se um membro suplente é quem participou?
-        for ($i = 0; $i < count($banca); $i++) {
-            if ($banca[$i]->papel == 1 || $banca[$i]->papel == 2) {
-                $membrosBanca[] = User::find(MembroBanca::find($banca[$i]->membrobanca_id)->user_id)->name;
-            }
-        }
-
-//        return $membrosBanca;
-
-        $nomeAluno = array();
-
-        for ($i = 0; $i < count($banca[0]->academicotrabalho); $i++) {
-            $nomeAluno[] = \App\Academico::find($banca[0]->academicotrabalho[$i]->academico_id)->user->name;
-        }
-
-//        return $nomeAluno;
-
-        return PDF::loadView('banca.cert', [
-            'banca' => $banca,
-            'coordenadorTcc' => Auth::user()->name,
-            'aluno' => $nomeAluno,
-            'membro' => $membrosBanca,
-        ])->stream();
 
     }
 
@@ -358,10 +291,19 @@ class BancaController extends Controller
     {
         $this->authorize('create', Banca::class);
         
-        $banca =  Banca::where('trabalho_id', $id)
-                ->get();
+        $banca = Banca::where('trabalho_id', $id)
+            ->with('academico')
+            ->with('membrobanca')
+            ->first();
 
-        $academico = AcademicoTrabalho::where('trabalho_id', $id)->get();
+        $apr = array();
+
+        for ($i = 0; $i < $banca->academico->count(); $i++) {
+
+            $apr[] = AcademicoTrabalho::where('academico_id', $banca->academico[$i]->id)
+                ->where('trabalho_id', $banca->trabalho_id)
+                ->value('aprovado');
+        }
 
         $data = Etapa::where('banca', 1)
                     ->join('etapa_anos as ea', 'ea.etapa_id', '=', 'etapas.id')
@@ -373,11 +315,10 @@ class BancaController extends Controller
                     ->pluck('u.name', 'membro_bancas.id');
         
         return view('banca.edit', [
-            'banca' => Banca::find($banca[0]->id),
+            'banca' => $banca,
             'data' => $data,
             'membros' => $membros,
-            'membro' => $banca,
-            'academico' => $academico,
+            'apr' => $apr
         ]);
     }
 
@@ -392,7 +333,6 @@ class BancaController extends Controller
     {
         $this->authorize('create', Banca::class);
 
-
         $alunosAprovados = $request->except([
             '_method',
             '_token',
@@ -400,13 +340,14 @@ class BancaController extends Controller
             'membro',
             'membro2',
             'suplente',
-            'suplente2'
+            'suplente2',
+            'local'
         ]);
-
 
         if ($alunosAprovados != null) {
 
             $soNumeros = array_keys($alunosAprovados);
+
             for ($i = 0; $i < count($soNumeros); $i++) {
                 $soNumeros = preg_replace("/[^0-9,.]/", "", $soNumeros[$i]);
                 $at = AcademicoTrabalho::where('academico_id', $soNumeros)->first();
@@ -414,7 +355,7 @@ class BancaController extends Controller
                 $at->save();
             }
 
-            return redirect('/banca')->with('message', 'Alunos aprovados com sucesso.');
+            return redirect('/banca')->with('message', 'Aluno(as) aprovado(as) com sucesso.');
 
         }
 
@@ -422,6 +363,7 @@ class BancaController extends Controller
 
         $messages = [
             'data.required' => 'O campo Data é obrigatório.',
+            'local.required' => 'O campo Local é obrigatório.',
             'membro.required' => 'O campo Membro de Banca é obrigatório.',
             'membro2.required' => 'O campo Membro de Banca é obrigatório.',
             'suplente.required' => 'O campo Membro Suplente é obrigatório.',
@@ -434,6 +376,7 @@ class BancaController extends Controller
 
         $validator = Validator::make($request->all(), [
             'data' => 'required',
+            'local' => 'required',
             'membro' => 'required',
             'membro2' => 'required',
             'suplente' => 'required',
@@ -474,7 +417,6 @@ class BancaController extends Controller
             }
         }
 
-
         $data = Etapa::where('banca', 1)
                     ->join('etapa_anos as ea', 'ea.etapa_id', '=', 'etapas.id')
                     ->select('data_inicial', 'data_final')
@@ -486,8 +428,11 @@ class BancaController extends Controller
                 ->withInput(['data']);
         }
 
-        DB::update('update bancas as b set b.data = ? where b.trabalho_id = ?', [$request->input('data'), $id]);
-
+        Banca::where('trabalho_id', $id)
+            ->update([
+                'data' => $request->input('data'),
+                'local' => $request->input('local'),
+            ]);
 
 
         return redirect('/banca')
@@ -507,7 +452,7 @@ class BancaController extends Controller
     }
 
     /**
-     * Muda para o status 1 a banca, indicando que a banca aconteceu.
+     * Muda a banca para o status 1, indicando que a banca aconteceu.
      * Sendo $id do trabalho.
      *
      * @param $id
@@ -515,13 +460,63 @@ class BancaController extends Controller
      */
     public function finaliza($id)
     {
+        $this->authorize('create', Banca::class);
+
         Banca::where('trabalho_id', $id)->update([
             'status' => 1
         ]);
+
+        $academicoTrabalho = AcademicoTrabalho::where('trabalho_id', $id)
+            ->get();
+
+        for ($i = 0; $i < count($academicoTrabalho); $i++) {
+            if ($academicoTrabalho[$i]->aprovado != 1) {
+
+                DB::insert('insert into academico_trabalhos (aprovado, academico_id, created_at, updated_at) values(?, ?, ?, ?)', [
+                    0,
+                    $academicoTrabalho[$i]->academico_id,
+                    Carbon::now(),
+                    Carbon::now()
+                ]);
+            }
+        }
 
         return redirect('/banca')
             ->with('message', 'Banca realizada');
     }
 
+    /**
+     * Lista de todas bancas para impressão, em PDF
+     *
+     * @return mixed
+     */
+    public function imprime() {
+
+        $this->authorize('create', Banca::class);
+
+        set_time_limit(0);
+
+        $data = Etapa::where('banca', 1)
+            ->join('etapa_anos as ea', 'ea.etapa_id', '=', 'etapas.id')
+            ->select('data_inicial', 'data_final')
+            ->first();
+
+        $etapaano = EtapaAno::join('etapas as e', 'e.id', '=', 'etapa_anos.etapa_id')
+            ->where('e.banca', 1)
+            ->select('etapa_anos.id')
+            ->first();
+
+        $banca = Banca::where('etapaano_id', $etapaano->id)
+            ->with('academico', 'membrobanca')
+            ->get();
+
+        return PDF::loadView('banca.imprime', [
+            'coordenadorTcc' => Auth::user()->name,
+            'cursoupper' => strtoupper(session()->get('curso')->nome),
+            'data' => $data,
+            'banca' => $banca,
+        ])->stream(\Carbon\Carbon::now()->format('Y-m-d') . '-horario-bancas-' . session()->get('curso')->nome);
+
+    }
 
 }

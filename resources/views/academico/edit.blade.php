@@ -15,11 +15,7 @@
                 Editando o aluno(a) {{ $academico->user->name }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                <li class="active">Here</li>
-            </ol> --}}
+
             <a href="{{ url('academico') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
 
@@ -57,76 +53,74 @@
 
 			<br>
 
-             {!! Form::open(['url'=>"academico/update/$academico->id", 'method'=>'put']) !!}
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Informações Básicas</h3>
-                        </div>
-                        <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        {!! Form::label('curso', 'Curso *') !!}
-                                        {!! Form::select('curso', $curso, $academico->curso_id, ['class'=>'form-control', 'title'=>'Curso do(a) acadêmico(a)']) !!}
-                                    </div> {{-- ./col-md-4 --}}
-                                    <div class="col-md-4">
-                                        {!! Form::label('nome', 'Nome *') !!}
-                                        {!! Form::text('nome', $academico->user->name, ['class'=>'form-control', 'title'=>'Nome do(a) acadêmico(a)']) !!}
-                                    </div> {{-- ./col-md-4 --}}
-                                    <div class="col-md-3">
-                                        {!! Form::label('ra', 'RA *') !!}
-                                        {!! Form::number('ra', $academico->ra, ['class'=>'form-control', 'min'=>'0', 'title'=>'Registro Acadêmico']) !!}
-                                        <br>
-                                    </div> {{-- ./col-md-4 --}}
-                                </div> {{-- ./row --}}
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        {!! Form::label('ativo', 'Ativo *') !!}
-                                        {!! Form::checkbox('ativo', 1, $academico->user->ativo, ['title'=>'Status do(a) Aluno(a)']) !!}
+            {!! Form::open(['url'=>"academico/update/$academico->id", 'method'=>'put']) !!}
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Informações Básicas</h3>
+                            </div>
+                            <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            {!! Form::label('curso', 'Curso *') !!}
+                                            {!! Form::select('curso', $curso, $academico->curso_id, ['class'=>'form-control', 'title'=>'Curso do(a) acadêmico(a)']) !!}
+                                        </div> {{-- ./col-md-4 --}}
+                                        <div class="col-md-4">
+                                            {!! Form::label('nome', 'Nome *') !!}
+                                            {!! Form::text('nome', $academico->user->name, ['class'=>'form-control', 'title'=>'Nome do(a) acadêmico(a)']) !!}
+                                        </div> {{-- ./col-md-4 --}}
+                                        <div class="col-md-3">
+                                            {!! Form::label('ra', 'RA *') !!}
+                                            {!! Form::number('ra', $academico->ra, ['class'=>'form-control', 'min'=>'0', 'title'=>'Registro Acadêmico']) !!}
+                                            <br>
+                                        </div> {{-- ./col-md-4 --}}
+                                    </div> {{-- ./row --}}
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            {!! Form::label('ativo', 'Ativo *') !!}
+                                            {!! Form::checkbox('ativo', 1, $academico->user->ativo, ['title'=>'Status do(a) Aluno(a)']) !!}
+                                        </div>
                                     </div>
-                                </div>
-                        </div> {{-- ./panel-body --}}
-                    </div> {{-- ./panel --}}
-                </div> {{-- ./col-md-7 --}}
+                            </div> {{-- ./panel-body --}}
+                        </div> {{-- ./panel --}}
+                    </div> {{-- ./col-md-7 --}}
 
-                <div class="col-md-5">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Contato</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    {!! Form::label('email', 'E-mail *') !!}
-                                    {!! Form::text('email', $academico->user->email, ['class'=>'form-control', 'title'=>'E-mail do(a) acadêmico(a)']) !!}
-                                </div> {{-- ./col-md-6 --}}
+                    <div class="col-md-5">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Contato</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        {!! Form::label('email', 'E-mail *') !!}
+                                        {!! Form::text('email', $academico->user->email, ['class'=>'form-control', 'title'=>'E-mail do(a) acadêmico(a)']) !!}
+                                    </div> {{-- ./col-md-6 --}}
 
-                                <div class="col-md-5 add-telefone">
-                                    {!! Form::label('telefone', 'Telefone *') !!}<br>
-                                    @foreach($academico->user->telefone as $contato)
-                                        @if($loop->index == 0)
-                                            {!! Form::text('telefone', $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
-                                            <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
-                                        @else
-                                            <div class='telefone{{$loop->index}}'>
-                                                {!! Form::text("telefone$loop->index", $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
+                                    <div class="col-md-1 add-telefone">
+                                        {!! Form::label('telefone', 'Telefone *') !!}<br>
+                                        @foreach($academico->user->telefone as $contato)
+                                            @if($loop->index == 0)
+                                                {!! Form::text('telefone', $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
                                                 <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
-                                                <span id="{{$contato->id}}" onclick="rm(id)" class="btn btn-link btn-sm" title="Remover telefone" data-toggle="modal" data-target="#myModalDelTelefone"><i class="fa fa-minus"></i></span>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div> {{-- ./col-md-5 --}}
-
-                            </div> {{-- ./row --}}
-                            <br>
-                        </div> {{-- ./panel-body --}}
-                    </div> {{-- ./panel --}}
-                </div> {{-- ./col-md-6 --}}
-            </div> {{-- ./row --}}
+                                            @else
+                                                <div class='telefone{{$loop->index}}'>
+                                                    {!! Form::text("telefone$loop->index", $contato->numero, ['class'=>'form-control phone_with_ddd', 'title'=>'Número do telefone com DDD']) !!}
+                                                    <span id="addTelefone" onclick="add()" class="btn btn-link btn-sm" title="Adicionar telefone"><i class="fa fa-plus"></i></span>
+                                                    <span id="{{$contato->id}}" onclick="rm(id)" class="btn btn-link btn-sm" title="Remover telefone" data-toggle="modal" data-target="#myModalDelTelefone"><i class="fa fa-minus"></i></span>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div> {{-- ./col-md-5 --}}
+                                </div> {{-- ./row --}}
+                                <br>
+                            </div> {{-- ./panel-body --}}
+                        </div> {{-- ./panel --}}
+                    </div> {{-- ./col-md-6 --}}
+                </div> {{-- ./row --}}
                                 {!! Form::submit('Salvar', ['class'=>'btn btn-primary pull-right']) !!}
-                                
-                            {!! Form::close() !!}
+            {!! Form::close() !!}
 
         <!-- Modal del telefone-->
             <div id="myModalDelTelefone" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -161,8 +155,6 @@
 <script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
 {{-- jQuery Mask Plugin --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.9/jquery.mask.js"></script>
-{{-- AngularJS --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
 
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

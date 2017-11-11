@@ -79,23 +79,6 @@ class EtapaanoController extends Controller
                                               where al.id = ?', [$trabalho[$i]->id, Session::get('anoletivo')->id]);
                 }
 
-//                for ($i = 0; $i < count($objetos) - 1; $i++) {
-//                    for ($j = $i; count($objetos[$i][$j]->id); $j++) {
-//                        if (!is_null($objetos[$i][$j]->id)) {
-//                            $qntArquivos[] = DB::table('arquivos as a')
-//                                ->join('etapa_trabalhos as et', 'et.id', '=', 'a.etapatrabalho_id')
-//                                ->join('etapa_anos as ea', 'ea.id', '=', 'et.etapaano_id')
-//                                ->join('trabalhos as t', 't.id', '=', 'et.trabalho_id')
-//                                ->where('ea.id', '=', $objetos[$i][$j]->id)
-//                                ->where('t.id', '=', $objetos[$i][$j]->trabalho_id)
-//                                ->whereNull('a.deleted_at')
-//                                ->count();
-//                        }
-//                    }
-//                }
-//
-//                return $qntArquivos;
-
                 return view('etapaano.index', [
                     'etapaano' => $objetos
                 ]);
@@ -124,8 +107,8 @@ class EtapaanoController extends Controller
                                                  on t.id = ?
                                                inner join ano_letivos as al
                                                  on al.id = t.anoletivo_id
-                                              where al.ativo = ?', [$trabalho[$i]->id, 1]);
-
+                                              where al.ativo = ?
+                                                 ', [$trabalho[$i]->id, 1]);
                 }
                 
                 return view('etapaano.index', [

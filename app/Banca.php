@@ -12,7 +12,16 @@ class Banca extends Model
         return $this->belongsTo(Trabalho::class);
     }
 
-    public function academicotrabalho() {
-        return $this->hasManyThrough(AcademicoTrabalho::class, Trabalho::class, 'id');
+    public function membrobanca() {
+        return $this->belongsToMany(MembroBanca::class, 'membro_bancas_bancas')
+            ->withPivot('papel', 'membro_banca_id')
+            ->withTimestamps();
     }
+
+    public function academico() {
+        return $this->belongsToMany(Academico::class, 'academico_bancas')
+            ->withPivot('academico_id', 'banca_id')
+            ->withTimestamps();
+    }
+
 }

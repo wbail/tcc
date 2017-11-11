@@ -15,11 +15,7 @@
                 {{ $page_title or "Novo(a) Aluno(a)" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="{{ url('/academico') }}"><i class="fa fa-dashboard"></i> Acadêmicos</a></li>
-                <li class="active">Novo</li>
-            </ol> --}}
+
             <a href="{{ url('academico') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
         </section>
@@ -85,15 +81,12 @@
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     {!! Form::label('email', 'E-mail *') !!}
                                     {!! Form::text('email', null, ['class'=>'form-control', 'title'=>'E-mail do(a) acadêmico(a)']) !!}
                                 </div> {{-- ./col-md-6 --}}
-                            </div> {{-- ./row --}}
-                            <br>
-                            <div class="row">
                                 <div class="col-md-6">
-                                
+
                                     {{--{!! Form::label('tipo', 'Tipo de Telefone *') !!}<br>--}}
                                     {{--{!! Form::select('tipo', $tipo, 1, ['class'=>'form-control', 'title'=>'Tipo de Telefone', 'placeholder'=>'']) !!}--}}
 
@@ -104,11 +97,9 @@
                                         <br>
                                     </div>
 
-                                </div> {{-- ./col-md-4 --}}
-                                <div class="col-md-6">
-
                                 </div> {{-- ./col-md-6 --}}
                             </div> {{-- ./row --}}
+                            <br>
 
                         </div> {{-- ./panel-body --}}
                     </div> {{-- ./panel --}}

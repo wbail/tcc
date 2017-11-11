@@ -29,4 +29,10 @@ class MembroBanca extends Model
     				->withPivot('papel', 'data', 'membrobanca_id', 'trabalho_id')
                     ->withTimestamps();
     }
+
+    public function banca() {
+        return $this->belongsToMany(Banca::class, 'membro_bancas_bancas')
+            ->withPivot('papel', 'membro_banca_id')
+            ->withTimestamps();
+    }
 }

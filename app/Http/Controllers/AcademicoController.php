@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AcademicoTrabalho;
 use Illuminate\Http\Request;
 use App\Http\Requests\AcademicoRequest;
+use Illuminate\Support\Facades\Session;
 use Response;
 
 use App\Pessoa;
@@ -34,34 +35,34 @@ class AcademicoController extends Controller {
 
             $term = $request->term;
 
-            $academico = DB::table('membro_bancas as mb')
-                ->join('users as u', 'u.id', '=', 'mb.user_id')
-                ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
-                ->join('cursos as c', 'c.departamento_id', '=', 'd.id')
-                ->join('academicos as a', 'a.curso_id', '=', 'c.id')
-                ->join('users as ua', 'ua.id', '=', 'a.user_id')
+            $academico = DB::table('academicos as a')
+                ->join('users as u', 'u.id', '=', 'a.user_id')
+                ->join('coordenador_cursos as cc', 'cc.curso_id', '=', 'a.curso_id')
+                ->join('cursos as c', 'c.id', '=', 'a.curso_id')
+                ->join('membro_bancas as mb', 'mb.id', '=', 'cc.coordenador_id')
                 ->join('academico_trabalhos as at', 'at.academico_id', '=', 'a.id')
-                ->where('ua.name', 'LIKE', '%'. $term . '%')
-                ->where('u.id', '=', Auth::user()->id)
+                ->where('mb.user_id', Auth::user()->id)
+                ->where('u.name', 'like', '%' . $term . '%')
+//                ->where('at.ano_letivo_id', Session::get('anoletivo')->id)
+                ->where('c.id', Session::get('curso')->id)
+                ->where('at.aprovado', 0)
                 ->whereNull('at.trabalho_id')
-                ->orderBy('ua.name')
-                ->pluck('a.id', 'ua.name as text');
+                ->orderBy('u.name')
+                ->pluck('a.id', 'u.name as text');
         
             return Response::json(['itens' => $academico]);
                         
         }
 
-        $academicos = DB::table('membro_bancas as mb')
-                        ->join('users as u', 'u.id', '=', 'mb.user_id')
-                        ->join('departamentos as d', 'd.id', '=', 'mb.departamento_id')
-                        ->join('cursos as c', 'c.departamento_id', '=', 'd.id')
-                        ->join('academicos as a', 'a.curso_id', '=', 'c.id')
-                        ->join('users as ua', 'ua.id', '=', 'a.user_id')
-                        ->where('u.id', '=', Auth::user()->id)
-                        ->select('a.*', 'a.id as academicoid', 'ua.*', 'c.nome as cursonome', 'ua.ativo')
-                        ->get();
+        $academicos = DB::table('academicos as a')
+            ->join('users as u', 'u.id', '=', 'a.user_id')
+            ->join('coordenador_cursos as cc', 'cc.curso_id', '=', 'a.curso_id')
+            ->join('cursos as c', 'c.id', '=', 'a.curso_id')
+            ->join('membro_bancas as mb', 'mb.id', '=', 'cc.coordenador_id')
+            ->where('mb.user_id', Auth::user()->id)
+            ->select('a.id as academicoid', 'a.ra', 'u.name', 'u.ativo', 'u.email', 'c.nome as cursonome')
+            ->get();
 
-        // return $academicos;
 
         return View('academico.index', [
             'academico' => $academicos
@@ -104,8 +105,6 @@ class AcademicoController extends Controller {
     public function store(AcademicoRequest $request) {
 
         $this->authorize('create', Academico::class);
-
-//        return $request->all();
         
         $telefone = $request->except('_token', 'nome', 'email', 'ra', 'curso', 'tipo');
         
@@ -229,17 +228,15 @@ class AcademicoController extends Controller {
         // Pega apenas os valores do request
         $telefone = array_values($telefone);
 
+        $telefoneDono = Telefone::where('user_id', $academico->user_id)
+            ->get();
+
         for ($i = 0; $i < count($telefone); $i++) {
 
-            $telefoneDono = Telefone::where('user_id', $id)
-                ->get();
-
             if((DB::table('telefones')->where('numero', '=', $telefone[$i])->exists()) && ($telefoneDono[$i]->user_id == $academico->user_id)) {
-
-                continue;
-
+                //
             } else if(DB::table('telefones')->where('numero', '=', $telefone[$i])->exists() && $telefoneDono[$i]->user_id != $academico->user_id) {
-                continue;
+                //
             } else {
                 $contato = new Telefone;
                 $contato->numero = $telefone[$i];

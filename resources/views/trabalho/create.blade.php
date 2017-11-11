@@ -15,15 +15,9 @@
                 {{ $page_title or "Novo Trabalho" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="{{ url('/trabalho') }}"><i class="fa fa-dashboard"></i> Acadêmicos</a></li>
-                <li class="active">Novo</li>
-            </ol> --}}
+
             <a href="{{ url('trabalho') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
-            	           
-
 
         </section>
 
@@ -38,6 +32,15 @@
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if (session('message'))
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <ul>
+                        <li>{{ session('message') }}</li>
                     </ul>
                 </div>
             @endif
@@ -132,7 +135,7 @@
 <!-- Bootstrap 3.3.2 JS -->
 <script src="{{ asset ('../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ("app.min.js") }}" type="text/javascript"></script>
+<script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
 {{-- Select2 --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
 {{-- Select2 - pt-BR --}}

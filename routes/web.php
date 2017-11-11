@@ -167,7 +167,7 @@ Route::group(['prefix'=>'banca','where'=>['id'=>'[0-9]+']], function() {
 	Route::get('destroy/{id}', ['as'=>'banca.destroy', 'uses'=>'BancaController@destroy', 'middleware' => 'auth']);
 	Route::get('show/{id}', ['as'=>'banca.show', 'uses'=>'BancaController@show', 'middleware' => 'auth']);
 	Route::get('finaliza/{id}', ['as'=>'banca.finaliza', 'uses'=>'BancaController@finaliza', 'middleware' => 'auth']);
-
+    Route::get('imprime', ['as'=>'banca.imprime', 'uses'=>'BancaController@imprime', 'middleware' => 'auth']);
 });
 
 Route::group(['prefix'=>'anoletivo','where'=>['id'=>'[0-9]+']], function() {

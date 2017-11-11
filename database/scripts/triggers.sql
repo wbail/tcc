@@ -28,25 +28,26 @@ delimiter ;
 delimiter #
 create trigger tr_verifica_aluno_academico_trabalhos before insert on academico_trabalhos
 for each row
-begin
-	
+  begin
+
     -- Verifica se o aluno já tem um trabalho
     if((select count(atr.academico_id)
-		  from academico_trabalhos atr
-		 where atr.academico_id = new.academico_id) > 0) then
-		signal sqlstate '45000'
-		set message_text = 'O aluno já está vinculado a um trabalho.';
+        from academico_trabalhos atr
+        where atr.academico_id = new.academico_id
+              and atr.trabalho_id is not null) > 0) then
+      signal sqlstate '45000'
+      set message_text = 'O aluno já está vinculado a um trabalho.';
     end if;
 
-	-- Verifica se um trabalho tem mais de dois alunos
+    -- Verifica se um trabalho tem mais de dois alunos
     if((select count(atr.trabalho_id)
-		  from academico_trabalhos atr
-		 where atr.trabalho_id = new.trabalho_id) > 1) then
-		signal sqlstate '45000'
-		set message_text = 'O trabalho já possui o máximo de alunos permitidos.';
+        from academico_trabalhos atr
+        where atr.trabalho_id = new.trabalho_id) > 1) then
+      signal sqlstate '45000'
+      set message_text = 'O trabalho já possui o máximo de alunos permitidos.';
     end if;
 
-end#
+  end#
 delimiter ;
 
 

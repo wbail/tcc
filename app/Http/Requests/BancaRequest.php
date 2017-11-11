@@ -26,6 +26,7 @@ class BancaRequest extends FormRequest
         return [
             // 'data' => 'required',
             'trabalho' => 'required|unique:bancas,trabalho_id',
+            'local' => 'required',
             'membro' => 'required',
             'membro2' => 'required',
             'suplente' => 'required',
@@ -42,6 +43,7 @@ class BancaRequest extends FormRequest
     {
         return [
             'data.required' => 'O campo Data é obrigatório.',
+            'local.required' => 'O campo Local é obrigatório.',
             'trabalho.unique' => 'Trabalho já cadastrado para Bancas.',
             'membro.required' => 'O campo Membro de Banca é obrigatório.',
             'membro2.required' => 'O campo Membro de Banca é obrigatório.',

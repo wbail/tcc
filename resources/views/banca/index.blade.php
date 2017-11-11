@@ -15,11 +15,7 @@
                 {{ $page_title or "Bancas" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                <li class="active">Here</li>
-            </ol> --}}
+
             <br>
 
         </section>
@@ -29,7 +25,6 @@
             <!-- Your Page Content Here -->
 
             <div class="row">
-            	{{--<div class="col-md-1"></div> --}}{{-- ./col-md-3 --}}
                 <div class="col-md-12">
                     
                     @if (session('message'))
@@ -39,56 +34,127 @@
                         </div>
                     @endif
 
-                    <br>
+                    @if (session('message-warning'))
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>{{ session('message-warning') }}</strong>
+                        </div>
+                    @endif
 
-		            <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
-		                <thead>
-		                    <tr>
-                                <th>Trabalho</th>
+                    @if($countBancaData > 0)
+                        <a href="{{ url('banca/imprime') }}" target="_blank" class="btn btn-success btn-sm" title="Imprimir lista de bancas"><i class="fa fa-print"></i> Imprimir</a>
+                    @endif
+
+                    <br>
+                    <br>
+                    @if(!empty($banca))
+                        <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
+                            <thead>
+                            <tr>
+                                <th class="col-md-3">Trabalho</th>
                                 <th>Orientador(es)</th>
+                                <th>Acadêmico(as)</th>
                                 <th>Data da Banca</th>
+                                <th>Local da Banca</th>
                                 <th class="text-center">Status da Banca</th>
                                 <th class="text-center">Ação</th>
-		                    </tr>
-		                </thead>
-		                <tbody>
-		                    @foreach($banca as $banca)
-		                    <tr>
-                                <td title="{{ $banca->titulo }}">{{ $banca->sigla }}</td>
-                                <td>
-                                    <li>{{ \App\User::find(\App\MembroBanca::find($banca->orientador_id)->user_id)->name }}</li>
-                                    @if($banca->coorientador_id)
-                                        <li>{{ \App\User::find(\App\MembroBanca::find($banca->coorientador_id)->user_id)->name }}</li>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($banca as $banca)
+                                    @if(empty($banca->trabalho))
+                                        @continue
                                     @endif
-                                </td>
-                                @if((empty($banca->data)))
-                                    <td class="text-danger">
-                                        Data a definir
-                                    </td>
-                                @else
+                                    <tr>
+                                        <td title="{{ $banca->trabalho->sigla }}">{{ $banca->trabalho->titulo }}</td>
+                                        <td>
+                                            <li>{{ \App\User::find(\App\MembroBanca::find($banca->trabalho->orientador_id)->user_id)->name }}</li>
+                                            @if($banca->trabalho->coorientador_id)
+                                                <li>{{ \App\User::find(\App\MembroBanca::find($banca->trabalho->coorientador_id)->user_id)->name }}</li>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @foreach($banca->academico as $academico)
+                                                <li>{{ $academico->user->name }}</li>
+                                            @endforeach
+                                        </td>
+                                        @if((empty($banca->data)))
+                                            <td class="text-danger">
+                                                Data a definir
+                                            </td>
+                                        @else
+                                            <td>
+                                                {{ \Carbon\Carbon::parse($banca->data)->format('d/m/Y H:i') }}
+
+                                            </td>
+                                        @endif
+                                        <td>
+                                            {{ $banca->local }}
+                                        </td>
+                                        <td class="text-center">
+                                            @if($banca->status == 1)
+                                                <label for="statusbanc" class="label label-success">Banca Realizada</label>
+                                            @elseif($banca->data <= \Carbon\Carbon::now() && !is_null($banca->data))
+                                                <button id="{{ $banca->trabalho_id }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalStatusBanca" title="Finalizar Banca">Concluir Banca</button>
+                                            @else
+                                                <label for="statusbanc" class="label label-default">Banca Não Realizada</label>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Definir Data"><i class="fa fa-calendar"></i></a>
+                                            <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
+                                            @if($banca->status == 1)
+                                                <button id="{{ $banca->trabalho_id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalCertBanca" title="Gerar Certificado"><i class="fa fa-file"></i> </button>
+                                            @endif
+                                            <button id="{{ $banca->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelbanca" title="Excluir"><i class="fa fa-trash"></i> </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
+                            <thead>
+                            <tr>
+                                <th class="col-md-3">Trabalho</th>
+                                <th>Orientador(es)</th>
+                                <th>Acadêmico(as)</th>
+                                <th>Data da Banca</th>
+                                <th>Local da Banca</th>
+                                <th class="text-center">Status da Banca</th>
+                                <th class="text-center">Ação</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td title=""></td>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($banca->data)->format('d/m/Y H:i') }}
+
                                     </td>
-                                @endif
-                                <td class="text-center">
-                                    @if($banca->status == 1)
-                                        <label for="statusbanc" class="label label-success">Banca Realizada</label>
-                                    @elseif($banca->data <= \Carbon\Carbon::now())
-                                        <button id="{{ $banca->trabalho_id }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModalStatusBanca" title="Finalizar Banca">Concluir Banca</button>
-                                    @else
-                                        <label for="statusbanc" class="label label-default">Banca Não Realizada</label>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Definir Data"><i class="fa fa-calendar"></i></a>
-                                    <a id="{{ $banca->id }}" class="btn btn-link" href="{{ route('banca.edit', ['id'=>$banca->trabalho_id]) }}" title="Editar"><i class="fa fa-pencil"></i></a>
-                                    <button id="{{ $banca->trabalho_id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalCertBanca" title="Gerar Certificado"><i class="fa fa-file"></i> </button>
-                                    <button id="{{ $banca->id }}" class="btn btn-link" data-toggle="modal" data-target="#myModalDelbanca" title="Excluir"><i class="fa fa-trash"></i> </button>
-                                </td>
-		                    </tr>
-		                    @endforeach
-		                </tbody>
-		            </table>
+                                    <td>
+                                        Nenhum registro
+
+                                    </td>
+
+                                    <td>
+
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td class="text-center">
+
+                                    </td>
+                                    <td class="text-center">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    @endif
+
             	</div> {{-- ./col-md-4 --}}
             	{{--<div class="col-md-4"></div> --}}{{-- ./col-md-4 --}}
             </div> {{-- ./row --}}
@@ -139,7 +205,8 @@
                     <h4 class="modal-title" id="myModalLabel"></h4>
                 </div>
                 <div class="modal-body">
-
+                    Ao finalizar a banca, caso os alunos não tenham sido aprovados, serão considerados reprovados
+                    e ficarão disponíveis para um novo trabalho no próximo ano letivo.
                 </div>
                 <div class="modal-footer status-banca">
                 </div>
@@ -156,7 +223,7 @@
 <!-- Bootstrap 3.3.2 JS -->
 <script src="{{ asset ('../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ('app.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
 {{-- jQuery Mask Plugin --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.9/jquery.mask.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
@@ -169,8 +236,8 @@
 
 <script type="text/javascript">
 
-    $(".alert-success").fadeTo(2000, 500).slideUp(500, function() {
-        $(".alert-success").slideUp(500);
+    $(".alert").fadeTo(2000, 500).slideUp(500, function() {
+        $(".alert").slideUp(500);
     });
 
     $(document).ready( function () {
@@ -212,7 +279,7 @@
 
         var $modal = $(this);
         var bancaid = e.relatedTarget.id;
-        $modal.find('.del-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="banca/destroy/' + bancaid + '" class="btn btn-danger"> Excluir</a>');
+        $modal.find('.del-banca').html('<a href="banca/destroy/' + bancaid + '" class="btn btn-danger"> Excluir</a><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
         $modal.find('.modal-title').html('Deseja realmente excluir?');
     });
 
@@ -222,7 +289,11 @@
         var $modal = $(this);
         var bancaid = e.relatedTarget.id;
         $modal.find('.modal-title').html('Geração de Certificado de Presença de Banca');
-        $modal.find('.cert-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a target="_blank" href="banca/show/'+ bancaid +'" class="btn btn-success"> Gerar</a>');
+        $modal.find('.cert-banca').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a id="btnGeraCert" target="_blank" href="banca/show/'+ bancaid +'" class="btn btn-success"> Gerar</a>');
+    });
+
+    $('#btnGeraCert').click(function() {
+        $('#myModalCertBanca').modal('hide');
     });
 
     // Confirmação que a banca já aconteceu

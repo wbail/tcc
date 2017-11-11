@@ -15,11 +15,7 @@
                 {{ $page_title or "Trabalhos" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="{{ url('/trabalho') }}"><i class="fa fa-dashboard"></i> Acadêmicos</a></li>
-                <li class="active">Novo</li>
-            </ol> --}}
+
             <a href="{{ url('trabalho') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
 
@@ -33,6 +29,13 @@
                 <div class="alert alert-success alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <strong>{{ session('message') }}</strong>
+                </div>
+            @endif
+
+            @if (session('message-del'))
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>{{ session('message-del') }}</strong>
                 </div>
             @endif
 
@@ -145,18 +148,13 @@
 
 <script type="text/javascript">
 
-    $(document).ready (function() {
-        $(".alert-success").fadeTo(2000, 500).slideUp(500, function() {
-            $(".alert-success").slideUp(500);
-        });
-    });
-
-
     $(document).ready( function () {
 
-        var table = $('.display').DataTable({
+        $(".alert").fadeTo(2000, 500).slideUp(500, function() {
+            $(".alert").slideUp(500);
+        });
 
-            // Filtro de range de ano letivo
+        var table = $('.display').DataTable({
 
             "language": {
 
@@ -185,6 +183,11 @@
                 },
             }, // fim language
         });
+
+        table.search($('#min').val())
+            .draw();
+
+        // Filtro de range de ano letivo
 
         // Evento do range de anos, filtrando os inputs
         $('#min, #max').keyup( function() {
@@ -216,7 +219,7 @@
         var $modal = $(this);
         var trabalhoid = e.relatedTarget.id;
         $modal.find('.modal-title').html('Deseja realmente excluir?');
-        $modal.find('.del-trabalho').html('<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button><a href="trabalho/destroy/' + trabalhoid + '" class="btn btn-danger"> Excluir </a>');
+        $modal.find('.del-trabalho').html('<a href="trabalho/destroy/' + trabalhoid + '" class="btn btn-danger"> Excluir </a><button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
     });
 
 

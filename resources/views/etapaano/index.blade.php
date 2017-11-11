@@ -17,11 +17,7 @@
                 {{ $page_title or "Etapas e Trabalhos" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                <li class="active">Here</li>
-            </ol> --}}
+
             <br>
 
         </section>
@@ -193,7 +189,7 @@
 <!-- Bootstrap 3.3.2 JS -->
 <script src="{{ asset ('../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ('app.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
 {{-- jQuery Mask Plugin --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.9/jquery.mask.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
@@ -370,7 +366,7 @@
     @include('header') 
 
     <!-- Sidebar -->
-    @include('sidebar')          
+    @include('sidebar')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -381,11 +377,7 @@
                 {{ $page_title or "Etapas" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                <li class="active">Here</li>
-            </ol> --}}
+
             <br>
 
         </section>

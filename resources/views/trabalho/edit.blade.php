@@ -15,14 +15,9 @@
                 {{ $page_title or "Editando o trabalho " . $trabalho->titulo }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="{{ url('/trabalho') }}"><i class="fa fa-dashboard"></i> Acadêmicos</a></li>
-                <li class="active">Novo</li>
-            </ol> --}}
+
             <a href="{{ url('trabalho') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
-            	           
 
 
         </section>

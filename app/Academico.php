@@ -27,4 +27,10 @@ class Academico extends Model
             ->withTimestamps();
     }
 
+    public function banca() {
+        return $this->belongsToMany(Academico::class, 'academico_bancas')
+            ->withPivot('academico_id', 'banca_id')
+            ->withTimestamps();
+    }
+
 }

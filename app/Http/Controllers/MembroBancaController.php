@@ -218,7 +218,6 @@ class MembroBancaController extends Controller
                 ->withInput();
         }
 
-
         // Atualiza os campos relacionado a user
         $user = User::find($id);
         $user->update([

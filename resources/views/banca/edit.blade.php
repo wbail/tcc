@@ -15,11 +15,7 @@
                 {{ $page_title or "Definir Data de Banca de Avaliação" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            {{-- <ol class="breadcrumb">
-                <li><a href="{{ url('/avaliador') }}"><i class="fa fa-dashboard"></i> Acadêmicos</a></li>
-                <li class="active">Novo</li>
-            </ol> --}}
+
             <a href="{{ url('banca') }}" class="btn btn-link pull-right breadcrumb">Voltar</a>
             <br>
         </section>
@@ -63,16 +59,15 @@
                                 <br>
                                 {!! Form::label('aluno', 'Aluno(s) *') !!}
                                 <div class="row">
-                                    @foreach($academico as $a)
-                                    <div class="col-md-6">
-                                        <h5 title="Aluno(a)">{{ \App\Academico::find($a->academico_id)->user->name }}</h5>
-                                        @if($membro[0]->data != null)
-                                            {!! Form::label('aprovado', 'Aprovado', ['title'=>'Acadêmico(a) aprovado(a)']) !!}
-                                            {!! Form::checkbox("aprovado$a->academico_id", $a->academico_id, $a->aprovado) !!}
-                                        @endif
-                                    </div> <!-- ./col-md-6 -->
+                                    @foreach($banca->academico as $academico)
+                                        <div class="col-md-6">
+                                            <h5 title="Aluno(a)">{{ $academico->user->name }}</h5>
+                                            @if($banca->data != null)
+                                                {!! Form::label('aprovado', 'Aprovado(a)', ['title'=>'Acadêmico(a) aprovado(a)']) !!}
+                                                {!! Form::checkbox("aprovado$academico->id", $academico->id, $apr[$loop->index], ['title'=>'Aprovar aluno(a)']) !!}
+                                            @endif
+                                        </div> <!-- ./col-md-6 -->
                                     @endforeach
-                                    
                                 </div> <!-- ./row -->
                                 <br>
                                 <div class="row">
@@ -81,14 +76,13 @@
                                          <h5 title="Orientador(a)" >{{ $banca->trabalho()->first()->membrobanca()->first()->user()->value('name') }}</h5>
                                     </div> <!-- ./col-md-6 -->
                                     @if($banca->trabalho()->first()->coorientador()->first())
-                                    <div class="col-md-6">
-                                         {!! Form::label('coorientador', 'Coorientador(a) *') !!} 
-                                         <h5 title="Coorientador(a)" >{{ $banca->trabalho()->first()->coorientador()->first()->user()->value('name') }}</h5>
-                                    </div> <!-- ./col-md-6 -->
+                                        <div class="col-md-6">
+                                             {!! Form::label('coorientador', 'Coorientador(a) *') !!}
+                                             <h5 title="Coorientador(a)" >{{ $banca->trabalho()->first()->coorientador()->first()->user()->value('name') }}</h5>
+                                        </div> <!-- ./col-md-6 -->
                                     @endif
                                 </div> <!-- ./row -->
                                 <br>
-                                
                         </div>
                     </div> {{-- ./panel --}}
                 </div> {{-- ./col-md-6 --}}
@@ -111,34 +105,37 @@
                                 </div>
                             
                                 <div class="col-md-6">
-                                    {!! Form::label('data', 'Data *') !!}
-                                    @if($membro[0]->data == null)
+                                    {!! Form::label('data', 'Data e Horário *') !!}
+                                    @if($banca->data == null)
                                         {{ Form::text('data', null, ['class'=>'form-control', 'title'=>'Data da banca', 'id'=>'datetimepicker']) }} 
                                     @else
-                                        {{ Form::text('data', \Carbon\Carbon::parse($membro[0]->data)->format('d/m/Y H:i'), ['class'=>'form-control', 'title'=>'Data da banca', 'id'=>'datetimepicker']) }}
+                                        {{ Form::text('data', \Carbon\Carbon::parse($banca->data)->format('d/m/Y H:i'), ['class'=>'form-control', 'title'=>'Data da banca', 'id'=>'datetimepicker']) }}
                                     @endif
+                                    <br>
+                                    {!! Form::label('local', 'Local *') !!}
+                                    {{ Form::text('local', $banca->local, ['class'=>'form-control', 'title'=>'Local da banca']) }}
                                 </div> <!-- ./col-md-12 -->
                             </div> <!-- ./row -->
                             <br>
                             <div class="row">
                                 <div class="col-md-6">
                                     {!! Form::label('membro', 'Membro de Banca *') !!}
-                                    {!! Form::select('membro', $membros, $membro[0]->membrobanca_id, ['class'=>'form-control', 'title'=>'Membro de Banca', 'placeholder'=>'']) !!}
+                                    {!! Form::select('membro', $membros, $banca->membrobanca[0]->id, ['class'=>'form-control', 'title'=>'Membro de Banca', 'placeholder'=>'']) !!}
                                 </div> <!-- ./col-md-6 -->
                                 <div class="col-md-6">
                                     {!! Form::label('membro2', 'Membro de Banca *') !!}
-                                    {!! Form::select('membro2', $membros, $membro[1]->membrobanca_id, ['class'=>'form-control', 'title'=>'Membro de Banca', 'placeholder'=>'']) !!}
+                                    {!! Form::select('membro2', $membros, $banca->membrobanca[1]->id, ['class'=>'form-control', 'title'=>'Membro de Banca', 'placeholder'=>'']) !!}
                                 </div> <!-- ./col-md-6 -->
                             </div> <!-- ./row -->
                             <br>
                             <div class="row">
                                 <div class="col-md-6">
                                     {!! Form::label('suplente', 'Membro Suplente*') !!}
-                                    {!! Form::select('suplente', $membros, $membro[2]->membrobanca_id, ['class'=>'form-control', 'title'=>'Membro Suplente', 'placeholder'=>'']) !!}
+                                    {!! Form::select('suplente', $membros, $banca->membrobanca[2]->id, ['class'=>'form-control', 'title'=>'Membro Suplente', 'placeholder'=>'']) !!}
                                 </div> <!-- ./col-md-6 -->
                                 <div class="col-md-6">
                                     {!! Form::label('suplente2', 'Membro Suplente*') !!}
-                                    {!! Form::select('suplente2', $membros, $membro[3]->membrobanca_id, ['class'=>'form-control', 'title'=>'Membro Suplente', 'placeholder'=>'']) !!}
+                                    {!! Form::select('suplente2', $membros, $banca->membrobanca[3]->id, ['class'=>'form-control', 'title'=>'Membro Suplente', 'placeholder'=>'']) !!}
                                 </div> <!-- ./col-md-6 -->
                             </div> <!-- ./row -->
     
@@ -167,7 +164,7 @@
 <!-- Bootstrap 3.3.2 JS -->
 <script src="{{ asset ('../bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ('app.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset ('../bower_components/AdminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
 {{-- jQuery Mask Plugin --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.9/jquery.mask.js"></script>
 {{-- Select2 --}}
