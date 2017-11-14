@@ -24,7 +24,7 @@ class ArquivoRequest extends FormRequest
     public function rules()
     {
         return [
-            'descricao' => 'required|file|min:0.1|max:5000|mimes:doc,txt,pdf'
+            'descricao' => 'required|file|min:0.1|max:5000|mimes:doc,txt,pdf,docx'
         ];
     }
 
@@ -39,7 +39,7 @@ class ArquivoRequest extends FormRequest
             'descricao.required' => 'O campo Arquivo é obrigatório.',
             'descricao.min' => 'O Arquivo deve ter no mínimo 1 Kb.',
             'descricao.max' => 'O Arquivo deve ter no máximo 5 Megabyte.',
-            'descricao.mimes' => 'O Arquivo deve ter umas seguintes extenções: doc, txt ou pdf.',
+            'descricao.mimes' => 'O Arquivo deve ter umas seguintes extenções: doc, docx, txt ou pdf.',
         ];
     }
 }

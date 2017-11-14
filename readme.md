@@ -2,7 +2,6 @@
 
 <p align="center">
 <a href="https://travis-ci.org/wbail/tcc"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
@@ -24,6 +23,6 @@ GED - Gerenciador Eletronico de Documentos
 - composer install
 - npm install
 
-## Liceca
+## Licenca
 
 Projeto TCC e um software open-source sob a licenca [MIT license](http://opensource.org/licenses/MIT).
