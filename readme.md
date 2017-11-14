@@ -1,7 +1,6 @@
 <p align="center"><img height="100" width="100" src="http://portal.uepg.br/institucional/universidade/figuras/uepgazul.jpg"></p>
 
 <p align="center">
-<a href="https://travis-ci.org/wbail/tcc"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
