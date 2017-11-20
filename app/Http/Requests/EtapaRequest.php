@@ -27,6 +27,7 @@ class EtapaRequest extends FormRequest {
             
             'desc' => [
                 'required',
+                'alpha',
                 'max:45',
                 'min:1',
                 Rule::unique('etapas')->ignore($this->id)
@@ -45,6 +46,7 @@ class EtapaRequest extends FormRequest {
             
             'desc.required' => 'O campo Descrição é obrigatório.',
             'desc.unique' => 'Etapa já cadastrada.',
+            'desc.alpha' => 'O campo Descrição deve conter apenas letras.',
             'desc.max' => 'O campo Descrição permite até 45 caracteres.',
             'desc.min' => 'O campo Descrição deve ter no mímino 1 caracter.',
             'desc.alpha_num' => 'O campo Descrição aceita apenas letras e números.',

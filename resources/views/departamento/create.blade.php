@@ -31,26 +31,22 @@
         <section class="content">
             <!-- Your Page Content Here -->
 
-            
+            @if (count($errors) > 0)
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-
-            <br><br>
+            <br>
 
             <div class="row">
             	<div class="col-md-4"></div> {{-- ./col-md-4 --}}
             	<div class="col-md-4">
-
-                    @if (count($errors) > 0)
-                        <div class="alert alert-warning alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
 
             		{!! Form::open(['url' => '/departamento/store', 'method'=>'post']) !!}
             			{!! Form::label('instituicao', 'Nome da Instituição *') !!}

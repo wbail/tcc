@@ -24,7 +24,14 @@ class InstituicaoRequest extends FormRequest {
     public function rules(){
 
         return [
-            'nome' => array('required', 'regex:/([A-Z])\w.+[^0-9]/', 'unique:instituicaos,nome'),
+            'nome' => array(
+                'required',
+                //'regex:/([A-Z])\w.+[^0-9]/',
+                'alpha',
+                'unique:instituicaos,nome',
+                'max:80',
+                'min:5'
+            ),
             'sigla' => [
                 'required',
                 'regex:/([A-Z])\w.+[^0-9]/',
@@ -42,11 +49,14 @@ class InstituicaoRequest extends FormRequest {
     public function messages() {
         return [
             'nome.required' => 'O campo Nome é obrigatório.',
-            'sigla.required' => 'O campo Sigla é obrigatório.',
             'nome.alpha' => 'O campo Nome aceita somente letras.',
-            'sigla.alpha' => 'O campo Sigla aceita somente letras.',
-            'sigla.max' => 'O campo Sigla deve conter até 10 caracteres.',
             'nome.unique' => 'Nome já cadastrado.',
+            'nome.regex' => 'O campo Nome deve conter apenas letras.',
+            'nome.max' => 'O campo Nome deve conter no máximo 80 caracteres.',
+            'nome.min' => 'O campo Nome deve conter no mínimo 5 caracteres.',
+            'sigla.alpha' => 'O campo Sigla aceita somente letras.',
+            'sigla.required' => 'O campo Sigla é obrigatório.',
+            'sigla.max' => 'O campo Sigla deve conter até 10 caracteres.',
             'sigla.unique' => 'Sigla já cadastrada.',
         ];
     }

@@ -31,6 +31,7 @@ class DepartamentoRequest extends FormRequest {
                 'required',
                 'min:3',
                 'max:40',
+                'alpha',
                 //'regex:/([A-Z])\w.+[^0-9]/',
                 Rule::unique('departamentos')->ignore($this->id),
             ],

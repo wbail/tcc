@@ -28,25 +28,23 @@
         <section class="content">
             <!-- Your Page Content Here -->
 
+            @if (session('message'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>{{ session('message') }}</strong>
+                </div>
+            @endif
+
+            @if (session('message-warning'))
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>{{ session('message-warning') }}</strong>
+                </div>
+            @endif
+
             <div class="row">
             	<div class="col-md-3"></div> {{-- ./col-md-3 --}}
                 <div class="col-md-6">
-                    
-                    @if (session('message'))
-                        <div class="alert alert-success alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <strong>{{ session('message') }}</strong>
-                        </div>
-                    @endif
-
-                        @if (session('message-warning'))
-                            <div class="alert alert-warning alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <strong>{{ session('message-warning') }}</strong>
-                            </div>
-                        @endif
-
-                    <br>
 
 		            <table data-order='[[0, "asc"]]' class="table table-hover table-striped table-bordered display">
 		                <thead>

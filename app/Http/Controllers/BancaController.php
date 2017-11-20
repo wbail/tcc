@@ -344,26 +344,13 @@ class BancaController extends Controller
             'local'
         ]);
 
-        if ($alunosAprovados != null) {
-
-            $soNumeros = array_keys($alunosAprovados);
-
-            for ($i = 0; $i < count($soNumeros); $i++) {
-                $soNumeros = preg_replace("/[^0-9,.]/", "", $soNumeros[$i]);
-                $at = AcademicoTrabalho::where('academico_id', $soNumeros)->first();
-                $at->aprovado = 1;
-                $at->save();
-            }
-
-            return redirect('/banca')->with('message', 'Aluno(as) aprovado(as) com sucesso.');
-
-        }
 
         $trabalho = Trabalho::find($id);
 
         $messages = [
             'data.required' => 'O campo Data é obrigatório.',
             'local.required' => 'O campo Local é obrigatório.',
+            'local.alpha_num' => 'O campo Local deve conter apenas letras e números.',
             'membro.required' => 'O campo Membro de Banca é obrigatório.',
             'membro2.required' => 'O campo Membro de Banca é obrigatório.',
             'suplente.required' => 'O campo Membro Suplente é obrigatório.',
@@ -376,7 +363,7 @@ class BancaController extends Controller
 
         $validator = Validator::make($request->all(), [
             'data' => 'required',
-            'local' => 'required',
+            'local' => 'required|alpha_num',
             'membro' => 'required',
             'membro2' => 'required',
             'suplente' => 'required',
@@ -428,11 +415,28 @@ class BancaController extends Controller
                 ->withInput(['data']);
         }
 
+
+
         Banca::where('trabalho_id', $id)
             ->update([
                 'data' => $request->input('data'),
                 'local' => $request->input('local'),
             ]);
+
+        if ($alunosAprovados != null) {
+
+            $soNumeros = array_keys($alunosAprovados);
+
+            for ($i = 0; $i < count($soNumeros); $i++) {
+                $soNumeros = preg_replace("/[^0-9,.]/", "", $soNumeros[$i]);
+                $at = AcademicoTrabalho::where('academico_id', $soNumeros)->first();
+                $at->aprovado = 1;
+                $at->save();
+            }
+
+            return redirect('/banca')->with('message', 'Aluno(as) aprovado(as) com sucesso.');
+
+        }
 
 
         return redirect('/banca')

@@ -97,6 +97,7 @@ class AcademicoRequest extends FormRequest {
             'nome.min' => 'O campo Nome deve ter no mínimo 3 caracteres.',
             'nome.max' => 'O campo Nome deve ter no máximo 80 caracteres.',
             'nome.alpha' => 'O campo Nome é somente permitido letras.',
+            'nome.regex' => 'O campo Nome deve conter apenas letras.',
             'ra.required' => 'O campo RA é obrigatório.',
             'ra.numeric' => 'O campo RA é numérico.',
             'ra.unique' => 'RA já cadastrado.',

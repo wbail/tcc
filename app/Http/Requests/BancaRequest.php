@@ -24,10 +24,10 @@ class BancaRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'data' => 'required',
+//             'data' => 'required',
 //            'trabalho' => 'required|unique:bancas,trabalho_id',
             'trabalho' => 'required|unique:bancas,trabalho_id',
-//            'local' => 'required',
+            'local' => 'alpha',
             'membro' => 'required',
             'membro2' => 'required',
             'suplente' => 'required',

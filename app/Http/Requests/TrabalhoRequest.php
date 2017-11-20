@@ -28,10 +28,13 @@ class TrabalhoRequest extends FormRequest {
             'sigla' => [
                 'required',
                 'max:10',
+                'alpha_num',
                 Rule::unique('trabalhos')->ignore($this->id),
             ],
             'titulo' => [
                 'required',
+                'max: 190',
+                'alpha',
                 Rule::unique('trabalhos')->ignore($this->id),
             ],
             'academico_id' => [
@@ -59,8 +62,11 @@ class TrabalhoRequest extends FormRequest {
             'titulo.required' => 'O campo Título é obrigatório.',
             'sigla.required' => 'O campo Sigla é obrigatório.',
             'titulo.unique' => 'Trabalho já cadastrado.',
+            'titulo.alpha' => 'O Título deve conter apenas letras.',
+            'titulo.max' => 'O Título deve conter até 190 caracteres.',
             'sigla.unique' => 'Sigla já cadastrada.',
-            'sigla.max' => 'A Sigla deve conter ate 10 caracteres.',
+            'sigla.max' => 'O campo Sigla deve conter até 10 caracteres.',
+            'sigla.alpha_num' => 'O campo Sigla deve conter apenas letras e números.',
             'academico.required' => 'O campo Acadêmico(a) é obrigatório.',
             //'academico.unique' => 'O Acadêmico já está vinculado a um trabalho',
             'academico1.different' => 'Os(as) acadêmicos(as) devem ser diferentes.',

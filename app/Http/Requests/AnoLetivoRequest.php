@@ -27,6 +27,9 @@ class AnoLetivoRequest extends FormRequest
         return [
             'rotulo' => [
                 'required',
+                'alpha_num',
+                'min:5',
+                'max:80',
                 Rule::unique('ano_letivos')->ignore($this->id)
             ],
             'data' => 'required'
@@ -40,9 +43,12 @@ class AnoLetivoRequest extends FormRequest
      */
     public function messages() {
         return [
-            'rotulo.required' => 'O campo Rotulo e obrigatorio.',
-            'rotulo.unique' => 'Rotulo ja cadastrado.',
-            'data.required' => 'O campo Data e obrigatorio.',
+            'rotulo.required' => 'O campo Rótulo é obrigatório.',
+            'rotulo.unique' => 'Rótulo já cadastrado.',
+            'rotulo.min' => 'O campo Rótulo deve conter no mínimo 5 caracteres.',
+            'rotulo.max' => 'O campo Rótulo deve conter no máximo 80 caracteres.',
+            'rotulo.alpha_num' => 'O campo Rótulo deve conter apenas letras e números.',
+            'data.required' => 'O campo Data é obrigatório.',
         ];
     }
 
