@@ -30,15 +30,6 @@ create trigger tr_verifica_aluno_academico_trabalhos before insert on academico_
 for each row
   begin
 
-    -- Verifica se o aluno já tem um trabalho
-    if((select count(atr.academico_id)
-        from academico_trabalhos atr
-        where atr.academico_id = new.academico_id
-              and atr.trabalho_id is not null) > 0) then
-      signal sqlstate '45000'
-      set message_text = 'O aluno já está vinculado a um trabalho.';
-    end if;
-
     -- Verifica se um trabalho tem mais de dois alunos
     if((select count(atr.trabalho_id)
         from academico_trabalhos atr
@@ -159,14 +150,6 @@ delimiter $
 create trigger tr_verifica_aluno_academico_trabalhos_before_update before update on academico_trabalhos
   for each row
   begin
-
-    -- Verifica se o aluno já tem um trabalho
-    if((select count(atr.academico_id)
-        from academico_trabalhos atr
-        where atr.academico_id = new.academico_id) > 0) then
-      signal sqlstate '45000'
-      set message_text = 'O aluno já está vinculado a um trabalho.';
-    end if;
 
     -- Verifica se um trabalho tem mais de dois alunos
     if((select count(atr.trabalho_id)
