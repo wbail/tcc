@@ -25,8 +25,9 @@ class BancaRequest extends FormRequest
     {
         return [
             // 'data' => 'required',
+//            'trabalho' => 'required|unique:bancas,trabalho_id',
             'trabalho' => 'required|unique:bancas,trabalho_id',
-            'local' => 'required',
+//            'local' => 'required',
             'membro' => 'required',
             'membro2' => 'required',
             'suplente' => 'required',

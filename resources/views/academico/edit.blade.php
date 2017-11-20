@@ -12,7 +12,7 @@
         <section class="content-header">
             
             <h1>
-                Editando o aluno(a) {{ $academico->user->name }}
+                Editando o(a) aluno(a) {{ $academico->user->name }}
                 <small>{{ $page_description or null }}</small>
             </h1>
 
@@ -93,12 +93,12 @@
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-7">
                                         {!! Form::label('email', 'E-mail *') !!}
                                         {!! Form::text('email', $academico->user->email, ['class'=>'form-control', 'title'=>'E-mail do(a) acadêmico(a)']) !!}
                                     </div> {{-- ./col-md-6 --}}
 
-                                    <div class="col-md-1 add-telefone">
+                                    <div class="col-md-5 add-telefone">
                                         {!! Form::label('telefone', 'Telefone *') !!}<br>
                                         @foreach($academico->user->telefone as $contato)
                                             @if($loop->index == 0)

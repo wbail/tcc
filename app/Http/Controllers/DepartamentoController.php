@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\MembroBanca;
 use Illuminate\Http\Request;
 use App\Http\Requests\DepartamentoRequest;
 
@@ -115,7 +116,12 @@ class DepartamentoController extends Controller {
      */
     public function destroy($id) {
 
-        $this->authorize('delete', Departamento::class);
+        $this->authorize('create', Departamento::class);
+
+        if (MembroBanca::where('departamento_id', $id)->count() > 0) {
+            return back()
+                ->with('message-warning', 'Não pode excluir o Departamento');
+        }
 
         return back();
     }
